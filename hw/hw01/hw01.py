@@ -107,6 +107,7 @@ def hailstone(n):
             n=3*n+1
         print(n)
     return length """
+    #solution
     length = 1
     while n != 1:
         print(n)
