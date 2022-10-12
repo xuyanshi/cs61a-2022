@@ -1,0 +1,1031 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/disc.css">
+
+
+    <title>
+Discussion 0 | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 0: Getting Started
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc00.pdf" class="label label-outline">disc00.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<div class="alert storable-login-status"></div>
+
+This is an online worksheet that you can work on during discussions.
+Your work is not graded and you do not need to submit anything.
+
+
+    
+
+
+
+<h2 id="the-course-website">The Course Website</h2>
+
+
+<p>Welcome to CS 61A! We have various resources on the course site which you might
+find helpful as you go through the course during the semester.</p>
+
+<p>Here's a summary of some of these resources. You can follow along with the
+navigation bar at the top of the page.</p>
+
+<ul>
+  <li><p>Calendar:</p>
+
+  <ul>
+    <li><p>Weekly Schedule:</p>
+
+    <ul>
+      <li>Weekly lab and discussion schedule.</li>
+    </ul></li>
+    <li><p>Office Hours:</p>
+
+    <ul>
+      <li><p>Weekly office hours schedule where you can get help from course staff.
+      We will have several kinds of office hours available:</p>
+
+      <ul>
+        <li>Advising office hours, for questions that don't pertain directly
+        to course content (e.g. advice on what classes to take or how to
+        go about seeking internship opportunities)</li>
+        <li>In-person office hours, where you can join other students in a
+        larger room to work collaboratively, and join a queue to get help
+        from course staff</li>
+        <li>Online office hours, where you can book a 20-minute with a member
+        of course staff for quick debugging or conceptual questions</li>
+      </ul></li>
+    </ul></li>
+  </ul></li>
+  <li><p>Staff:</p>
+
+  <ul>
+    <li>The list of everyone on course staff, with contact information.</li>
+  </ul></li>
+  <li><p>Resources</p>
+
+  <ul>
+    <li><p>Request an Extension</p>
+
+    <ul>
+      <li>Use this Google form to request an extension on an assignment due
+      to extenuating circumstances—you can read more about our extension
+      policy <a href="/articles/about#assignment-extensions">here</a>, but it's good to
+      know that we will approve any extension up to 24 hours on any non-extra
+      credit assignment for any reason, no-questions-asked.</li>
+    </ul></li>
+    <li><p>Book an Accommodations Appointment</p>
+
+    <ul>
+      <li>Here you can book an accommodations appointment if you wish to
+      discuss ways we can help make the course work best for you—you can read
+      more about accommodations appointments <a href="/articles/about#accommodations-appointments">here</a>, but these will likely be especially
+      of interest to DSP students and students in the process of enrolling in
+      DSP.</li>
+    </ul></li>
+    <li><p>Topical Resources + Past Exams:</p>
+
+    <ul>
+      <li>Past exams (grouped by topic or semester) and study guides. Some past
+      exams have video walkthroughs. In these videos, staff members explain
+      how they approached the exam problem as they solve it.</li>
+    </ul></li>
+    <li><p>PythonTutor:</p>
+
+    <ul>
+      <li>This allows you to run Python code and visualize the corresponding
+      environment diagram for the execution of the code.</li>
+    </ul></li>
+    <li><p>Code:</p>
+
+    <ul>
+      <li>The CS 61A web editor. You can run doctests and use the interpreter.
+      It has support for Python, Scheme, and SQL, as well as Lark (which we
+      won't be using over the summer). It can visualize environment diagrams
+      following the execution of your code for debugging. Moreover, it can
+      visualize trees, lists, and linked lists. Any files you save here get
+      saved on your local storage. You can also edit okpy backups, but you
+      <em>cannot</em> run <code>ok</code> tests.</li>
+    </ul></li>
+    <li><p>Ed:</p>
+
+    <ul>
+      <li>The course forum. Feel free to ask questions about the content or
+      logistics here. Make sure to famaliarize yourself with the <a href="https://edstem.org/us/courses/25379/discussion/1688946">policies and guidelines</a> for using Ed!</li>
+    </ul></li>
+    <li><p>Department/Campus Resources:</p>
+
+    <ul>
+      <li>These are resources, not necessarily specific to CS 61A, that many
+      students find helpful, e.g., campus and department advising,
+      mental health resources, basic needs resources, etc. If you know of a
+      resource that we should add to this page, let us know!</li>
+    </ul></li>
+  </ul></li>
+  <li><p>Syllabus</p>
+
+  <ul>
+    <li>Policies for the course regarding assignments, grades, DSP and
+    accommodations, and other parts of the course.</li>
+  </ul></li>
+  <li><p>Contact</p>
+
+  <ul>
+    <li>Various ways you can contact course staff if you have questions, or
+    concerns.</li>
+    <li>Feedback forms for the instructors, staff, or department..</li>
+    <li>The extension form and accommodation appointments calendar are linked
+    here, in addition to being listed on the course syllabus and listed
+    under the "Resources" dropdown.</li>
+    <li>If a student or staff member makes you feel uncomfortable at any point
+    during the semester, that doesn't represent everyone, and that incident
+    should be reported. The contact page has the anonymous feedback form and the
+    EECS contact form.</li>
+  </ul>
+
+  <p>Hot tip: You can also draw on the site for discussion pages! To do so, you
+  can click on the pencil icon on the top left.</p></li>
+</ul>
+
+<div class="page-break"></div>
+
+
+<h2 id="lost-on-the-moon">Lost on the Moon</h2>
+
+
+
+
+<p>Your spaceship has just crashed on the light side of the moon. You were
+scheduled to rendezvous with a mother ship 200 miles away on the lighted
+surface of the moon, but the rough landing has ruined your ship and destroyed
+all the equipment on board except for the 15 items listed below (note: you
+are able to consume food/water/medicine inside your space suit).</p>
+
+<p>Your crew's survival depends on reaching the mother ship, so you must choose
+the most critical items available for the 200-mile trip. Your task is to rank
+the 15 items in terms of their importance for survival.  Place a number 1 by
+the most important item, number 2 by the second most important, and so on,
+through number 15, the least important.</p>
+
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th>Item</th>
+    <th>Your Rank (1)</th>
+    <th>Group's Rank (2)</th>
+    <th>NASA's Rank (3)</th>
+    <th>&#124; (3)—(1) &#124;</th>
+    <th>&#124; (3)—(2) &#124;</th>
+  </tr>
+  <tr>
+    <td>Box of matches</td>
+    <td>
+            <label class="sr-only" for="your-rank1-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank1-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank1-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank1-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank1-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank1-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-1-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-1-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-1-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-1-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>Food concentrate</td>
+    <td>
+            <label class="sr-only" for="your-rank2-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank2-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank2-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank2-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank2-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank2-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-2-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-2-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-2-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-2-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>50 feet of nylon rope</td>
+    <td>
+            <label class="sr-only" for="your-rank3-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank3-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank3-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank3-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank3-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank3-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-3-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-3-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-3-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-3-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>Parachute silk</td>
+    <td>
+            <label class="sr-only" for="your-rank4-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank4-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank4-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank4-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank4-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank4-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-4-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-4-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-4-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-4-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>Solar-powered portable heating unit</td>
+    <td>
+            <label class="sr-only" for="your-rank5-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank5-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank5-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank5-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank5-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank5-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-1-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-1-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-5-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-5-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>Two .45 caliber pistols</td>
+    <td>
+            <label class="sr-only" for="your-rank6-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank6-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank6-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank6-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank6-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank6-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-6-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-6-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-6-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-6-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>One case of dehydrated milk</td>
+    <td>
+            <label class="sr-only" for="your-rank7-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank7-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank7-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank7-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank7-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank7-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-7-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-7-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-7-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-7-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>Two 100-pound tanks of oxygen</td>
+    <td>
+            <label class="sr-only" for="your-rank8-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank8-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank8-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank8-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank8-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank8-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-8-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-8-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-8-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-8-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>Stellar map (of the moon's constellations)</td>
+    <td>
+            <label class="sr-only" for="your-rank9-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank9-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank9-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank9-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank9-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank9-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-9-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-9-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-9-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-9-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>Self-inflating life raft</td>
+    <td>
+            <label class="sr-only" for="your-rank10-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank10-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank10-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank10-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank10-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank10-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-10-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-10-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-10-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-10-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>Magnetic compass</td>
+    <td>
+            <label class="sr-only" for="your-rank11-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank11-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank11-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank11-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank11-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank11-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-11-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-11-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-11-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-11-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>5 gallons of water</td>
+    <td>
+            <label class="sr-only" for="your-rank12-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank12-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank12-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank12-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank12-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank12-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-12-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-12-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-12-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-12-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>Signal flares</td>
+    <td>
+            <label class="sr-only" for="your-rank13-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank13-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank13-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank13-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank13-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank13-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-13-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-13-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-13-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-13-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>First-aid kit containing injection needles</td>
+    <td>
+            <label class="sr-only" for="your-rank14-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank14-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank14-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank14-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank14-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank14-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-14-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-14-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-14-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-14-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+  <tr>
+    <td>Solar-powered FM receiver-transmitter</td>
+    <td>
+            <label class="sr-only" for="your-rank15-input">Your Answer:</label>
+            <input class="form-control storable" id="your-rank15-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="group-rank15-input">Your Answer:</label>
+            <input class="form-control storable" id="group-rank15-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="nasa-rank15-input">Your Answer:</label>
+            <input class="form-control storable" id="nasa-rank15-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-indiv-15-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-indiv-15-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+    <td>
+            <label class="sr-only" for="diff-group-15-input">Your Answer:</label>
+            <input class="form-control storable" id="diff-group-15-input" type="text">
+            <div class="storable-status"></div>
+        </td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+<div class="sol-highlight">
+Error points are the absolute difference between your rankings and
+NASA's (disregard plus or minus signs).
+
+<ul>
+  <li>0—25: excellent</li>
+  <li>26—32: good</li>
+  <li>33—55: fair</li>
+  <li>56—70: oops</li>
+  <li>71—112: oh well</li>
+</ul>
+
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th>Item</th>
+    <th>NASA's Reasoning</th>
+    <th>NASA's Rank</th>
+  </tr>
+  <tr>
+    <td>Box of matches</td>
+    <td>No oxygen to sustain flame, virtually worthless</td>
+    <td>15</td>
+  </tr>
+  <tr>
+    <td>Food concentrate</td>
+    <td>Efficient means of supplying energy requirements</td>
+    <td>4</td>
+  </tr>
+  <tr>
+    <td>50 feet of nylon rope</td>
+    <td>Useful in scaling cliffs, tying injured together</td>
+    <td>6</td>
+  </tr>
+  <tr>
+    <td>Parachute silk</td>
+    <td>Protection from sun's rays</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>Solar-powered portable heating unit</td>
+    <td>Not needed unless on dark side</td>
+    <td>13</td>
+  </tr>
+  <tr>
+    <td>Two .45 caliber pistols</td>
+    <td>Possible means of self-propulsion</td>
+    <td>11</td>
+  </tr>
+  <tr>
+    <td>One case of dehydrated milk</td>
+    <td>Bulkier duplication of food concentrate</td>
+    <td>12</td>
+  </tr>
+  <tr>
+    <td>Two 100-pound tanks of oxygen</td>
+    <td>Most pressing survival need</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>Stellar map (of the moon's constellations)</td>
+    <td>Primary means of navigation</td>
+    <td>3</td>
+  </tr>
+  <tr>
+    <td>Self-inflating life raft</td>
+    <td>CO_2 bottle in military raft may be used for propulsion</td>
+    <td>9</td>
+  </tr>
+  <tr>
+    <td>Magnetic compass</td>
+    <td>Magnetic field on moon is not polarized; worthless for navigation</td>
+    <td>14</td>
+  </tr>
+  <tr>
+    <td>5 gallons of water</td>
+    <td>Replacement for tremendous liquid loss on lighted side</td>
+    <td>2</td>
+  </tr>
+  <tr>
+    <td>Signal flares</td>
+    <td>Distress signal when mother ship is sighted</td>
+    <td>10</td>
+  </tr>
+  <tr>
+    <td>First-aid kit containing injection needles</td>
+    <td>Needles for vitamins, medicines, etc., will fit special aperture in NASA space suits</td>
+    <td>7</td>
+  </tr>
+  <tr>
+    <td>Solar-powered FM receiver-transmitter</td>
+    <td>For communication with mother ship; but FM requires line-of-sight transmission and short ranges</td>
+    <td>5</td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+</div>
+
+
+
+
+<h2 id="secrets-to-success-in-cs-61a">Secrets to Success in CS 61A</h2>
+
+
+<p>CS 61A is definitely a challenge, but we all want you to learn and
+succeed, so here is a collection of various tips that might help in your
+journey:</p>
+
+<ul>
+  <li><p>Find what works for you.</p>
+
+  <ul>
+    <li>There are many different ways to succeed in 61A—we've found that the below
+    advice applies to almost all students, but there are going to be
+    different things that work best for different people, and we recommend
+    exploring different study and work strategies that will work well for you.
+    If you ever want to talk with a TA about your approach, we have
+    <a href="/articles/advising">advising office hours</a> for exactly that kind of thing
+    as well!</li>
+  </ul></li>
+  <li><p>Ask questions.</p>
+
+  <ul>
+    <li>If you encounter something you don't know or aren't sure
+    about a concept or problem, <em>ask</em> away. We're here to help you learn, and
+    if you ask a question, that tells us where we can help with your
+    understanding of the material. The process of asking questions itself can
+    also be helpful in figuring out for yourself what you would specifically
+    like to ask about, and in therefore pinpointing concepts that you believe
+    you can learn more about.</li>
+  </ul></li>
+  <li><p>Study in groups.</p>
+
+  <ul>
+    <li>Again, this class is not an easy course for most students; you might feel
+    overwhelmed going at it alone. Send a message and reach out to other students
+    in the class; work together on assignments or study together to prepare for
+    exams, as long as you don't violate the course policy on Academic Honesty as
+    stated in the <a href="/articles/about#academic-misconduct">Syllabus</a>.</li>
+  </ul></li>
+  <li><p>When stuck on a problem, try to verbally explain the area in which you are stuck.</p>
+
+  <ul>
+    <li>This doesn't need to require a person who understands how to solve the problem
+    (or even a person—this practice is often referred to as <strong>rubber ducking</strong>,
+    since you can take a rubber duck and consider it your practice audience),
+    because the main goal is for you to clarify your own thoughts and figure out
+    where exactly you're getting stuck with your understanding and code. From
+    there you can focus on that portion to better your understanding.</li>
+  </ul></li>
+  <li>If you're still feeling stuck, feel free to make use of the class
+  <a href="https://edstem.org/us/courses/25379/discussion/">Ed Page</a>
+  (our course forum for asking and answering questions) or attend office hours.</li>
+  <li>Office hours gives you time with the instructors or staff by themselves, and
+  you will be able to get some (nearly) one-on-one instruction. You are <em>not</em>
+  intruding; the instructors and staff are here to help as you learn.</li>
+  <li>Do (or at least attempt seriously) all the homework.  We do not give many
+  homework problems, but those we do give you may find are challenging,
+  time-consuming, and rewarding.</li>
+  <li>Do all the lab exercises. Most of them are designed as more of an
+  introduction to the course material, and may take around the length of
+  a lab section. This is a great time to get acquainted with new material.
+  Feel free to ask the staff members in your lab section or come to office hours
+  if you would like more guidance.
+  <!--* Optional lab questions are 'optional' in the sense that they are extra
+  practice, not that they are material that's out of scope. Make sure you do them
+  if you have time.--></li>
+  <li>Do the readings before lecture. They can be helpful in offering an overview
+  of the material covered in lecture and other aspects of the class, as well as
+  being a reference as part of the overall textbook that you can refer to as you
+  go through the course.</li>
+  <li><p>When preparing for the exams, <strong>do past exam questions</strong>!</p>
+
+  <ul>
+    <li>Lecture, lab, and discussion provide a great introduction to the material,
+    but the main way to learn how to solve exam-level problems is to do exam-level
+    problems. You can find past exams (and other resources) under the
+    <a href="https://cs61a.org/resources/">Resources</a> tab of the website. Many
+    past exams also have solutions or walkthrough videos where past
+    staff members may walk you through the solution to the exam.</li>
+  </ul></li>
+</ul>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#the-course-website">The Course Website</a></li>
+  <li><a href="#lost-on-the-moon">Lost on the Moon</a></li>
+  <li><a href="#secrets-to-success-in-cs-61a">Secrets to Success in CS 61A</a></li>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

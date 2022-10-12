@@ -1,0 +1,1143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/disc.css">
+
+
+    <title>
+Discussion 6 | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 6: Mutability, Iterators, Generators
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc06.pdf" class="label label-outline">disc06.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<div class="alert storable-login-status"></div>
+
+This is an online worksheet that you can work on during discussions.
+Your work is not graded and you do not need to submit anything.
+
+
+    
+<div class="sol-highlight">
+
+<h2 id="walkthrough-videos">Walkthrough Videos</h2>
+
+
+<p>Feel free to try these problems on the worksheet in discussion or on
+your own, and then come back to reference these walkthrough videos
+as you study.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZcTiYYRR_hpo_CF4iCevgmn"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZcTiYYRR_hpo_CF4iCevgmn'> YouTube link </a></p>
+</div>
+
+
+
+
+<h1 id="mutability">Mutability</h1>
+
+
+</p>
+
+<p>Some objects in Python, such as lists and dictionaries, are <strong>mutable</strong>,
+meaning that their contents or state can be changed.
+Other objects, such as numeric types, tuples, and strings, are <strong>immutable</strong>,
+meaning they cannot be changed once they are created.</p>
+
+<p>Let's imagine you order a mushroom and cheese pizza from La Val's,
+and they represent your order as a list:</p>
+
+<pre><code>&gt;&gt;&gt; pizza = [&#x27;cheese&#x27;, &#x27;mushrooms&#x27;]</code></pre>
+
+<p>With list mutation, they can update your order by mutate <code>pizza</code> directly
+rather than having to create a new list:</p>
+
+<pre><code>&gt;&gt;&gt; pizza.append(&#x27;onions&#x27;)
+&gt;&gt;&gt; pizza
+[&#x27;cheese&#x27;, &#x27;mushrooms&#x27;, &#x27;onions&#x27;]</code></pre>
+
+<p>Aside from <code>append</code>, there are various other list mutation methods:</p>
+
+<ul>
+  <li><code>append(el)</code>:
+  Add <code>el</code> to the end of the list. Return <code>None</code>.</li>
+  <li><code>extend(lst)</code>:
+  Extend the list by concatenating it with <code>lst</code>. Return <code>None</code>.</li>
+  <li><code>insert(i, el)</code>:
+  Insert <code>el</code> at index <code>i</code>. This does not replace any existing elements,
+  but only adds the new element <code>el</code>. Return <code>None</code>.</li>
+  <li><code>remove(el)</code>:
+  Remove the first occurrence of <code>el</code> in list.
+  Errors if <code>el</code> is not in the list. Return <code>None</code> otherwise.</li>
+  <li><code>pop(i)</code>:
+  Remove and return the element at index <code>i</code>.</li>
+</ul>
+
+<p>We can also use list indexing with an assignment statement
+to change an existing element in a list.
+For example:</p>
+
+<pre><code>&gt;&gt;&gt; pizza[1] = &#x27;tomatoes&#x27;
+&gt;&gt;&gt; pizza
+[&#x27;cheese&#x27;, &#x27;tomatoes&#x27;, &#x27;onions&#x27;]</code></pre>
+
+<div class="page-break"></div>
+
+
+<h3 id="q1-wwpd-mutability">Q1: WWPD: Mutability</h3>
+
+<p>What would Python display? In addition to giving the output, draw the box and pointer diagrams for each list to the right.</p>
+
+<pre><code>&gt;&gt;&gt; x = [1, 2, 3]
+&gt;&gt;&gt; y = x
+&gt;&gt;&gt; x += [4]
+&gt;&gt;&gt; x</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-1-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-1-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> [1, 2, 3, 4] </div>
+
+<pre><code>&gt;&gt;&gt; y # y is pointing to the same list as x, which got mutated</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-2-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-2-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> [1, 2, 3, 4] </div>
+
+<pre><code>&gt;&gt;&gt; x = [1, 2, 3]
+&gt;&gt;&gt; y = x
+&gt;&gt;&gt; x = x + [4] # creates NEW list, assigns it to x
+&gt;&gt;&gt; x</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-3-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-3-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> [1, 2, 3, 4] </div>
+
+<pre><code>&gt;&gt;&gt; y   # y still points to OLD list, which was not mutated</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-4-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-4-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> [1, 2, 3] </div>
+
+<pre><code>&gt;&gt;&gt; s1 = [1, 2, 3]
+&gt;&gt;&gt; s2 = s1
+&gt;&gt;&gt; s1 is s2</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-5-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-5-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> True </div>
+
+<pre><code>&gt;&gt;&gt; s2.extend([5, 6])
+&gt;&gt;&gt; s1[4]</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-6-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-6-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 6 </div>
+
+<pre><code>&gt;&gt;&gt; s1.append([&#x2d;1, 0, 1])
+&gt;&gt;&gt; s2[5]</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-7-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-7-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> [-1, 0, 1] </div>
+
+<pre><code>&gt;&gt;&gt; s3 = s2[:]
+&gt;&gt;&gt; s3.insert(3, s2.pop(3))
+&gt;&gt;&gt; len(s1)</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-8-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-8-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 5 </div>
+
+<pre><code>&gt;&gt;&gt; s1[4] is s3[6]</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-9-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-9-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> True </div>
+
+<pre><code>&gt;&gt;&gt; s3[s2[4][1]]</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-10-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-10-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 1 </div>
+
+<pre><code>&gt;&gt;&gt; s1[:3] is s2[:3]</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-11-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-11-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> False </div>
+
+<pre><code>&gt;&gt;&gt; s1[:3] == s2[:3]</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-12-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-12-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> True </div>
+
+<pre><code>&gt;&gt;&gt; s1[4].append(2)
+&gt;&gt;&gt; s3[6][3]</code></pre>
+
+
+
+            <label class="sr-only" for="list-wwpd-13-input">Your Answer:</label>
+            <input class="form-control storable" id="list-wwpd-13-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 2 </div>
+
+
+<h3 id="q2-add-this-many">Q2: Add This Many</h3>
+
+
+<p>Write a function that takes in a value <code>x</code>, a value <code>el</code>, and a list <code>s</code>, and adds <code>el</code> to the end of <code>s</code>
+the same number of times that <code>x</code> occurs in <code>s</code>. <strong>Make sure to modify the original list using list mutation techniques.</strong></p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="add-this-many-input" style="height:360px;"></div>
+            <a href="javascript:void" id="modal-link-add-this-many-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-add-this-many-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-add-this-many-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def add_this_many(x, el, s):\n    &quot;&quot;&quot; Adds el to the end of s the number of times x occurs in s.\n    &gt;&gt;&gt; s = [1, 2, 4, 2, 1]\n    &gt;&gt;&gt; add_this_many(1, 5, s)\n    &gt;&gt;&gt; s\n    [1, 2, 4, 2, 1, 5, 5]\n    &gt;&gt;&gt; add_this_many(2, 2, s)\n    &gt;&gt;&gt; s\n    [1, 2, 4, 2, 1, 5, 5, 2, 2]\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "add-this-many-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def add_this_many(x, el, s):
+    &quot;&quot;&quot; Adds el to the end of s the number of times x occurs in s.
+    &gt;&gt;&gt; s = [1, 2, 4, 2, 1]
+    &gt;&gt;&gt; add_this_many(1, 5, s)
+    &gt;&gt;&gt; s
+    [1, 2, 4, 2, 1, 5, 5]
+    &gt;&gt;&gt; add_this_many(2, 2, s)
+    &gt;&gt;&gt; s
+    [1, 2, 4, 2, 1, 5, 5, 2, 2]
+    &quot;&quot;&quot;
+    count = 0
+    for element in s:
+        if element == x:
+            count += 1
+    while count &gt; 0:
+        s.append(el)
+        count &#x2d;= 1
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+Two alternate solutions involve iterating over the list indices and iterating over a copy of the list:
+
+<pre><code>def add_this_many_alt1(x, el, s):
+    for i in range(len(s)):
+        if s[i] == x:
+	    s.append(el)</code></pre>
+
+
+
+<pre><code>def add_this_many_alt2(x, el, s):
+    for element in list(s):
+        if element == x:
+	    s.append(el)</code></pre>
+
+
+</div>
+</p>
+
+<div class="page-break"></div>
+
+
+<h1 id="iterators">Iterators</h1>
+
+
+<p>An iterable is an object where we can go through its elements one at a time.
+Specifically, we define an <strong>iterable</strong> as any object where calling the built-in <code>iter</code>
+function on it returns an <em>iterator</em>. An <strong>iterator</strong> is another type of object
+which can iterate over an iterable by keeping track of which element is next in
+the iterable.</p>
+
+<p>For example, a sequence of numbers is an iterable,
+since <code>iter</code> gives us an iterator over the given sequence:</p>
+
+<pre><code>&gt;&gt;&gt; lst = [1, 2, 3]
+&gt;&gt;&gt; lst_iter = iter(lst)
+&gt;&gt;&gt; lst_iter
+&lt;list_iterator object ...&gt;</code></pre>
+
+<p>With an iterator, we can call <code>next</code> on it to get the next element in the
+iterator. If calling <code>next</code> on an iterator raises a <code>StopIteration</code> exception,
+this signals to us that the iterator has no more elements to go through. This
+will be explored in the example below.</p>
+
+<p>Calling <code>iter</code> on an iterable multiple times returns a new iterator each time
+with distinct states (otherwise, you'd never be able to iterate through a
+iterable more than once). You can also call <code>iter</code> on the iterator itself, which
+will just return the same iterator without changing its state. However, note
+that you cannot call <code>next</code> directly on an iterable.</p>
+
+<p>For example, we can see what happens when we use <code>iter</code> and <code>next</code> with a list:</p>
+
+<pre><code>&gt;&gt;&gt; lst = [1, 2, 3]
+&gt;&gt;&gt; next(lst)             # Calling next on an iterable
+TypeError: &#x27;list&#x27; object is not an iterator
+&gt;&gt;&gt; list_iter = iter(lst) # Creates an iterator for the list
+&gt;&gt;&gt; next(list_iter)       # Calling next on an iterator
+1
+&gt;&gt;&gt; next(iter(list_iter)) # Calling iter on an iterator returns itself
+2
+&gt;&gt;&gt; for e in list_iter:   # Exhausts remainder of list_iter
+...     print(e)
+3
+&gt;&gt;&gt; next(list_iter)       # No elements left!
+StopIteration
+&gt;&gt;&gt; lst                   # Original iterable is unaffected
+[1, 2, 3]</code></pre>
+
+<div class="page-break"></div>
+
+
+<h3 id="q3-wwpd-iterators">Q3: WWPD: Iterators</h3>
+
+
+<p>What would Python display?</p>
+
+<pre><code>&gt;&gt;&gt; s = &quot;cs61a&quot;
+&gt;&gt;&gt; s_iter = iter(s)
+&gt;&gt;&gt; next(s_iter)</code></pre>
+
+
+
+            <label class="sr-only" for="iter-wwpd-1-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-1-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 'c' </div>
+
+<pre><code>&gt;&gt;&gt; next(s_iter)</code></pre>
+
+
+
+            <label class="sr-only" for="iter-wwpd-2-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-2-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 's' </div>
+
+<pre><code>&gt;&gt;&gt; list(s_iter)</code></pre>
+
+
+
+            <label class="sr-only" for="iter-wwpd-3-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-3-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> [‘6’, ‘1’, ‘a’] </div>
+
+<pre><code>&gt;&gt;&gt; s = [[1, 2, 3, 4]]
+&gt;&gt;&gt; i = iter(s)
+&gt;&gt;&gt; j = iter(next(i))
+&gt;&gt;&gt; next(j)</code></pre>
+
+
+
+            <label class="sr-only" for="iter-wwpd-4-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-4-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 1 </div>
+
+<pre><code>&gt;&gt;&gt; s.append(5)
+&gt;&gt;&gt; next(i)</code></pre>
+
+
+
+            <label class="sr-only" for="iter-wwpd-5-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-5-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 5 </div>
+
+<pre><code>&gt;&gt;&gt; next(j)</code></pre>
+
+
+
+
+            <label class="sr-only" for="iter-wwpd-6-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-6-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 2 </div>
+
+<pre><code>&gt;&gt;&gt; list(j)</code></pre>
+
+
+
+
+            <label class="sr-only" for="iter-wwpd-7-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-7-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> [3, 4] </div>
+
+<pre><code>&gt;&gt;&gt; next(i)</code></pre>
+
+
+
+            <label class="sr-only" for="iter-wwpd-8-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-8-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> StopIteration </div>
+
+
+<h1 id="generators">Generators</h1>
+
+
+
+
+<p>We can define custom iterators by writing a <em>generator function</em>,
+which returns a special type of iterator called a <strong>generator</strong>.</p>
+
+<p>A generator function has at least one <code>yield</code> statement
+and returns a <strong><em>generator</em></strong> <em>object</em> when we call it,
+without evaluating the body of the generator function itself.</p>
+
+<p>When we first call <code>next</code> on the returned generator,
+then we will begin evaluating the body of the generator function until
+an element is yielded or the function otherwise stops
+(such as if we <code>return</code>).
+The generator remembers where we stopped,
+and will continue evaluating from that stopping point
+on the next time we call <code>next</code>.</p>
+
+<p>As with other iterators, if there are no more elements to be generated,
+then calling <code>next</code> on the generator will give us a <code>StopIteration</code>.</p>
+
+<p>For example, here's a generator function:</p>
+
+<pre><code>def countdown(n):
+    print(&quot;Beginning countdown!&quot;)
+    while n &gt;= 0:
+        yield n
+        n &#x2d;= 1
+    print(&quot;Blastoff!&quot;)</code></pre>
+
+<p>To create a new generator object, we can call the generator function.
+Each returned generator object from a function call will separately
+keep track of where it is in terms of evaluating the body of the function.
+Notice that calling <code>iter</code> on a generator object doesn't create a new
+bookmark, but simply returns the existing generator object!</p>
+
+<pre><code>&gt;&gt;&gt; c1, c2 = countdown(2), countdown(2)
+&gt;&gt;&gt; c1 is iter(c1)  # a generator is an iterator
+True
+&gt;&gt;&gt; c1 is c2
+False
+&gt;&gt;&gt; next(c1)
+Beginning countdown!
+2
+&gt;&gt;&gt; next(c2)
+Beginning countdown!
+2</code></pre>
+
+<p>In a generator function, we can also have a <code>yield from</code> statement,
+which will <strong>yield</strong> each element <strong>from</strong> an iterator or iterable.</p>
+
+<pre><code>&gt;&gt;&gt; def gen_list(lst):
+...     yield from lst
+...
+&gt;&gt;&gt; g = gen_list([1, 2])
+&gt;&gt;&gt; next(g)
+1
+&gt;&gt;&gt; next(g)
+2
+&gt;&gt;&gt; next(g)
+StopIteration</code></pre>
+
+<div class="page-break"></div>
+
+
+<h3 id="q4-wwpd-generators">Q4: WWPD: Generators</h3>
+
+
+<p>What would Python display? If the command errors, input the specific error.</p>
+
+<pre><code>&gt;&gt;&gt; def infinite_generator(n):
+...     yield n
+...     while True:
+...     	n += 1
+...     	yield n
+&gt;&gt;&gt; next(infinite_generator)</code></pre>
+
+
+
+            <label class="sr-only" for="generators-wwpd-1-input">Your Answer:</label>
+            <input class="form-control storable" id="generators-wwpd-1-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> TypeError </div>
+
+<pre><code>&gt;&gt;&gt; gen_obj = infinite_generator(1)
+&gt;&gt;&gt; next(gen_obj)</code></pre>
+
+
+
+            <label class="sr-only" for="generators-wwpd-2-input">Your Answer:</label>
+            <input class="form-control storable" id="generators-wwpd-2-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 1 </div>
+
+<pre><code>&gt;&gt;&gt; next(gen_obj)</code></pre>
+
+
+
+            <label class="sr-only" for="generators-wwpd-3-input">Your Answer:</label>
+            <input class="form-control storable" id="generators-wwpd-3-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 2 </div>
+
+<pre><code>&gt;&gt;&gt; list(gen_obj)</code></pre>
+
+
+
+            <label class="sr-only" for="generators-wwpd-4-input">Your Answer:</label>
+            <input class="form-control storable" id="generators-wwpd-4-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> Infinite Loop </div>
+
+<div class="page-break"></div>
+
+
+<h3 id="q5-filter-iter">Q5: Filter-Iter</h3>
+
+<p>Implement a generator function called <code>filter_iter(iterable, f)</code> that only yields
+elements of <code>iterable</code> for which <code>f</code> returns True.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="filter-iter-input" style="height:450px;"></div>
+            <a href="javascript:void" id="modal-link-filter-iter-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-filter-iter-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-filter-iter-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def filter_iter(iterable, f):\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; is_even = lambda x: x % 2 == 0\n    &gt;&gt;&gt; list(filter_iter(range(5), is_even)) # a list of the values yielded from the call to filter_iter\n    [0, 2, 4]\n    &gt;&gt;&gt; all_odd = (2*y&#x2d;1 for y in range(5))\n    &gt;&gt;&gt; list(filter_iter(all_odd, is_even))\n    []\n    &gt;&gt;&gt; naturals = (n for n in range(1, 100))\n    &gt;&gt;&gt; s = filter_iter(naturals, is_even)\n    &gt;&gt;&gt; next(s)\n    2\n    &gt;&gt;&gt; next(s)\n    4\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "filter-iter-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def filter_iter(iterable, f):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; is_even = lambda x: x % 2 == 0
+    &gt;&gt;&gt; list(filter_iter(range(5), is_even)) # a list of the values yielded from the call to filter_iter
+    [0, 2, 4]
+    &gt;&gt;&gt; all_odd = (2*y&#x2d;1 for y in range(5))
+    &gt;&gt;&gt; list(filter_iter(all_odd, is_even))
+    []
+    &gt;&gt;&gt; naturals = (n for n in range(1, 100))
+    &gt;&gt;&gt; s = filter_iter(naturals, is_even)
+    &gt;&gt;&gt; next(s)
+    2
+    &gt;&gt;&gt; next(s)
+    4
+    &quot;&quot;&quot;
+    for elem in iterable:
+        if f(elem):
+            yield elem
+
+# Alternate solution (only works if iterable is not an infinite iterator)
+def filter_iter(iterable, f):
+    yield from [elem for elem in iterable if f(elem)]
+</code></pre>
+
+            </div>
+        
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q6-primes-generator">Q6: Primes Generator</h3>
+
+
+
+
+<p>Write a function <code>primes_gen</code> that takes a single argument <code>n</code> and yields all prime
+numbers less than or equal to <code>n</code> in decreasing order. Assume <code>n &gt;= 1</code>.
+You may use the <code>is_prime</code> function included below, which we implemented in
+<a href="/disc/disc03/">Discussion 3</a>.</p>
+
+<p>Optional Challenge:
+Now rewrite the generator so that it also prints the primes in
+<em>ascending order</em>.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="primes-input" style="height:558px;"></div>
+            <a href="javascript:void" id="modal-link-primes-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-primes-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-primes-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def is_prime(n):\n    &quot;&quot;&quot;Returns True if n is a prime number and False otherwise.\n    &gt;&gt;&gt; is_prime(2)\n    True\n    &gt;&gt;&gt; is_prime(16)\n    False\n    &gt;&gt;&gt; is_prime(521)\n    True\n    &quot;&quot;&quot;\n    def helper(i):\n        if i &gt; (n ** 0.5): # Could replace with i == n\n            return True\n        elif n % i == 0:\n            return False\n        return helper(i + 1)\n    return helper(2)\n\ndef primes_gen(n):\n    &quot;&quot;&quot;Generates primes in decreasing order.\n    &gt;&gt;&gt; pg = primes_gen(7)\n    &gt;&gt;&gt; list(pg)\n    [7, 5, 3, 2]\n    &quot;&quot;&quot;\n    if __________________________________:\n        return\n    if __________________________________:\n        yield __________________________________\n    yield from __________________________________\n\n', "python", "primes-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def is_prime(n):
+    &quot;&quot;&quot;Returns True if n is a prime number and False otherwise.
+    &gt;&gt;&gt; is_prime(2)
+    True
+    &gt;&gt;&gt; is_prime(16)
+    False
+    &gt;&gt;&gt; is_prime(521)
+    True
+    &quot;&quot;&quot;
+    def helper(i):
+        if i &gt; (n ** 0.5): # Could replace with i == n
+            return True
+        elif n % i == 0:
+            return False
+        return helper(i + 1)
+    return helper(2)
+
+def primes_gen(n):
+    &quot;&quot;&quot;Generates primes in decreasing order.
+    &gt;&gt;&gt; pg = primes_gen(7)
+    &gt;&gt;&gt; list(pg)
+    [7, 5, 3, 2]
+    &quot;&quot;&quot;
+    if n == 1:
+        return
+    if is_prime(n):
+        yield n
+    yield from primes_gen(n&#x2d;1)
+</code></pre>
+
+            </div>
+        
+
+</p>
+
+<div class="page-break"></div>
+
+
+<h3 id="q7-generate-preorder">Q7: Generate Preorder</h3>
+
+
+
+
+<p><strong>Part 1:</strong></p>
+
+<p>First define the function <code>preorder</code>, which takes in a tree as an argument and
+returns a list of all the entries in the tree in the order that
+<code>print_tree</code> would print them.</p>
+
+<p>The following diagram shows the order that the nodes would get printed,
+with the arrows representing function calls.</p>
+
+<p><img class="img-responsive center-block" src="assets/preorder.png" alt="preorder" width="" height=""></p>
+
+<blockquote><p>Note: This ordering of the nodes in a tree is called a preorder traversal.</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="preorder-input" style="height:450px;"></div>
+            <a href="javascript:void" id="modal-link-preorder-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-preorder-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-preorder-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def preorder(t):\n    &quot;&quot;&quot;Return a list of the entries in this tree in the order that they\n    would be visited by a preorder traversal (see problem description).\n\n    &gt;&gt;&gt; numbers = tree(1, [tree(2), tree(3, [tree(4), tree(5)]), tree(6, [tree(7)])])\n    &gt;&gt;&gt; preorder(numbers)\n    [1, 2, 3, 4, 5, 6, 7]\n    &gt;&gt;&gt; preorder(tree(2, [tree(4, [tree(6)])]))\n    [2, 4, 6]\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "preorder-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def preorder(t):
+    &quot;&quot;&quot;Return a list of the entries in this tree in the order that they
+    would be visited by a preorder traversal (see problem description).
+
+    &gt;&gt;&gt; numbers = tree(1, [tree(2), tree(3, [tree(4), tree(5)]), tree(6, [tree(7)])])
+    &gt;&gt;&gt; preorder(numbers)
+    [1, 2, 3, 4, 5, 6, 7]
+    &gt;&gt;&gt; preorder(tree(2, [tree(4, [tree(6)])]))
+    [2, 4, 6]
+    &quot;&quot;&quot;
+    if branches(t) == []:
+        return [label(t)]
+    flattened_branches = []
+    for child in branches(t):
+        flattened_branches += preorder(child)
+    return [label(t)] + flattened_branches
+
+# Alternate solution
+from functools import reduce
+
+def preorder_alt(t):
+    return reduce(add, [preorder_alt(child) for child in branches(t)], [label(t)])
+</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+<p><strong>Part 2:</strong></p>
+
+<p>Similarly to <code>preorder</code> defined above,
+define the function <code>generate_preorder</code>,
+which takes in a tree as an argument and
+now instead <code>yield</code>s the entries in the tree
+in the order that <code>print_tree</code> would print them.</p>
+
+<blockquote><p><strong>Hint:</strong>
+How can you modify your implementation of <code>preorder</code> to
+<code>yield from</code> your recursive calls instead of returning them?</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="generate_preorder-input" style="height:306px;"></div>
+            <a href="javascript:void" id="modal-link-generate_preorder-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-generate_preorder-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-generate_preorder-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def generate_preorder(t):\n    &quot;&quot;&quot;Yield the entries in this tree in the order that they\n    would be visited by a preorder traversal (see problem description).\n\n    &gt;&gt;&gt; numbers = tree(1, [tree(2), tree(3, [tree(4), tree(5)]), tree(6, [tree(7)])])\n    &gt;&gt;&gt; gen = generate_preorder(numbers)\n    &gt;&gt;&gt; next(gen)\n    1\n    &gt;&gt;&gt; list(gen)\n    [2, 3, 4, 5, 6, 7]\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "generate_preorder-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def generate_preorder(t):
+    &quot;&quot;&quot;Yield the entries in this tree in the order that they
+    would be visited by a preorder traversal (see problem description).
+
+    &gt;&gt;&gt; numbers = tree(1, [tree(2), tree(3, [tree(4), tree(5)]), tree(6, [tree(7)])])
+    &gt;&gt;&gt; gen = generate_preorder(numbers)
+    &gt;&gt;&gt; next(gen)
+    1
+    &gt;&gt;&gt; list(gen)
+    [2, 3, 4, 5, 6, 7]
+    &quot;&quot;&quot;
+    yield label(t)
+    for b in branches(t):
+        yield from generate_preorder(b)
+</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+
+<h3 id="q8-optional-mystery-reverse-environment-diagram">Q8: (Optional) Mystery Reverse Environment Diagram</h3>
+
+
+<p>Fill in the lines below so that the variables in the <strong>global frame</strong> are bound to the values below. Note that the image does not contain a full environment diagram. <strong>You may only use brackets, colons,</strong> <code>p</code> <strong>and</strong>  <code>q</code> <strong>in your answer.</strong></p>
+
+<p>Hint: If you get stuck, feel free to try out different combinations in <a href="http://tutor.cs61a.org/">PythonTutor</a>!</p>
+
+<p><img class="img-responsive center-block" src="assets/mystery.png" alt="envdiagram" width="" height=""></p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="mystery-input" style="height:180px;"></div>
+            <a href="javascript:void" id="modal-link-mystery-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-mystery-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-mystery-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def mystery(p, q):\n    p[1].extend(___________________________)\n    ___________________________.append(____________________[1:])\n\np = [2, 3]\nq = [4, [p]]\nmystery(_________________, ________________________)\n\n', "python", "mystery-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def mystery(p, q):
+    p[1].extend(q)
+    q.append(p[1:])
+
+p = [2, 3]
+q = [4, [p]]
+mystery(q, p)
+</code></pre>
+
+            </div>
+        
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#walkthrough-videos">Walkthrough Videos</a></li>
+  <li><a href="#mutability">Mutability</a></li>
+  <ul>
+    <li><a href="#q1-wwpd-mutability">Q1: WWPD: Mutability</a></li>
+    <li><a href="#q2-add-this-many">Q2: Add This Many</a></li>
+  </ul>
+  <li><a href="#iterators">Iterators</a></li>
+  <ul>
+    <li><a href="#q3-wwpd-iterators">Q3: WWPD: Iterators</a></li>
+  </ul>
+  <li><a href="#generators">Generators</a></li>
+  <ul>
+    <li><a href="#q4-wwpd-generators">Q4: WWPD: Generators</a></li>
+    <li><a href="#q5-filter-iter">Q5: Filter-Iter</a></li>
+    <li><a href="#q6-primes-generator">Q6: Primes Generator</a></li>
+    <li><a href="#q7-generate-preorder">Q7: Generate Preorder</a></li>
+    <li><a href="#q8-optional-mystery-reverse-environment-diagram">Q8: (Optional) Mystery Reverse Environment Diagram</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,850 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/disc.css">
+
+
+    <title>
+Discussion 3 | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 3: Recursion
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc03.pdf" class="label label-outline">disc03.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<div class="alert storable-login-status"></div>
+
+This is an online worksheet that you can work on during discussions.
+Your work is not graded and you do not need to submit anything.
+
+
+    
+
+
+
+<h1 id="recursion">Recursion</h1>
+
+
+<p>A <em>recursive</em> function is a function that is defined in terms of itself.</p>
+
+<p>Consider this recursive <code>factorial</code> function:</p>
+
+<pre><code>def factorial(n):
+    &quot;&quot;&quot;Return the factorial of N, a positive integer.&quot;&quot;&quot;
+    if n == 1:
+        return 1
+    else:
+        return n * factorial(n &#x2d; 1)</code></pre>
+
+<p>Inside of the body of <code>factorial</code>, we are able to call <code>factorial</code> itself,
+since the function body is not evaluated until the function is called.</p>
+
+<p>When <code>n</code> is 1, we can directly return the factorial of 1, which is 1.
+This is known as the <em>base case</em> of this recursive function,
+which is the case where we can return from the function call directly,
+without having to first recurse (i.e. call <code>factorial</code>) and then returning.
+The base case is what prevents <code>factorial</code> from recursing infinitely.</p>
+
+<p>Since we know that our base case <code>factorial(1)</code> will return,
+we can compute <code>factorial(2)</code> in terms of <code>factorial(1)</code>,
+then <code>factorial(3)</code> in terms of <code>factorial(2)</code>, and so on.</p>
+
+<p>There are three main steps in a recursive definition:</p>
+
+<ol>
+  <li><p><strong>Base case.</strong>
+  You can think of the base case as the case of the simplest function input,
+  or as the stopping condition for the recursion.</p>
+
+  <p>In our example, <code>factorial(1)</code> is our base case for the <code>factorial</code>
+  function.</p></li>
+  <li><p><strong>Recursive call on a smaller problem.</strong>
+  You can think of this step as calling the function on a smaller problem
+  that our current problem depends on. We assume that a recursive call on
+  this smaller problem will give us the expected result; we call this idea
+  the "recursive leap of faith".</p>
+
+  <p>In our example, <code>factorial(n)</code> depends on the smaller problem of
+  <code>factorial(n&#x2d;1)</code>.</p></li>
+  <li><p><strong>Solve the larger problem.</strong>
+  In step 2, we found the result of a smaller problem.
+  We want to now use that result to figure out what the result of our current
+  problem should be, which is what we want to return from our current
+  function call.</p>
+
+  <p>In our example, we can compute <code>factorial(n)</code> by multiplying the result
+  of our smaller problem <code>factorial(n&#x2d;1)</code> (which represents <code>(n&#x2d;1)!</code>)
+  by <code>n</code> (the reasoning being that <code>n! = n * (n&#x2d;1)!</code>).</p></li>
+</ol>
+
+<div class="page-break"></div>
+
+
+<h3 id="q1-warm-up-recursive-multiplication">Q1: Warm Up: Recursive Multiplication</h3>
+
+
+<p>These exercises are meant to help refresh your memory of the topics covered in
+lecture.</p>
+
+<p>Write a function that takes two numbers <code>m</code> and <code>n</code> and returns their product.
+Assume <code>m</code> and <code>n</code> are positive integers. Use <strong>recursion</strong>, not <code>mul</code> or <code>*</code>.</p>
+
+<blockquote><p>Hint: <code>5 * 3 = 5 + (5 * 2) = 5 + 5 + (5 * 1)</code>.</p></blockquote>
+
+<p>For the base case, what is the simplest possible input for <code>multiply</code>?</p>
+
+
+            <label class="sr-only" for="recursive-multiplication-base-case-input">Your Answer:</label>
+            <input class="form-control storable" id="recursive-multiplication-base-case-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p>If one of the inputs is one, you simply return the other input.</p>
+
+</div>
+
+<p>For the recursive case, what does calling <code>multiply(m &#x2d; 1, n)</code> do?
+What does calling <code>multiply(m, n &#x2d; 1)</code> do? Do we prefer one over the other?</p>
+
+
+            <label class="sr-only" for="recursive-multiplication-recursive-case-input">Your Answer:</label>
+            <input class="form-control storable" id="recursive-multiplication-recursive-case-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p>The first call will calculate a value that is <code>n</code> less than the total,
+while the second will calculate a value that is <code>m</code> less.
+Either recursive call will work, but only <code>multiply(m, n &#x2d; 1)</code> is used
+in this solution.</p>
+
+</div>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="recursive-multiplication-input" style="height:216px;"></div>
+            <a href="javascript:void" id="modal-link-recursive-multiplication-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-recursive-multiplication-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-recursive-multiplication-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def multiply(m, n):\n    &quot;&quot;&quot; Takes two positive integers and returns their product using recursion.\n    &gt;&gt;&gt; multiply(5, 3)\n    15\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "recursive-multiplication-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def multiply(m, n):
+    &quot;&quot;&quot; Takes two positive integers and returns their product using recursion.
+    &gt;&gt;&gt; multiply(5, 3)
+    15
+    &quot;&quot;&quot;
+    if n == 1:
+        return m
+    else:
+        return m + multiply(m, n &#x2d; 1)
+</code></pre>
+
+            </div>
+        
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q2-recursion-environment-diagram">Q2: Recursion Environment Diagram</h3>
+
+
+<p>Draw an environment diagram for the following code:</p>
+
+<blockquote><p>Note: If you can't move elements around, make sure you're logged in!</p></blockquote>
+
+
+            
+<pre><code>def rec(x, y):
+    if y &gt; 0:
+        return x * rec(x, y &#x2d; 1)
+    return 1
+
+rec(3, 2)</code></pre>
+
+            <b>Your Answer</b>
+            
+<pre><code>def rec(x, y):
+    if y &gt; 0:
+        return x * rec(x, y &#x2d; 1)
+    return 1
+
+rec(3, 2)</code></pre>
+
+        <div class="env-diagram" id=env-diagram-recursion-env-diagram>
+          <div class="env-diagram-objects">
+            <div>Objects</div>
+            <ul><li>
+            <button class="env-diagram-connector" id="env-diagram-recursion-env-diagram-object0-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-recursion-env-diagram-object0-value" type="text">
+            </li>
+            <li><button class="env-diagram-trash" title="Click here to remove a binding">🗑️</button></li>
+            </ul>
+        </div>
+          <div class="env-diagram-frame">
+                <div>Global frame</div>
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame0-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame0-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-recursion-env-diagram-frame0-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame0-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame0-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-recursion-env-diagram-frame0-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f1: <input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame1-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame1-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame1-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame1-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-recursion-env-diagram-frame1-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame1-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame1-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-recursion-env-diagram-frame1-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame1-return">
+                <button class="env-diagram-connector" id="env-diagram-recursion-env-diagram-frame1-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f2: <input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame2-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame2-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame2-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame2-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-recursion-env-diagram-frame2-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame2-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame2-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-recursion-env-diagram-frame2-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame2-return">
+                <button class="env-diagram-connector" id="env-diagram-recursion-env-diagram-frame2-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f3: <input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame3-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame3-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame3-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame3-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-recursion-env-diagram-frame3-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame3-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame3-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-recursion-env-diagram-frame3-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-recursion-env-diagram-frame3-return">
+                <button class="env-diagram-connector" id="env-diagram-recursion-env-diagram-frame3-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="storable-status"></div>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+            <iframe
+                width="800"
+                height="642"
+                frameborder="0"
+                src="https://pythontutor.com/iframe-embed.html#code=def+rec%28x%2C+y%29%3A%0A++++if+y+%3E+0%3A%0A++++++++return+x+%2A+rec%28x%2C+y+-+1%29%0A++++return+1%0A%0Arec%283%2C+2%29%0A&codeDivHeight=642&codeDivWidth=350&cumulative=true&curInstr=1&heapPrimitives=nevernest&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false">
+            </iframe>
+        
+            </div>
+        
+
+<div class="sol-highlight">
+
+<p>This function returns the result of computing X to the power of Y.</p>
+
+</div>
+
+<blockquote><p>Note:
+This problem is meant to help you understand what really goes on when we
+make the "recursive leap of faith". However, when approaching or debugging
+recursive functions, you should avoid visualizing them in this way for large
+or complicated inputs, since the large number of frames can be quite unwieldy
+and confusing. Instead, think in terms of the three steps:
+base case, recursive call, and solving the full problem.</p></blockquote>
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q3-find-the-bug">Q3: Find the Bug</h3>
+
+
+<p>Find the bug with this recursive function.</p>
+
+<pre><code>def skip_mul(n):
+    &quot;&quot;&quot;Return the product of n * (n &#x2d; 2) * (n &#x2d; 4) * ...
+
+    &gt;&gt;&gt; skip_mul(5) # 5 * 3 * 1
+    15
+    &gt;&gt;&gt; skip_mul(8) # 8 * 6 * 4 * 2
+    384
+    &quot;&quot;&quot;
+    if n == 2:
+        return 2
+    else:
+        return n * skip_mul(n &#x2d; 2)</code></pre>
+
+<div class="sol-highlight">
+
+<p>Consider what happens when we choose an odd number for <code>n</code>. <code>skip_mul(3)</code> will
+return <code>3 * skip_mul(1)</code>. <code>skip_mul(1)</code> will return <code>1 * skip_mul(&#x2d;1)</code>. You
+may see the problem now. Since we are decreasing <code>n</code> by two at a time, we've
+completed missed our base case of <code>n == 2</code>, and we will end up recursing
+indefinitely. We need to add another base case to make sure this doesn't
+happen.</p>
+
+<pre><code>def skip_mul(n):
+    if n == 1:
+        return 1
+    elif n == 2:
+        return 2
+    else:
+        return n * skip_mul(n &#x2d; 2)</code></pre>
+
+</div>
+
+<div class="page-break"></div>
+
+
+<h3 id="q4-is-prime">Q4: Is Prime</h3>
+
+
+<p>Write a function <code>is_prime</code> that takes a single argument <code>n</code> and returns <code>True</code>
+if <code>n</code> is a prime number and <code>False</code> otherwise. Assume <code>n &gt; 1</code>. We implemented
+this in <a href="/disc/disc01/">Discussion 1</a> iteratively, now time to do it recursively!</p>
+
+<blockquote><p><em>Hint</em>: You will need a helper function! Remember helper functions are
+nested functions that are useful if you need to keep track of more variables
+than the given parameters, or if you need to change the value of the input.</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="is-prime-input" style="height:378px;"></div>
+            <a href="javascript:void" id="modal-link-is-prime-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-is-prime-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-is-prime-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def is_prime(n):\n    &quot;&quot;&quot;Returns True if n is a prime number and False otherwise.\n\n    &gt;&gt;&gt; is_prime(2)\n    True\n    &gt;&gt;&gt; is_prime(16)\n    False\n    &gt;&gt;&gt; is_prime(521)\n    True\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "is-prime-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def is_prime(n):
+    &quot;&quot;&quot;Returns True if n is a prime number and False otherwise.
+
+    &gt;&gt;&gt; is_prime(2)
+    True
+    &gt;&gt;&gt; is_prime(16)
+    False
+    &gt;&gt;&gt; is_prime(521)
+    True
+    &quot;&quot;&quot;
+    def helper(i):
+        if i &gt; (n ** 0.5): # Could replace with i == n
+            return True
+        elif n % i == 0:
+            return False
+        return helper(i + 1)
+    return helper(2)
+
+</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+
+<h3 id="q5-recursive-hailstone">Q5: Recursive Hailstone</h3>
+
+
+<p>Recall the <code>hailstone</code> function from <a href="/hw/hw01/">Homework 1</a>.
+First, pick a positive integer <code>n</code> as the start. If <code>n</code> is even, divide it by 2.
+If <code>n</code> is odd, multiply it by 3 and add 1. Repeat this process until <code>n</code> is 1.
+Write a recursive version of <code>hailstone</code> that prints out the values of the
+sequence and returns the number of steps.</p>
+
+<blockquote><p>Hint:
+When taking the recursive leap of faith, consider both the return value and
+side effect of this function.</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="recursive-hailstone-input" style="height:486px;"></div>
+            <a href="javascript:void" id="modal-link-recursive-hailstone-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-recursive-hailstone-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-recursive-hailstone-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def hailstone(n):\n    &quot;&quot;&quot;Print out the hailstone sequence starting at n, and return the number of elements in the sequence.\n    &gt;&gt;&gt; a = hailstone(10)\n    10\n    5\n    16\n    8\n    4\n    2\n    1\n    &gt;&gt;&gt; a\n    7\n    &gt;&gt;&gt; b = hailstone(1)\n    1\n    &gt;&gt;&gt; b\n    1\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "recursive-hailstone-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def hailstone(n):
+    &quot;&quot;&quot;Print out the hailstone sequence starting at n, and return the number of elements in the sequence.
+    &gt;&gt;&gt; a = hailstone(10)
+    10
+    5
+    16
+    8
+    4
+    2
+    1
+    &gt;&gt;&gt; a
+    7
+    &gt;&gt;&gt; b = hailstone(1)
+    1
+    &gt;&gt;&gt; b
+    1
+    &quot;&quot;&quot;
+    print(n)
+    if n == 1:
+        return 1
+    elif n % 2 == 0:
+        return 1 + hailstone(n // 2)
+    else:
+        return 1 + hailstone(3 * n + 1)
+</code></pre>
+
+            </div>
+        
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q6-merge-numbers">Q6: Merge Numbers</h3>
+
+
+<p>Write a procedure <code>merge(n1, n2)</code> which takes numbers with digits in decreasing
+order and returns a single number with all of the digits of the two,
+in decreasing order. Any number merged with 0 will be that number
+(treat 0 as having no digits). Use recursion.</p>
+
+<blockquote><p>Hint: If you can figure out which number has the smallest digit out of both,
+then we know that the resulting number will have that smallest digit,
+followed by the merge of the two numbers with the smallest digit removed.</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="merge-numbers-input" style="height:360px;"></div>
+            <a href="javascript:void" id="modal-link-merge-numbers-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-merge-numbers-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-merge-numbers-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def merge(n1, n2):\n    &quot;&quot;&quot; Merges two numbers by digit in decreasing order\n    &gt;&gt;&gt; merge(31, 42)\n    4321\n    &gt;&gt;&gt; merge(21, 0)\n    21\n    &gt;&gt;&gt; merge (21, 31) \n    3211\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "merge-numbers-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def merge(n1, n2):
+    &quot;&quot;&quot; Merges two numbers by digit in decreasing order
+    &gt;&gt;&gt; merge(31, 42)
+    4321
+    &gt;&gt;&gt; merge(21, 0)
+    21
+    &gt;&gt;&gt; merge (21, 31) 
+    3211
+    &quot;&quot;&quot;
+    if n1 == 0:
+        return n2
+    elif n2 == 0:
+        return n1
+    elif n1 % 10 &lt; n2 % 10:
+        return merge(n1 // 10, n2) * 10 + n1 % 10
+    else:
+        return merge(n1, n2 // 10) * 10 + n2 % 10
+</code></pre>
+
+            </div>
+        
+
+
+
+<div class="page-break"></div>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#recursion">Recursion</a></li>
+  <ul>
+    <li><a href="#q1-warm-up-recursive-multiplication">Q1: Warm Up: Recursive Multiplication</a></li>
+    <li><a href="#q2-recursion-environment-diagram">Q2: Recursion Environment Diagram</a></li>
+    <li><a href="#q3-find-the-bug">Q3: Find the Bug</a></li>
+    <li><a href="#q4-is-prime">Q4: Is Prime</a></li>
+    <li><a href="#q5-recursive-hailstone">Q5: Recursive Hailstone</a></li>
+    <li><a href="#q6-merge-numbers">Q6: Merge Numbers</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

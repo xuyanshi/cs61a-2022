@@ -1,0 +1,899 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/hw.css">
+
+
+    <title>
+Homework 3 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Homework 3 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="hw03.zip" class="label label-outline">hw03.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+<p>You can find the solutions in <a href="hw03.py">hw03.py</a>.</p>
+
+    
+<h1 id="required-questions">Required Questions</h1>
+
+
+<br>
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+<h2 id="getting-started-videos">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZcyXID3-_EPIZ9WWwRFJRwq"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZcyXID3-_EPIZ9WWwRFJRwq'> YouTube link </a></p>
+</div>
+
+
+<h3 id="q1-num-eights">Q1: Num eights</h3>
+
+
+<p>Write a recursive function <code>num_eights</code> that takes a positive integer <code>pos</code> and
+returns the number of times the digit 8 appears in <code>pos</code>.</p>
+
+<p><strong>Important:</strong>
+Use recursion; the tests will fail if you use any assignment statements or loops.
+(You can however use function definitions if you so wish.)</p>
+
+<solution>
+
+<pre><code>def num_eights(pos):
+    &quot;&quot;&quot;Returns the number of times 8 appears as a digit of pos.
+
+    &gt;&gt;&gt; num_eights(3)
+    0
+    &gt;&gt;&gt; num_eights(8)
+    1
+    &gt;&gt;&gt; num_eights(88888888)
+    8
+    &gt;&gt;&gt; num_eights(2638)
+    1
+    &gt;&gt;&gt; num_eights(86380)
+    2
+    &gt;&gt;&gt; num_eights(12345)
+    0
+    &gt;&gt;&gt; num_eights(8782089)
+    3
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; # ban all assignment statements
+    &gt;&gt;&gt; check(HW_SOURCE_FILE, &#x27;num_eights&#x27;,
+    ...       [&#x27;Assign&#x27;, &#x27;AnnAssign&#x27;, &#x27;AugAssign&#x27;, &#x27;NamedExpr&#x27;, &#x27;For&#x27;, &#x27;While&#x27;])
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if pos % 10 == 8:
+        return 1 + num_eights(pos // 10)
+    elif pos &lt; 10:
+        return 0
+    else:
+        return num_eights(pos // 10)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q num_eights<button id="copy-code-python3ok-qnum_eights" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qnum_eights").onclick = () => copyCode('python3 ok -q num_eights', "copy-code-python3ok-qnum_eights");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>The equivalent iterative version of this problem might look something like
+this:</p>
+
+<pre><code>total = 0
+while pos &gt; 0:
+    if pos % 10 == 8:
+        total = total + 1
+    pos = pos // 10
+return total</code></pre>
+
+<p>The main idea is that we check each digit for a eight. The recursive solution
+is similar, except that you depend on the recursive call to count the
+occurences of eight in the rest of the number. Then, you add that to the number
+of eights you see in the current digit.</p>
+
+</div>
+
+
+<h3 id="q2-ping-pong">Q2: Ping-pong</h3>
+
+
+<p>The ping-pong sequence counts up starting from 1 and is always either counting
+up or counting down.  At element <code>k</code>, the direction switches if <code>k</code> is a
+multiple of 8 or contains the digit 8.  The first 30 elements of the ping-pong
+sequence are listed below, with direction swaps marked using brackets at the
+8th, 16th, 18th, 24th, and 28th elements:</p>
+
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th>Index</th>
+    <th>1</th>
+    <th>2</th>
+    <th>3</th>
+    <th>4</th>
+    <th>5</th>
+    <th>6</th>
+    <th>7</th>
+    <th>[8]</th>
+    <th>9</th>
+    <th>10</th>
+    <th>11</th>
+    <th>12</th>
+    <th>13</th>
+    <th>14</th>
+    <th>15</th>
+    <th>[16]</th>
+    <th>17</th>
+    <th>[18]</th>
+    <th>19</th>
+    <th>20</th>
+    <th>21</th>
+    <th>22</th>
+    <th>23</th>
+  </tr>
+  <tr>
+    <td>PingPong Value</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>[8]</td>
+    <td>7</td>
+    <td>6</td>
+    <td>5</td>
+    <td>4</td>
+    <td>3</td>
+    <td>2</td>
+    <td>1</td>
+    <td>[0]</td>
+    <td>1</td>
+    <td>[2]</td>
+    <td>1</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>-2</td>
+    <td>-3</td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th>Index (cont.)</th>
+    <th>[24]</th>
+    <th>25</th>
+    <th>26</th>
+    <th>27</th>
+    <th>[28]</th>
+    <th>29</th>
+    <th>30</th>
+  </tr>
+  <tr>
+    <td>PingPong Value</td>
+    <td>[-4]</td>
+    <td>-3</td>
+    <td>-2</td>
+    <td>-1</td>
+    <td>[0]</td>
+    <td>-1</td>
+    <td>-2</td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+<p>Implement a function <code>pingpong</code> that returns the nth element of the ping-pong
+sequence <em>without using any assignment statements</em>. (You are allowed to use function definitions.)</p>
+
+<p>You may use the function <code>num_eights</code>, which you defined in the previous question.</p>
+
+<p><strong>Important:</strong>
+Use recursion; the tests will fail if you use any assignment statements.
+(You can however use function definitions if you so wish.)</p>
+
+<blockquote><p><strong>Hint:</strong>
+If you're stuck, first try implementing <code>pingpong</code> using assignment
+statements and a <code>while</code> statement. Then, to convert this into a recursive
+solution, write a helper function that has a parameter for each variable that
+changes values in the body of the while loop.</p>
+
+<p><strong>Hint:</strong>
+There are a few pieces of information that we need to keep track of.
+One of these details is the direction that we're going (either increasing or decreasing).
+Building off of the hint above, think about how we can keep track of the direction throughout the calls to the helper function.</p></blockquote>
+
+<solution>
+
+<pre><code>def pingpong(n):
+    &quot;&quot;&quot;Return the nth element of the ping&#x2d;pong sequence.
+
+    &gt;&gt;&gt; pingpong(8)
+    8
+    &gt;&gt;&gt; pingpong(10)
+    6
+    &gt;&gt;&gt; pingpong(15)
+    1
+    &gt;&gt;&gt; pingpong(21)
+    &#x2d;1
+    &gt;&gt;&gt; pingpong(22)
+    &#x2d;2
+    &gt;&gt;&gt; pingpong(30)
+    &#x2d;2
+    &gt;&gt;&gt; pingpong(68)
+    0
+    &gt;&gt;&gt; pingpong(69)
+    &#x2d;1
+    &gt;&gt;&gt; pingpong(80)
+    0
+    &gt;&gt;&gt; pingpong(81)
+    1
+    &gt;&gt;&gt; pingpong(82)
+    0
+    &gt;&gt;&gt; pingpong(100)
+    &#x2d;6
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; # ban assignment statements
+    &gt;&gt;&gt; check(HW_SOURCE_FILE, &#x27;pingpong&#x27;,
+    ...       [&#x27;Assign&#x27;, &#x27;AnnAssign&#x27;, &#x27;AugAssign&#x27;, &#x27;NamedExpr&#x27;])
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    def helper(result, i, step):
+        if i == n:
+            return result
+        elif i % 8 == 0 or num_eights(i) &gt; 0:
+            return helper(result &#x2d; step, i + 1, &#x2d;step)
+        else:
+            return helper(result + step, i + 1, step)
+    return helper(1, 1, 1)
+
+# Alternate solution 1
+def pingpong_next(x, i, step):
+    if i == n:
+        return x
+    return pingpong_next(x + step, i + 1, next_dir(step, i+1))
+
+def next_dir(step, i):
+    if i % 8 == 0 or num_eights(i) &gt; 0:
+        return &#x2d;step
+    return step
+
+# Alternate solution 2
+def pingpong_alt(n):
+    if n &lt;= 8:
+        return n
+    return direction(n) + pingpong_alt(n&#x2d;1)
+
+def direction(n):
+    if n &lt; 8:
+        return 1
+    if (n&#x2d;1) % 8 == 0 or num_eights(n&#x2d;1) &gt; 0:
+        return &#x2d;1 * direction(n&#x2d;1)
+    return direction(n&#x2d;1)</div></code></pre>
+
+</solution>
+
+<!--
+
+<pre><code>def has_eight(k):
+    &quot;&quot;&quot;Returns True if at least one of the digits of k is a 8, False otherwise.
+
+    &gt;&gt;&gt; has_eight(3)
+    False
+    &gt;&gt;&gt; has_eight(8)
+    True
+    &gt;&gt;&gt; has_eight(2834)
+    True
+    &gt;&gt;&gt; has_eight(2634)
+    False
+    &gt;&gt;&gt; has_eight(834)
+    True
+    &gt;&gt;&gt; has_eight(8888)
+    True
+    &quot;&quot;&quot;
+    if k % 10 == 8:
+        return True
+    elif k &lt; 10:
+        return False
+    else:
+        return has_eight(k // 10)</code></pre>
+
+-->
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q pingpong<button id="copy-code-python3ok-qpingpong" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qpingpong").onclick = () => copyCode('python3 ok -q pingpong', "copy-code-python3ok-qpingpong");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>This is a fairly involved recursion problem, which we will first solve
+through iteration and then convert to a recursive solution.</p>
+
+<p>Note that at any given point in the sequence, we need to keep track of the
+current <em>value</em> of the sequence (this is the value that might be output)
+as well as the current <em>index</em> of the sequence (how many items we have
+seen so far, not actually output).</p>
+
+<p>For example, 14th element has <em>value</em> 0, but it's the 14th <em>index</em> in
+the sequence. We will refer to the value as <code>x</code> and the index as <code>i</code>. An
+iterative solution may look something like this:</p>
+
+<pre><code>def pingpong(n):
+    i = 1
+    x = 1
+    while i &lt; n:
+        x += 1
+        i += 1
+    return x</code></pre>
+
+<p>Hopefully, it is clear to you that this has a big problem. This doesn't
+account for changes in directions at all! It will work for the first eight
+values of the sequence, but then fail after that. To fix this, we can add
+in a check for direction, and then also keep track of the current
+direction to make our lives a bit easier (it's possible to compute the
+direction from scratch at each step, see the <code>direction</code> function in the
+alternate solution).</p>
+
+<pre><code>def pingpong(n):
+    i = 1
+    x = 1
+    is_up = True
+    while i &lt; n:
+        is_up = next_dir(...)
+        if is_up:
+            x += 1
+        else:
+            x &#x2d;= 1
+        i += 1
+    return x</code></pre>
+
+<p>All that's left to do is to write the <code>next_dir</code> function, which will take
+in the <em>current direction</em> and <em>index</em> and then tell us what direction to
+go in next (which could be the same direction):</p>
+
+<pre><code>def next_dir(is_up, i):
+    if i % 8 == 0 or num_eights(i) &gt; 0:
+        return not is_up
+    return is_up</code></pre>
+
+<p>There's a tiny optimization we can make here. Instead of calculating an
+increment based on the value of <code>is_up</code>, we can make it directly store the
+direction of change into the variable (<code>next_dir</code> is also updated, see the
+solution for the new version):</p>
+
+<pre><code>def pingpong(n):
+    i = 1
+    x = 1
+    step = 1
+    while i &lt; n:
+        step = next_dir(step, i)
+        x += step
+        i += 1
+    return x</code></pre>
+
+<p>This will work, but it uses assignment. To convert it to an equivalent
+recursive version without assignment, make each local variable into a
+parameter of a new helper function, and then add an appropriate base case.
+Lastly, we seed the helper function with appropriate starting values by
+calling it with the values we had in the iterative version.</p>
+
+<p>You should be able to convince yourself that the version of <code>pingpong</code> in
+the solutions has the same logic as the iterative version of <code>pingpong</code>
+above.</p>
+
+<p>Video walkthrough: <p><a href='https://youtu.be/74gwPjgrN_k'> YouTube link </a></p></p>
+
+</div>
+
+<!--<include topics/recursion/medium/missing-digits.md>-->
+
+
+<h3 id="q3-count-coins">Q3: Count coins</h3>
+
+
+<p>Given a positive integer <code>change</code>, a set of coins makes change for <code>change</code> if
+the sum of the values of the coins is <code>change</code>.
+Here we will use standard US Coin values: 1, 5, 10, 25.
+For example, the following sets make change for <code>15</code>:</p>
+
+<ul>
+  <li>15 1-cent coins</li>
+  <li>10 1-cent, 1 5-cent coins</li>
+  <li>5 1-cent, 2 5-cent coins</li>
+  <li>5 1-cent, 1 10-cent coins</li>
+  <li>3 5-cent coins</li>
+  <li>1 5-cent, 1 10-cent coin</li>
+</ul>
+
+<p>Thus, there are 6 ways to make change for <code>15</code>.  Write a <strong>recursive</strong> function
+<code>count_coins</code> that takes a positive integer <code>change</code> and returns the number of
+ways to make change for <code>change</code> using coins.</p>
+
+<p>You can use either of the functions given to you:</p>
+
+<ul>
+  <li><code>next_larger_coin</code> will return the next larger coin denomination from the
+  input, i.e. <code>next_larger_coin(5)</code> is <code>10</code>.</li>
+  <li><code>next_smaller_coin</code> will return the next smaller coin denomination from the
+  input, i.e. <code>next_smaller_coin(5)</code> is <code>1</code>.</li>
+  <li>Either function will return <code>None</code> if the next coin value does not exist</li>
+</ul>
+
+<p>There are two main ways in which you can approach this problem.
+One way uses <code>next_larger_coin</code>, and another uses <code>next_smaller_coin</code>.</p>
+
+<p><strong>Important:</strong>
+Use recursion; the tests will fail if you use loops.</p>
+
+<blockquote><p><strong>Hint:</strong>
+Refer the <a href="http://composingprograms.com/pages/17-recursive-functions.html#example-partitions">implementation</a> of <code>count_partitions</code> for an example
+of how to count the ways to sum up to a final value with smaller parts.
+If you need to keep track of more than one value across recursive calls,
+consider writing a helper function.</p></blockquote>
+
+<solution>
+
+<pre><code>def next_larger_coin(coin):
+    &quot;&quot;&quot;Returns the next larger coin in order.
+    &gt;&gt;&gt; next_larger_coin(1)
+    5
+    &gt;&gt;&gt; next_larger_coin(5)
+    10
+    &gt;&gt;&gt; next_larger_coin(10)
+    25
+    &gt;&gt;&gt; next_larger_coin(2) # Other values return None
+    &quot;&quot;&quot;
+    if coin == 1:
+        return 5
+    elif coin == 5:
+        return 10
+    elif coin == 10:
+        return 25
+
+def next_smaller_coin(coin):
+    &quot;&quot;&quot;Returns the next smaller coin in order.
+    &gt;&gt;&gt; next_smaller_coin(25)
+    10
+    &gt;&gt;&gt; next_smaller_coin(10)
+    5
+    &gt;&gt;&gt; next_smaller_coin(5)
+    1
+    &gt;&gt;&gt; next_smaller_coin(2) # Other values return None
+    &quot;&quot;&quot;
+    if coin == 25:
+        return 10
+    elif coin == 10:
+        return 5
+    elif coin == 5:
+        return 1
+
+def count_coins(change):
+    &quot;&quot;&quot;Return the number of ways to make change using coins of value of 1, 5, 10, 25.
+    &gt;&gt;&gt; count_coins(15)
+    6
+    &gt;&gt;&gt; count_coins(10)
+    4
+    &gt;&gt;&gt; count_coins(20)
+    9
+    &gt;&gt;&gt; count_coins(100) # How many ways to make change for a dollar?
+    242
+    &gt;&gt;&gt; count_coins(200)
+    1463
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; # ban iteration
+    &gt;&gt;&gt; check(HW_SOURCE_FILE, &#x27;count_coins&#x27;, [&#x27;While&#x27;, &#x27;For&#x27;])
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    def constrained_count(change, smallest_coin):
+        if change == 0:
+            return 1
+        if change &lt; 0:
+            return 0
+        if smallest_coin == None:
+            return 0
+        without_coin = constrained_count(change, next_larger_coin(smallest_coin))
+        with_coin = constrained_count(change &#x2d; smallest_coin, smallest_coin)
+        return without_coin + with_coin
+    return constrained_count(change, 1)
+
+    # Alternate solution: using next_smaller_coin
+    def constrained_count_small(change, largest_coin):
+        if change == 0:
+            return 1
+        if change &lt; 0:
+            return 0
+        if largest_coin == None:
+            return 0
+        without_coin = constrained_count_small(change, next_smaller_coin(largest_coin))
+        with_coin = constrained_count_small(change &#x2d; largest_coin, largest_coin)
+        return without_coin + with_coin
+    return constrained_count_small(change, 25)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q count_coins<button id="copy-code-python3ok-qcount_coins" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qcount_coins").onclick = () => copyCode('python3 ok -q count_coins', "copy-code-python3ok-qcount_coins");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>This is remarkably similar to the <code>count_partitions</code> problem, with a
+few minor differences:</p>
+
+<ul>
+  <li>A maximum partition size is not given, so we need to create a helper
+  function that takes in two arguments and also create another helper function
+  to find the max coin.</li>
+  <li>Partition size is not linear. To get the next partition you need to call
+  <code>next_larger_coin</code> if you are counting up (i.e. from the smallest coin to the
+  largest coin), or <code>next_smaller_coin</code> if you are counting down.</li>
+</ul>
+
+</div>
+
+
+<h2 id="submit">Submit</h2>
+
+
+<p>Make sure to submit this assignment by running:</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;submit</code></pre>
+
+
+<h1 id="optional-contest">Optional Contest</h1>
+
+
+<p>The following question is not worth any credit and is not a recursion problem. Instead, it is an <em>optional</em> fun contest
+that requires only knowledge of Midterm 1 concepts.</p>
+
+<h3 id="q4-busy-beaver-contest">Q4: Busy Beaver Contest</h3>
+
+
+<p>The A+ question on the midterm discussed the concept of a Busy Beaver function, which is a function of a given length that tries to output as much as possible. During this question, starter code was provided to write a Beaver that ran <code>f</code> 64 times. In this question, you'll be able to write your own Busy Beaver function, and compete for the best Busy Beaver in the Busy Beaver contest! The rules for this contest are as follows:</p>
+
+<p>Write a function <code>beaver(f)</code> that takes in a function <code>f</code>, and runs it as many times as possible. <code>f</code> is a function that takes in 0 inputs, and outputs <code>None</code>.</p>
+
+<ul>
+  <li>Your code must be exactly one line long, and less than 100 characters long (not including trailing or leading whitespace)</li>
+  <li>You may not use any numbers or strings, or any argument that evaluates to a number/string. This includes things like <code>int(&#x27;1000&#x27;)</code>, as this evaluates to a number and contains a string.</li>
+  <li>Your code must terminate (without crashing) in finite time.</li>
+  <li>You may not import any functions, but may use built-in functions that do not need to be imported.</li>
+  <li>You may not use semicolons.</li>
+</ul>
+
+<p>There are two categories for this contest. For both categories, please adhere to the conditions outlined above.</p>
+
+<ul>
+  <li><p>For the first category, your solution should call <code>f</code> at least 1000 times. The goal of this category is to have a <strong>minimal-length line of code</strong>. That means, as long as your solution calls <code>f</code> at least 1000 times, the only thing that matters is how short your solution is.</p>
+
+  <ul>
+    <li>For this category, please write your code in <code>hw03.py</code> and run <code>python3 ok &#x2d;&#x2d;submit</code> as usual to submit your solution. We will release rankings after all submissions have been processed.</li>
+    <li>If you would like to remain anonymous on the leaderboard, set the <code>anonymous</code> variable above the definition for <code>beaver</code> to <code>True</code>.</li>
+    <li>Run the syntax checker (<code>python3 ok &#x2d;q beaver_syntax_test</code>) to make sure your solution is one line. Run <code>python3 ok &#x2d;q beaver_run_test</code> to check that your solution runs at least 1000 times.</li>
+  </ul></li>
+  <li><p>For the second category, your solution should call <code>f</code> <strong>as many times as possible</strong>, as long as your solution stays below the 100 character limit. Submit your solution, along with how many times you expect your solution to call <code>f</code>, to <a href="https://forms.gle/Di9Qcjy7Gky2Pkd57">this Google form</a>.</p>
+
+  <ul>
+    <li>For this category, you may assume that your code gets run on an ideal system with no memory or stack frame limits (so you may exceed the maximum recursion depth normally available in Python).</li>
+  </ul></li>
+</ul>
+
+<p>The deadline for the contest submission is the same as the rest of the homework, <strong>Thursday, September 22, 11:59pm</strong>.</p>
+
+<solution>
+
+<pre><code>anonymous = False # Change to True if you would like to remain anonymous on the final leaderboard.
+def beaver(f):
+<div class="sol-highlight">    # Shortest solution (73 characters)
+    (lambda g: g(g(g(g(g(g(g(f))))))))(lambda f: lambda: f() or f() or f())()</div></code></pre>
+
+</solution>
+
+<!-- maybe include ok stuff? -->
+
+<!-- explanation... -->
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q beaver_syntax_check
+python3 ok -q beaver_run_test<button id="copy-code-python3ok-qbeaver_syntax_checkpython3ok-qbeaver_run_test" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qbeaver_syntax_checkpython3ok-qbeaver_run_test").onclick = () => copyCode('python3 ok -q beaver_syntax_check\npython3 ok -q beaver_run_test', "copy-code-python3ok-qbeaver_syntax_checkpython3ok-qbeaver_run_test");
+        </script>
+        <br/>
+
+
+<h1 id="exam-practice">Exam Practice</h1>
+
+<p>Homework assignments will also contain prior exam-level questions for you to take a look at.
+ These questions have no submission component; feel free to attempt them if you'd like a challenge!</p>
+
+<ol>
+  <li>Fall 2017 MT1 Q4a: <a href="https://inst.eecs.berkeley.edu/~cs61a/fa21/exam/fa17/mt1/61a-fa17-mt1.pdf#page=5">Digital</a></li>
+  <li>Summer 2018 MT1 Q5a: <a href="https://inst.eecs.berkeley.edu/~cs61a/su18/assets/pdfs/61a-su18-mt.pdf#page=5">Won't You Be My Neighbor?</a></li>
+  <li>Fall 2019 Final Q6b: <a href="https://inst.eecs.berkeley.edu/~cs61a/sp21/exam/fa19/final/61a-fa19-final.pdf#page=6">Palindromes</a></li>
+</ol>
+
+<!--
+The questions below are out of scope for 61A. You can try them if you want an extra challenge, but they're just puzzles that are not required or recommended at all. Almost all students will skip them, and that's fine.-->
+
+<!--<include topics/recursion/medium/towers-of-hanoi.md>-->
+
+<!--<include topics/recursion/difficult/anonymous-factorial.md>-->
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="#getting-started-videos">Getting Started Videos</a></li>
+    <ul>
+      <li><a href="#q1-num-eights">Q1: Num eights</a></li>
+      <li><a href="#q2-ping-pong">Q2: Ping-pong</a></li>
+      <li><a href="#q3-count-coins">Q3: Count coins</a></li>
+    </ul>
+    <li><a href="#submit">Submit</a></li>
+  </ul>
+  <li><a href="#optional-contest">Optional Contest</a></li>
+  <ul>
+    <li><a href="#q4-busy-beaver-contest">Q4: Busy Beaver Contest</a></li>
+  </ul>
+  <li><a href="#exam-practice">Exam Practice</a></li>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

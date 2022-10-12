@@ -1,0 +1,529 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/hw.css">
+
+
+    <title>
+Homework 2 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Homework 2 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="hw02.zip" class="label label-outline">hw02.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+<p>You can find solutions for all questions in <a href="hw02.py">hw02.py</a>.</p>
+
+    
+<h1 id="required-questions">Required questions</h1>
+
+
+<br>
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+<h2 id="getting-started-videos">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZc7bGrKHY8zf-7bk4iHgkvg"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZc7bGrKHY8zf-7bk4iHgkvg'> YouTube link </a></p>
+</div>
+
+<p>Several doctests refer to these functions:</p>
+
+<pre><code>from operator import add, mul
+
+square = lambda x: x * x
+
+identity = lambda x: x
+
+triple = lambda x: 3 * x
+
+increment = lambda x: x + 1</code></pre>
+
+<br>
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+
+<h2 id="getting-started-videos-2">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZc7bGrKHY8zf-7bk4iHgkvg"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZc7bGrKHY8zf-7bk4iHgkvg'> YouTube link </a></p>
+</div>
+
+<p>Several doctests refer to these functions:</p>
+
+<pre><code>from operator import add, mul
+
+square = lambda x: x * x
+
+identity = lambda x: x
+
+triple = lambda x: 3 * x
+
+increment = lambda x: x + 1</code></pre>
+
+
+<h3 id="q1-product">Q1: Product</h3>
+
+
+<p>Write a function called <code>product</code> that returns <code>term(1) * ... * term(n)</code>.</p>
+
+<pre><code>def product(n, term):
+    &quot;&quot;&quot;Return the product of the first n terms in a sequence.
+
+    n: a positive integer
+    term:  a function that takes one argument to produce the term
+
+    &gt;&gt;&gt; product(3, identity)  # 1 * 2 * 3
+    6
+    &gt;&gt;&gt; product(5, identity)  # 1 * 2 * 3 * 4 * 5
+    120
+    &gt;&gt;&gt; product(3, square)    # 1^2 * 2^2 * 3^2
+    36
+    &gt;&gt;&gt; product(5, square)    # 1^2 * 2^2 * 3^2 * 4^2 * 5^2
+    14400
+    &gt;&gt;&gt; product(3, increment) # (1+1) * (2+1) * (3+1)
+    24
+    &gt;&gt;&gt; product(3, triple)    # 1*3 * 2*3 * 3*3
+    162
+    &quot;&quot;&quot;
+<div class="sol-highlight">    total, k = 1, 1
+    while k &lt;= n:
+        total, k = term(k) * total, k + 1
+    return total</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q product<button id="copy-code-python3ok-qproduct" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qproduct").onclick = () => copyCode('python3 ok -q product', "copy-code-python3ok-qproduct");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>The <code>total</code> variable is used to keep track of the total product so far. We 
+start with <code>total = 1</code> since we will be multiplying and anything multiplied 
+by 1 is itself. We then initialize the counter variable k to use in the while
+loop to ensures that we get through all values 1 through k.</p>
+
+</div>
+
+
+<h3 id="q2-accumulate">Q2: Accumulate</h3>
+
+
+<p>Let's take a look at how <code>product</code> is an instance of a more
+general function called <code>accumulate</code>, which we would like to implement:</p>
+
+<pre><code>def accumulate(merger, start, n, term):
+    &quot;&quot;&quot;Return the result of merging the first n terms in a sequence and start.
+    The terms to be merged are term(1), term(2), ..., term(n). merger is a
+    two&#x2d;argument commutative function.
+
+    &gt;&gt;&gt; accumulate(add, 0, 5, identity)  # 0 + 1 + 2 + 3 + 4 + 5
+    15
+    &gt;&gt;&gt; accumulate(add, 11, 5, identity) # 11 + 1 + 2 + 3 + 4 + 5
+    26
+    &gt;&gt;&gt; accumulate(add, 11, 0, identity) # 11
+    11
+    &gt;&gt;&gt; accumulate(add, 11, 3, square)   # 11 + 1^2 + 2^2 + 3^2
+    25
+    &gt;&gt;&gt; accumulate(mul, 2, 3, square)    # 2 * 1^2 * 2^2 * 3^2
+    72
+    &gt;&gt;&gt; # 2 + (1^2 + 1) + (2^2 + 1) + (3^2 + 1)
+    &gt;&gt;&gt; accumulate(lambda x, y: x + y + 1, 2, 3, square)
+    19
+    &gt;&gt;&gt; # ((2 * 1^2 * 2) * 2^2 * 2) * 3^2 * 2
+    &gt;&gt;&gt; accumulate(lambda x, y: 2 * x * y, 2, 3, square)
+    576
+    &gt;&gt;&gt; accumulate(lambda x, y: (x + y) % 17, 19, 20, square)
+    16
+    &quot;&quot;&quot;
+<div class="sol-highlight">    total, k = start, 1
+    while k &lt;= n:
+        total, k = merger(total, term(k)), k + 1
+    return total
+
+# Alternative solution
+def accumulate_reverse(merger, start, n, term):
+    total, k = start, n
+    while k &gt;= 1:
+        total, k = merger(total, term(k)), k &#x2d; 1
+    return total</div></code></pre>
+
+<p><code>accumulate</code> has the following parameters:</p>
+
+<ul>
+  <li><code>term</code> and <code>n</code>: the same parameters as in <code>product</code></li>
+  <li><code>merger</code>: a two-argument function that specifies how the current term
+  is merged with the previously accumulated terms.</li>
+  <li><code>start</code>: value at which to start the accumulation.</li>
+</ul>
+
+<p>For example, the result of <code>accumulate(add, 11, 3, square)</code> is</p>
+
+<pre><code>11 + square(1) + square(2) + square(3) = 25</code></pre>
+
+<blockquote><p><strong>Note:</strong>
+You may assume that <code>merger</code> is commutative.
+That is, <code>merger(a, b) == merger(b, a)</code> for all <code>a</code> and <code>b</code>.
+However, you may not assume <code>merger</code> is chosen from a fixed function set
+and hard-code the solution.</p></blockquote>
+
+<p>After implementing <code>accumulate</code>, show how <code>summation</code> and <code>product</code> can both be
+defined as function calls to <code>accumulate</code>.</p>
+
+<p><strong>Important:</strong>
+You should have a single line of code (which should be a <code>return</code> statement)
+in each of your implementations for <code>summation_using_accumulate</code> and
+<code>product_using_accumulate</code>, which the syntax check will check for.</p>
+
+<pre><code>def summation_using_accumulate(n, term):
+    &quot;&quot;&quot;Returns the sum: term(0) + ... + term(n), using accumulate.
+
+    &gt;&gt;&gt; summation_using_accumulate(5, square)
+    55
+    &gt;&gt;&gt; summation_using_accumulate(5, triple)
+    45
+    &gt;&gt;&gt; # You aren&#x27;t expected to understand the code of this test.
+    &gt;&gt;&gt; # Check that the bodies of the functions are just return statements.
+    &gt;&gt;&gt; # If this errors, make sure you have removed the &quot;***YOUR CODE HERE***&quot;.
+    &gt;&gt;&gt; import inspect, ast
+    &gt;&gt;&gt; [type(x).__name__ for x in ast.parse(inspect.getsource(summation_using_accumulate)).body[0].body]
+    [&#x27;Expr&#x27;, &#x27;Return&#x27;]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return accumulate(add, 0, n, term)</div>
+def product_using_accumulate(n, term):
+    &quot;&quot;&quot;Returns the product: term(1) * ... * term(n), using accumulate.
+
+    &gt;&gt;&gt; product_using_accumulate(4, square)
+    576
+    &gt;&gt;&gt; product_using_accumulate(6, triple)
+    524880
+    &gt;&gt;&gt; # You aren&#x27;t expected to understand the code of this test.
+    &gt;&gt;&gt; # Check that the bodies of the functions are just return statements.
+    &gt;&gt;&gt; # If this errors, make sure you have removed the &quot;***YOUR CODE HERE***&quot;.
+    &gt;&gt;&gt; import inspect, ast
+    &gt;&gt;&gt; [type(x).__name__ for x in ast.parse(inspect.getsource(product_using_accumulate)).body[0].body]
+    [&#x27;Expr&#x27;, &#x27;Return&#x27;]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return accumulate(mul, 1, n, term)</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q accumulate
+python3 ok -q summation_using_accumulate
+python3 ok -q product_using_accumulate<button id="copy-code-python3ok-qaccumulatepython3ok-qsummation_using_accumulatepython3ok-qproduct_using_accumulate" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qaccumulatepython3ok-qsummation_using_accumulatepython3ok-qproduct_using_accumulate").onclick = () => copyCode('python3 ok -q accumulate\npython3 ok -q summation_using_accumulate\npython3 ok -q product_using_accumulate', "copy-code-python3ok-qaccumulatepython3ok-qsummation_using_accumulatepython3ok-qproduct_using_accumulate");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>We want to abstract the logic of <code>product</code> and <code>summation</code> into <code>accumulate</code>.
+The differences between <code>product</code> and <code>summation</code> are:</p>
+
+<ul>
+  <li>How to merge terms. For <code>product</code>, we merge via <code>*</code> (<code>mul</code>).
+  For <code>summation</code>, we merge via <code>+</code> (<code>add</code>).</li>
+  <li>The starting value. For <code>product</code>, we want to start off with 1 since
+  starting with 0 means that our result (via multiplying with the start)
+  will always be 0. For <code>summation</code>, we want to start off with 0 so we're
+  not adding any extra value what we are trying to sum.</li>
+</ul>
+
+<p>We can then define the merge method as <code>merger</code> and the starting value
+as <code>start</code> inside our <code>accumulate</code>, with the remaining logic of going
+through the loop being similar to <code>product</code> and <code>summation</code>.</p>
+
+<p>Once we've defined <code>accumulate</code>, we can now implement
+<code>product_using_accumulate</code> and <code>summation_using_accumulate</code> by passing in the
+appropriate parameters to <code>accumulate</code>.</p>
+
+</div>
+
+<p><strong>Takeaway:</strong> Notice how quick it is now to create accumulator functions with different <code>merger</code> functions!
+This is because we abstracted away the logic of <code>product</code> and <code>summation</code> into the <code>accumulate</code> function. Without this abstraction, our code for a <code>summation</code> function would be just as long as our code for the <code>product</code> function from Question 1, and the logic would be highly redundant!</p>
+
+
+<h2 id="submit">Submit</h2>
+
+
+<p>Make sure to submit this assignment by running:</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;submit</code></pre>
+
+
+<h2 id="exam-practice">Exam Practice</h2>
+
+
+<p>Homework assignments will also contain prior exam questions for you to try.
+These questions have no submission component; feel free to attempt them if you'd like some practice!</p>
+
+<blockquote><p>Note that exams from Spring 2020, Fall 2020, and Spring 2021 gave students
+access to an interpreter, so the question format may be different than other
+years. Regardless, the questions below are good problems to try <em>without</em>
+access to an interpreter.</p></blockquote>
+
+<ol>
+  <li>Fall 2019 MT1 Q3: <a href="https://cs61a.org/exam/fa19/mt1/61a-fa19-mt1.pdf#page=4">You Again</a> [Higher Order Functions]</li>
+  <li>Spring 2021 MT1 Q4: <a href="https://cs61a.org/exam/sp21/mt1/61a-sp21-mt1.pdf#page=14">Domain on the Range</a> [Higher Order Functions]</li>
+  <li>Fall 2021 MT1 Q1b: <a href="https://cs61a.org/exam/fa21/mt1/61a-fa21-mt1.pdf#page=4">tik</a> [Functions and Expressions]</li>
+</ol>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#required-questions">Required questions</a></li>
+  <ul>
+    <li><a href="#getting-started-videos">Getting Started Videos</a></li>
+    <li><a href="#getting-started-videos-2">Getting Started Videos</a></li>
+    <ul>
+      <li><a href="#q1-product">Q1: Product</a></li>
+      <li><a href="#q2-accumulate">Q2: Accumulate</a></li>
+    </ul>
+    <li><a href="#submit">Submit</a></li>
+    <li><a href="#exam-practice">Exam Practice</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

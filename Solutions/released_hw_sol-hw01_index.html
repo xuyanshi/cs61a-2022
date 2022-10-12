@@ -1,0 +1,502 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/hw.css">
+
+
+    <title>
+Homework 1 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Homework 1 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="hw01.zip" class="label label-outline">hw01.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+<p>You can find the solutions in <a href="hw01.py">hw01.py</a>.</p>
+
+    
+<br />
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+<h2 id="getting-started-videos">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZfDIBLqQ6AjZZopSVpnutKN"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZfDIBLqQ6AjZZopSVpnutKN'> YouTube link </a></p>
+</div></p></blockquote>
+
+
+<h1 id="required-questions">Required Questions</h1>
+
+
+
+<h3 id="q1-a-plus-abs-b">Q1: A Plus Abs B</h3>
+
+<p>Python's <code>operator</code> module defines <em>binary functions</em> for Python's intrinsic arithmetic operators. For example, calling <code>operator.add(2,3)</code> is equivalent to calling the expression <code>2 + 3</code>; both will return <code>5</code>.</p>
+
+<blockquote><p>Note that when the <code>operator</code> module is imported into the namespace, like at the top of <code>hw01.py</code>,
+you can just call <code>add(2,3)</code> instead of <code>operator.add(2,3)</code>.</p></blockquote>
+
+<p>Fill in the blanks in the following function for adding <code>a</code> to the
+absolute value of <code>b</code>, without calling <code>abs</code>. You may <strong>not</strong> modify any
+of the provided code other than the two blanks.</p>
+
+<pre><code>def a_plus_abs_b(a, b):
+    &quot;&quot;&quot;Return a+abs(b), but without calling abs.
+
+    &gt;&gt;&gt; a_plus_abs_b(2, 3)
+    5
+    &gt;&gt;&gt; a_plus_abs_b(2, &#x2d;3)
+    5
+    &gt;&gt;&gt; a_plus_abs_b(&#x2d;1, 4)
+    3
+    &gt;&gt;&gt; a_plus_abs_b(&#x2d;1, &#x2d;4)
+    3
+    &quot;&quot;&quot;
+    if b &lt; 0:
+<div class="sol-highlight">        f = sub</div>    else:
+<div class="sol-highlight">        f = add</div>    return f(a, b)</code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q a_plus_abs_b<button id="copy-code-python3ok-qa_plus_abs_b" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qa_plus_abs_b").onclick = () => copyCode('python3 ok -q a_plus_abs_b', "copy-code-python3ok-qa_plus_abs_b");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>If <code>b</code> is positive, we add the numbers together. If <code>b</code> is negative, we
+subtract the numbers. Therefore, we choose the operator <code>add</code> or <code>sub</code>
+based on the sign of <code>b</code>.</p>
+
+</div>
+
+
+<h3 id="q2-two-of-three">Q2: Two of Three</h3>
+
+
+<p>Write a function that takes three <em>positive</em> numbers as arguments and returns
+the sum of the squares of the two smallest numbers. <strong>Use only a single line
+for the body of the function.</strong></p>
+
+<pre><code>def two_of_three(i, j, k):
+    &quot;&quot;&quot;Return m*m + n*n, where m and n are the two smallest members of the
+    positive numbers i, j, and k.
+
+    &gt;&gt;&gt; two_of_three(1, 2, 3)
+    5
+    &gt;&gt;&gt; two_of_three(5, 3, 1)
+    10
+    &gt;&gt;&gt; two_of_three(10, 2, 8)
+    68
+    &gt;&gt;&gt; two_of_three(5, 5, 5)
+    50
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return min(i*i+j*j, i*i+k*k, j*j+k*k)
+    # Alternate solution
+def two_of_three_alternate(i, j, k):
+    return i**2 + j**2 + k**2 &#x2d; max(i, j, k)**2</div></code></pre>
+
+<blockquote><p><strong>Hint:</strong> Consider using the <code>max</code> or <code>min</code> function:</p>
+
+<pre><code>&gt;&gt;&gt; max(1, 2, 3)
+3
+&gt;&gt;&gt; min(&#x2d;1, &#x2d;2, &#x2d;3)
+&#x2d;3</code></pre></blockquote>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q two_of_three<button id="copy-code-python3ok-qtwo_of_three" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qtwo_of_three").onclick = () => copyCode('python3 ok -q two_of_three', "copy-code-python3ok-qtwo_of_three");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>We use the fact that if <code>x&gt;y</code> and <code>y&gt;0</code>, then <code>square(x)&gt;square(y)</code>.
+So, we can take the <code>min</code> of the sum of squares of all pairs. The
+<code>min</code> function can take an arbitrary number of arguments.</p>
+
+<p>Alternatively, we can do the sum of squares of all the numbers. Then we
+pick the largest value, and subtract the square of that.</p>
+
+</div>
+
+
+<h3 id="q3-largest-factor">Q3: Largest Factor</h3>
+
+
+<p>Write a function that takes an integer <code>n</code> that is <strong>greater than 1</strong> and
+returns the largest integer that is smaller than <code>n</code> and evenly divides <code>n</code>.</p>
+
+<pre><code>def largest_factor(n):
+    &quot;&quot;&quot;Return the largest factor of n that is smaller than n.
+
+    &gt;&gt;&gt; largest_factor(15) # factors are 1, 3, 5
+    5
+    &gt;&gt;&gt; largest_factor(80) # factors are 1, 2, 4, 5, 8, 10, 16, 20, 40
+    40
+    &gt;&gt;&gt; largest_factor(13) # factor is 1 since 13 is prime
+    1
+    &quot;&quot;&quot;
+<div class="sol-highlight">    factor = n &#x2d; 1
+    while factor &gt; 0:
+        if n % factor == 0:
+            return factor
+        factor &#x2d;= 1</div></code></pre>
+
+<blockquote><p><strong>Hint:</strong> To check if <code>b</code> evenly divides <code>a</code>,
+you can use the expression <code>a % b == 0</code>, which can be read as,
+"the remainder of dividing <code>a</code> by <code>b</code> is 0."</p></blockquote>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q largest_factor<button id="copy-code-python3ok-qlargest_factor" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qlargest_factor").onclick = () => copyCode('python3 ok -q largest_factor', "copy-code-python3ok-qlargest_factor");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>Iterating from <code>n&#x2d;1</code> to 1, we return the first integer that evenly divides
+<code>n</code>. This is guaranteed to be the largest factor of <code>n</code>.</p>
+
+</div>
+
+
+<h3 id="q4-hailstone">Q4: Hailstone</h3>
+
+
+<p>Douglas Hofstadter's Pulitzer-prize-winning book, <em>Gödel, Escher, Bach</em>, poses
+the following mathematical puzzle.</p>
+
+<ol>
+  <li>Pick a positive integer <code>n</code> as the start.</li>
+  <li>If <code>n</code> is even, divide it by 2.</li>
+  <li>If <code>n</code> is odd, multiply it by 3 and add 1.</li>
+  <li>Continue this process until <code>n</code> is 1.</li>
+</ol>
+
+<p>The number <code>n</code> will travel up and down but eventually end at 1 (at least for
+all numbers that have ever been tried -- nobody has ever proved that the
+sequence will terminate). Analogously, a hailstone travels up and down in the
+atmosphere before eventually landing on earth.</p>
+
+<p>This sequence of values of <code>n</code> is often called a Hailstone sequence. Write a
+function that takes a single argument with formal parameter name <code>n</code>, prints
+out the hailstone sequence starting at <code>n</code>, and returns the number of steps in
+the sequence:</p>
+
+<pre><code>def hailstone(n):
+    &quot;&quot;&quot;Print the hailstone sequence starting at n and return its
+    length.
+
+    &gt;&gt;&gt; a = hailstone(10)
+    10
+    5
+    16
+    8
+    4
+    2
+    1
+    &gt;&gt;&gt; a
+    7
+    &gt;&gt;&gt; b = hailstone(1)
+    1
+    &gt;&gt;&gt; b
+    1
+    &quot;&quot;&quot;
+<div class="sol-highlight">    length = 1
+    while n != 1:
+        print(n)
+        if n % 2 == 0:
+            n = n // 2      # Integer division prevents &quot;1.0&quot; output
+        else:
+            n = 3 * n + 1
+        length = length + 1
+    print(n)                # n is now 1
+    return length</div></code></pre>
+
+<p>Hailstone sequences can get quite long! Try 27. What's the longest you can
+find?</p>
+
+<blockquote><p>Note that if <code>n == 1</code> initially, then the sequence is one step long. <br>
+<strong>Hint:</strong> Recall the different outputs from using regular division <code>/</code> and floor division <code>//</code></p></blockquote>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q hailstone<button id="copy-code-python3ok-qhailstone" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qhailstone").onclick = () => copyCode('python3 ok -q hailstone', "copy-code-python3ok-qhailstone");
+        </script>
+        <br/>
+
+<p><strong>Curious about hailstones or hailstone sequences? Take a look at these articles:</strong></p>
+
+<ul>
+  <li>Check out <a href="https://www.nationalgeographic.org/encyclopedia/hail/">this article</a> to learn more about how hailstones work!</li>
+  <li>In 2019, there was a major <a href="https://www.quantamagazine.org/mathematician-terence-tao-and-the-collatz-conjecture-20191211/">development</a> in understanding how the hailstone conjecture works for most numbers!</li>
+</ul>
+
+<div class="sol-highlight">
+
+<p>We keep track of the current length of the hailstone sequence and the current
+value of the hailstone sequence. From there, we loop until we hit the end of
+the sequence, updating the length in each step.</p>
+
+<blockquote><p>Note: we need to do floor division <code>//</code> to remove decimals.</p></blockquote>
+
+</div>
+
+
+<h2 id="submit">Submit</h2>
+
+
+<p>Make sure to submit this assignment by running:</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;submit</code></pre>
+
+<blockquote><p>If you completed all problems correctly, you should see that your score is 6.0 in terminal. Each homework assignment counts for 2 points, so in this case you will receive the full 2 points for homework. Remember that every incorrect question costs you 1 point, so a 5.0/6.0 on this assignment will translate to a 1.0/2.0 homework grade for this assignment.</p></blockquote>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#getting-started-videos">Getting Started Videos</a></li>
+  <li><a href="#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="#q1-a-plus-abs-b">Q1: A Plus Abs B</a></li>
+    <li><a href="#q2-two-of-three">Q2: Two of Three</a></li>
+    <li><a href="#q3-largest-factor">Q3: Largest Factor</a></li>
+    <li><a href="#q4-hailstone">Q4: Hailstone</a></li>
+  </ul>
+  <ul>
+    <li><a href="#submit">Submit</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

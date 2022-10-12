@@ -1,0 +1,1797 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/disc.css">
+
+
+    <title>
+Discussion 2 | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 2: Environment Diagrams, Higher-Order Functions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc02.pdf" class="label label-outline">disc02.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<div class="alert storable-login-status"></div>
+
+This is an online worksheet that you can work on during discussions.
+Your work is not graded and you do not need to submit anything.
+
+
+    
+
+
+<blockquote><p><strong>Note on web discussions:</strong>
+In order to use the environment diagrams on the site,
+please log in using the account you use for Okpy.</p></blockquote>
+
+
+<h1 id="call-expressions">Call Expressions</h1>
+
+
+<p><strong>Call expressions</strong>, such as <code>square(2)</code>, apply functions to arguments. When
+executing call expressions, we create a new frame in our diagram to keep
+track of local variables:</p>
+
+<ol>
+  <li>Evaluate the operator, which should evaluate to a function.</li>
+  <li>Evaluate the operands from left to right.</li>
+  <li><p>Draw a new frame, labelling it with the following:</p>
+
+  <ul>
+    <li>A unique index (<code>f1</code>, <code>f2</code>, <code>f3</code>, ...).</li>
+    <li>The <strong>intrinsic name</strong> of the function, which is the name of the
+    function object itself. For example, if the function object is
+    <code>func square(x) [parent=Global]</code>, the intrinsic name is <code>square</code>.</li>
+    <li>The parent frame ([<code>parent=Global</code>]).</li>
+  </ul></li>
+  <li>Bind the formal parameters to the argument values obtained in step 2 (e.g.
+  bind <code>x</code> to 3).</li>
+  <li>Evaluate the body of the function in this new frame until a return value is
+  obtained. Write down the return value in the frame.</li>
+</ol>
+
+<p>If a function does not have a return value, it implicitly returns <code>None</code>. In that case,
+the “Return value” box should contain <code>None</code>.</p>
+
+<p><strong>Note:</strong>
+Since we do not know how built-in functions like <code>min(...)</code> or imported
+functions like <code>add(...)</code> are implemented, we do not draw a new frame when we
+call them, since we would not be able to fill it out accurately.</p>
+
+
+<h3 id="q1-call-diagram">Q1: Call Diagram</h3>
+
+
+<p>Let’s put it all together! Draw an environment diagram for the following code. You may not have to use all of the blanks provided to you.</p>
+
+
+            
+<pre><code>def double(x):
+    return x * 2
+
+hmmm = double
+wow = double(3)
+hmmm(wow)</code></pre>
+
+            <b>Your Answer</b>
+            
+<pre><code>def double(x):
+    return x * 2
+
+hmmm = double
+wow = double(3)
+hmmm(wow)</code></pre>
+
+        <div class="env-diagram" id=env-diagram-call-diagram>
+          <div class="env-diagram-objects">
+            <div>Objects</div>
+            <ul><li>
+            <button class="env-diagram-connector" id="env-diagram-call-diagram-object0-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-call-diagram-object0-value" type="text">
+            </li><li>
+            <button class="env-diagram-connector" id="env-diagram-call-diagram-object1-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-call-diagram-object1-value" type="text">
+            </li><li>
+            <button class="env-diagram-connector" id="env-diagram-call-diagram-object2-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-call-diagram-object2-value" type="text">
+            </li>
+            <li><button class="env-diagram-trash" title="Click here to remove a binding">🗑️</button></li>
+            </ul>
+        </div>
+          <div class="env-diagram-frame">
+                <div>Global frame</div>
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame0-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame0-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-call-diagram-frame0-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame0-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame0-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-call-diagram-frame0-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame0-binding2-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame0-binding2-value">
+                <button class="env-diagram-connector" id="env-diagram-call-diagram-frame0-binding2-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame0-binding3-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame0-binding3-value">
+                <button class="env-diagram-connector" id="env-diagram-call-diagram-frame0-binding3-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f1: <input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame1-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame1-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame1-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame1-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-call-diagram-frame1-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame1-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame1-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-call-diagram-frame1-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame1-return">
+                <button class="env-diagram-connector" id="env-diagram-call-diagram-frame1-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f2: <input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame2-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame2-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame2-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame2-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-call-diagram-frame2-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame2-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame2-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-call-diagram-frame2-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-call-diagram-frame2-return">
+                <button class="env-diagram-connector" id="env-diagram-call-diagram-frame2-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="storable-status"></div>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+            <iframe
+                width="800"
+                height="578"
+                frameborder="0"
+                src="https://pythontutor.com/iframe-embed.html#code=def+double%28x%29%3A%0A++++return+x+%2A+2%0A%0Ahmmm+%3D+double%0Awow+%3D+double%283%29%0Ahmmm%28wow%29%0A&codeDivHeight=578&codeDivWidth=350&cumulative=true&curInstr=1&heapPrimitives=nevernest&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false">
+            </iframe>
+        
+            </div>
+        
+
+<div class="sol-highlight">
+<a href="https://youtu.be/kmspUmcd6RI">Video diagram</a>
+</div>
+
+<div class="page-break"></div>
+
+
+<h3 id="q2-nested-calls-diagrams">Q2: Nested Calls Diagrams</h3>
+
+
+<p>Draw the environment diagram that results from executing the code below. You may not need to use all of the frames and blanks provided to you.</p>
+
+
+            
+<pre><code>def f(x):
+    return x
+
+def g(x, y):
+    if x(y):
+        return not y
+    return y
+
+x = 3
+x = g(f, x)
+f = g(f, 0)</code></pre>
+
+            <b>Your Answer</b>
+            
+<pre><code>def f(x):
+    return x
+
+def g(x, y):
+    if x(y):
+        return not y
+    return y
+
+x = 3
+x = g(f, x)
+f = g(f, 0)</code></pre>
+
+        <div class="env-diagram" id=env-diagram-nested-calls-diagram>
+          <div class="env-diagram-objects">
+            <div>Objects</div>
+            <ul><li>
+            <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-object0-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-nested-calls-diagram-object0-value" type="text">
+            </li><li>
+            <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-object1-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-nested-calls-diagram-object1-value" type="text">
+            </li><li>
+            <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-object2-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-nested-calls-diagram-object2-value" type="text">
+            </li>
+            <li><button class="env-diagram-trash" title="Click here to remove a binding">🗑️</button></li>
+            </ul>
+        </div>
+          <div class="env-diagram-frame">
+                <div>Global frame</div>
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame0-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame0-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame0-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame0-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame0-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame0-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame0-binding2-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame0-binding2-value">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame0-binding2-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f1: <input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame1-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame1-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame1-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame1-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame1-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame1-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame1-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame1-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame1-return">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame1-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f2: <input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame2-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame2-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame2-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame2-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame2-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame2-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame2-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame2-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame2-return">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame2-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f3: <input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame3-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame3-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame3-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame3-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame3-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame3-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame3-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame3-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame3-return">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame3-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f4: <input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame4-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame4-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame4-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame4-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame4-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame4-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame4-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame4-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-nested-calls-diagram-frame4-return">
+                <button class="env-diagram-connector" id="env-diagram-nested-calls-diagram-frame4-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="storable-status"></div>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+            <iframe
+                width="800"
+                height="802"
+                frameborder="0"
+                src="https://pythontutor.com/iframe-embed.html#code=def+f%28x%29%3A%0A++++return+x%0A%0Adef+g%28x%2C+y%29%3A%0A++++if+x%28y%29%3A%0A++++++++return+not+y%0A++++return+y%0A%0Ax+%3D+3%0Ax+%3D+g%28f%2C+x%29%0Af+%3D+g%28f%2C+0%29%0A&codeDivHeight=802&codeDivWidth=350&cumulative=true&curInstr=1&heapPrimitives=nevernest&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false">
+            </iframe>
+        
+            </div>
+        
+
+<div class="sol-highlight">
+<a href="https://youtu.be/zVThisRzK7A">Video walkthrough</a>
+</div>
+
+
+<h1 id="lambda-expressions">Lambda Expressions</h1>
+
+
+<p>A lambda expression evaluates to a function, called a lambda function. For
+example, <code>lambda y: x + y</code> is a lambda expression, and can be read as "a
+function that takes in one parameter <code>y</code> and returns <code>x + y</code>."</p>
+
+<p>A lambda expression by itself evaluates to a function but does not bind it to
+a name. Also note that the return expression of this function is not evaluated
+until the lambda is called. This is similar to how defining a new function
+using a def statement does not execute the function’s body until it is later
+called.</p>
+
+<pre><code>&gt;&gt;&gt; what = lambda x : x + 5
+&gt;&gt;&gt; what
+&lt;function &lt;lambda&gt; at 0xf3f490&gt;</code></pre>
+
+<p>Unlike <code>def</code> statements, lambda expressions can be used as an operator or an
+operand to a call expression. This is because they are simply one-line
+expressions that evaluate to functions. In the example below,
+<code>(lambda y: y + 5)</code> is the operator and <code>4</code> is the operand.</p>
+
+<pre><code>&gt;&gt;&gt; (lambda y: y + 5)(4)
+9
+&gt;&gt;&gt; (lambda f, x: f(x))(lambda y: y + 1, 10)
+11</code></pre>
+
+<div class="page-break"></div>
+
+
+<h3 id="q3-lambda-the-environment-diagram">Q3: Lambda the Environment Diagram</h3>
+
+
+<p>Draw the environment diagram for the following code and
+predict what Python will output.</p>
+
+
+            
+<pre><code>a = lambda x: x * 2 + 1
+def b(b, x):
+    return b(x + a(x))
+x = 3
+x = b(a, x)</code></pre>
+
+            <b>Your Answer</b>
+            
+<pre><code>a = lambda x: x * 2 + 1
+def b(b, x):
+    return b(x + a(x))
+x = 3
+x = b(a, x)</code></pre>
+
+        <div class="env-diagram" id=env-diagram-lambda-diagram>
+          <div class="env-diagram-objects">
+            <div>Objects</div>
+            <ul><li>
+            <button class="env-diagram-connector" id="env-diagram-lambda-diagram-object0-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-lambda-diagram-object0-value" type="text">
+            </li><li>
+            <button class="env-diagram-connector" id="env-diagram-lambda-diagram-object1-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-lambda-diagram-object1-value" type="text">
+            </li>
+            <li><button class="env-diagram-trash" title="Click here to remove a binding">🗑️</button></li>
+            </ul>
+        </div>
+          <div class="env-diagram-frame">
+                <div>Global frame</div>
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame0-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame0-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-lambda-diagram-frame0-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame0-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame0-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-lambda-diagram-frame0-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame0-binding2-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame0-binding2-value">
+                <button class="env-diagram-connector" id="env-diagram-lambda-diagram-frame0-binding2-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f1: <input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame1-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame1-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame1-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame1-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-lambda-diagram-frame1-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame1-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame1-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-lambda-diagram-frame1-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame1-return">
+                <button class="env-diagram-connector" id="env-diagram-lambda-diagram-frame1-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f2: <input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame2-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame2-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame2-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame2-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-lambda-diagram-frame2-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame2-return">
+                <button class="env-diagram-connector" id="env-diagram-lambda-diagram-frame2-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f3: <input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame3-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame3-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame3-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame3-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-lambda-diagram-frame3-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-lambda-diagram-frame3-return">
+                <button class="env-diagram-connector" id="env-diagram-lambda-diagram-frame3-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="storable-status"></div>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+            <iframe
+                width="800"
+                height="610"
+                frameborder="0"
+                src="https://pythontutor.com/iframe-embed.html#code=a+%3D+lambda+x%3A+x+%2A+2+%2B+1%0Adef+b%28b%2C+x%29%3A%0A++++return+b%28x+%2B+a%28x%29%29%0Ax+%3D+3%0Ax+%3D+b%28a%2C+x%29%0A&codeDivHeight=610&codeDivWidth=350&cumulative=true&curInstr=1&heapPrimitives=nevernest&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false">
+            </iframe>
+        
+            </div>
+        
+
+<div class="page-break"></div>
+
+
+<h1 id="higher-order-functions">Higher Order Functions</h1>
+
+
+<p>A <strong>higher order function</strong> (HOF) is a function that manipulates other
+functions by taking in functions as arguments, returning a function, or both.
+For example, the function <code>compose</code> below takes in two functions as arguments
+and returns a function that is the composition of the two arguments.</p>
+
+<pre><code>def composer(func1, func2):
+    &quot;&quot;&quot;Return a function f, such that f(x) = func1(func2(x)).&quot;&quot;&quot;
+    def f(x):
+        return func1(func2(x))
+    return f</code></pre>
+
+<p>HOFs are powerful abstraction tools that allow us to express certain general
+patterns as named concepts in our programs.</p>
+
+
+<h1 id="hofs-in-environment-diagrams">HOFs in Environment Diagrams</h1>
+
+
+<p>An <strong>environment diagram</strong> keeps track of all the variables that
+have been defined and the values they are bound to. However, values are not
+necessarily only integers and strings. Environment diagrams can model more
+complex programs that utilize higher order functions.</p>
+
+
+            <iframe
+                width="800"
+                height="380"
+                frameborder="0"
+                src="https://pythontutor.com/iframe-embed.html#code=x+%3D+4%0Adef+add_num%28x%29%3A%0A++++return+lambda+y%3A+x+%2B+y%0A%0Aadd_two+%3D+add_num%282%29%0Aadd_two%283%29%0A&codeDivHeight=380&codeDivWidth=350&cumulative=true&curInstr=1&heapPrimitives=nevernest&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false">
+            </iframe>
+        
+
+<p>Lambdas are represented similarly to functions in environment diagrams, but
+since they lack instrinsic names, the lambda symbol (λ) is used instead.</p>
+
+<p>The parent of any function (including lambdas) is always the frame in which
+the function is defined. It is useful to include the parent in environment
+diagrams in order to find variables that are not defined in the current
+frame. In the previous example, when we call <code>add_two</code> (which is really the
+lambda function), we need to know what <code>x</code> is in order to compute <code>x + y</code>.
+Since <code>x</code> is not in the frame <code>f2</code>, we look at the frame’s parent, which is
+<code>f1</code>. There, we find <code>x</code> is bound to 2.</p>
+
+<p>As illustrated above, higher order functions that return a function have
+their return value represented with a pointer to the function object.</p>
+
+<div class="page-break"></div>
+
+
+<h3 id="q4-make-adder">Q4: Make Adder</h3>
+
+
+<p>Draw the environment diagram for the following code:</p>
+
+
+            
+<pre><code>n = 9
+def make_adder(n):
+    return lambda k: k + n
+add_ten = make_adder(n+1)
+result = add_ten(n)</code></pre>
+
+            <b>Your Answer</b>
+            
+<pre><code>n = 9
+def make_adder(n):
+    return lambda k: k + n
+add_ten = make_adder(n+1)
+result = add_ten(n)</code></pre>
+
+        <div class="env-diagram" id=env-diagram-make-adder-diagram>
+          <div class="env-diagram-objects">
+            <div>Objects</div>
+            <ul><li>
+            <button class="env-diagram-connector" id="env-diagram-make-adder-diagram-object0-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-make-adder-diagram-object0-value" type="text">
+            </li><li>
+            <button class="env-diagram-connector" id="env-diagram-make-adder-diagram-object1-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-make-adder-diagram-object1-value" type="text">
+            </li>
+            <li><button class="env-diagram-trash" title="Click here to remove a binding">🗑️</button></li>
+            </ul>
+        </div>
+          <div class="env-diagram-frame">
+                <div>Global frame</div>
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame0-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame0-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-make-adder-diagram-frame0-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame0-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame0-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-make-adder-diagram-frame0-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame0-binding2-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame0-binding2-value">
+                <button class="env-diagram-connector" id="env-diagram-make-adder-diagram-frame0-binding2-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame0-binding3-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame0-binding3-value">
+                <button class="env-diagram-connector" id="env-diagram-make-adder-diagram-frame0-binding3-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f1: <input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame1-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame1-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame1-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame1-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-make-adder-diagram-frame1-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame1-return">
+                <button class="env-diagram-connector" id="env-diagram-make-adder-diagram-frame1-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f2: <input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame2-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame2-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame2-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame2-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-make-adder-diagram-frame2-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-make-adder-diagram-frame2-return">
+                <button class="env-diagram-connector" id="env-diagram-make-adder-diagram-frame2-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="storable-status"></div>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+            <iframe
+                width="800"
+                height="514"
+                frameborder="0"
+                src="https://pythontutor.com/iframe-embed.html#code=n+%3D+9%0Adef+make_adder%28n%29%3A%0A++++return+lambda+k%3A+k+%2B+n%0Aadd_ten+%3D+make_adder%28n%2B1%29%0Aresult+%3D+add_ten%28n%29%0A&codeDivHeight=514&codeDivWidth=350&cumulative=true&curInstr=1&heapPrimitives=nevernest&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false">
+            </iframe>
+        
+            </div>
+        
+
+<p>There are 3 frames total (including the Global frame).
+In addition, consider the following questions:</p>
+
+<ol>
+  <li>In the Global frame, the name <code>add_ten</code> points to a function object. What is
+  the intrinsic name of that function object, and what frame is its parent?</li>
+  <li>What name is frame <code>f2</code> labeled with (<code>add_ten</code> or &lambda;)?
+  Which frame is the parent of <code>f2</code>?</li>
+  <li>What value is the variable <code>result</code> bound to in the Global frame?</li>
+</ol>
+
+<div class="sol-highlight">
+
+<p>You can try out the environment diagram at <a href="http://tutor.cs61a.org">tutor.cs61a.org</a>.
+To see the environment diagram for this question, click <a href="https://goo.gl/axdNj5">here</a>.</p>
+
+<ol>
+  <li>The intrinsic name of the function object that <code>add_ten</code> points to is
+  &lambda; (specifically, the lambda whose parameter is <code>k</code>). The parent frame
+  of this lambda is <code>f1</code>.</li>
+  <li><code>f2</code> is labeled with the name &lambda;. The parent frame of <code>f2</code> is <code>f1</code>,
+  since that is where &lambda; is defined.</li>
+  <li>The variable <code>result</code> is bound to 19.</li>
+</ol>
+
+</div>
+
+
+<h3 id="q5-make-keeper">Q5: Make Keeper</h3>
+
+
+<p>Write a function that takes in a number <code>n</code> and returns a function
+that can take in a single parameter <code>cond</code>. When we pass in some condition
+function <code>cond</code> into this returned function, it will print out numbers from
+1 to <code>n</code> where calling <code>cond</code> on that number returns <code>True</code>.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="make_keeper-input" style="height:378px;"></div>
+            <a href="javascript:void" id="modal-link-make_keeper-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-make_keeper-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-make_keeper-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def make_keeper(n):\n    &quot;&quot;&quot;Returns a function which takes one parameter cond and prints\n    out all integers 1..i..n where calling cond(i) returns True.\n\n    &gt;&gt;&gt; def is_even(x):\n    ...     # Even numbers have remainder 0 when divided by 2.\n    ...     return x % 2 == 0\n    &gt;&gt;&gt; make_keeper(5)(is_even)\n    2\n    4\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "make_keeper-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def make_keeper(n):
+    &quot;&quot;&quot;Returns a function which takes one parameter cond and prints
+    out all integers 1..i..n where calling cond(i) returns True.
+
+    &gt;&gt;&gt; def is_even(x):
+    ...     # Even numbers have remainder 0 when divided by 2.
+    ...     return x % 2 == 0
+    &gt;&gt;&gt; make_keeper(5)(is_even)
+    2
+    4
+    &quot;&quot;&quot;
+    def do_keep(cond):
+        i = 1
+        while i &lt;= n:
+            if cond(i):
+                print(i)
+            i += 1
+    return do_keep
+</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+
+<h1 id="hofs-and-lambdas">HOFs and Lambdas</h1>
+
+
+
+<h3 id="q6-make-your-own-lambdas">Q6: Make Your Own Lambdas</h3>
+
+
+<p>For each of the following expressions, write functions <code>f1</code>, <code>f2</code>,
+<code>f3</code>, and <code>f4</code> such that the evaluation of each expression
+succeeds, without causing an error. Be sure to use lambdas in your
+function definition instead of nested <code>def</code> statements. Each function
+should have a one line solution.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="define_lambdas-input" style="height:540px;"></div>
+            <a href="javascript:void" id="modal-link-define_lambdas-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-define_lambdas-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-define_lambdas-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def f1():\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; f1()\n    3\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\ndef f2():\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; f2()()\n    3\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\ndef f3():\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; f3()(3)\n    3\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\ndef f4():\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; f4()()(3)()\n    3\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "define_lambdas-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def f1():
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; f1()
+    3
+    &quot;&quot;&quot;
+    return 3
+
+def f2():
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; f2()()
+    3
+    &quot;&quot;&quot;
+    return lambda: 3
+
+def f3():
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; f3()(3)
+    3
+    &quot;&quot;&quot;
+    return lambda x: x
+
+def f4():
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; f4()()(3)()
+    3
+    &quot;&quot;&quot;
+    return lambda: lambda x: lambda: x
+</code></pre>
+
+            </div>
+        
+
+
+
+
+<h1 id="currying">Currying</h1>
+
+
+<p>One important application of HOFs is converting a function that takes
+multiple arguments into a chain of functions that each take a single
+argument. This is known as <strong>currying</strong>. For example, the function below
+converts the <code>pow</code> function into its curried form:</p>
+
+<pre><code>&gt;&gt;&gt; def curried_pow(x):
+        def h(y):
+            return pow(x, y)
+        return h
+
+&gt;&gt;&gt; curried_pow(2)(3)
+8</code></pre>
+
+<p>This is useful if, say, you needed to calculate a lot of powers of 2.
+Using the normal <code>pow</code> function, you would have to put in <code>2</code> as the first
+argument for every function call:</p>
+
+<pre><code>&gt;&gt;&gt; pow(2, 3)
+8
+&gt;&gt;&gt; pow(2, 4)
+16
+&gt;&gt;&gt; pow(2, 10)
+1024</code></pre>
+
+<p>With <code>curried_pow</code>, however, you can create a one-argument function specialized for taking powers of 2 one time, and then keep using that function for taking powers of 2:</p>
+
+<pre><code>&gt;&gt;&gt; pow_2 = curried_pow(2)
+&gt;&gt;&gt; pow_2(3)
+8
+&gt;&gt;&gt; pow_2(4)
+16
+&gt;&gt;&gt; pow_2(10)
+1024</code></pre>
+
+<p>This way, you don't have to put <code>2</code> in as an argument for every call! If instead you wanted to take powers
+of 3, you could quickly make a similar function specialized in taking powers of 3 using <code>curried_pow(3)</code>.</p>
+
+<p>Another point that will be relevant once you learn about sequences: Currying is also helpful in contexts where only one-argument functions are allowed, such as with the <code>map</code> function. The <code>map</code> applies a one-argument function to every term in a sequence. If we wanted to take the power of 2 for every number in a sequence using <code>map</code>, we would be forced to use the one-argument function <code>pow_2</code> (as defined in the example above) instead of using <code>pow</code> with 2 as the first argument.</p>
+
+<div class="page-break"></div>
+
+
+<h3 id="q7-curry2-diagram">Q7: Curry2 Diagram</h3>
+
+
+<p>Draw the environment diagram that results from executing the code below.</p>
+
+
+            
+<pre><code>def curry2(h):
+    def f(x):
+        def g(y):
+            return h(x, y)
+        return g
+    return f
+
+make_adder = curry2(lambda x, y: x + y)
+add_three = make_adder(3)
+add_four = make_adder(4)
+five = add_three(2)</code></pre>
+
+            <b>Your Answer</b>
+            
+<pre><code>def curry2(h):
+    def f(x):
+        def g(y):
+            return h(x, y)
+        return g
+    return f
+
+make_adder = curry2(lambda x, y: x + y)
+add_three = make_adder(3)
+add_four = make_adder(4)
+five = add_three(2)</code></pre>
+
+        <div class="env-diagram" id=env-diagram-curry2-diagram>
+          <div class="env-diagram-objects">
+            <div>Objects</div>
+            <ul><li>
+            <button class="env-diagram-connector" id="env-diagram-curry2-diagram-object0-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-curry2-diagram-object0-value" type="text">
+            </li><li>
+            <button class="env-diagram-connector" id="env-diagram-curry2-diagram-object1-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-curry2-diagram-object1-value" type="text">
+            </li><li>
+            <button class="env-diagram-connector" id="env-diagram-curry2-diagram-object2-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-curry2-diagram-object2-value" type="text">
+            </li><li>
+            <button class="env-diagram-connector" id="env-diagram-curry2-diagram-object3-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-curry2-diagram-object3-value" type="text">
+            </li><li>
+            <button class="env-diagram-connector" id="env-diagram-curry2-diagram-object4-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-curry2-diagram-object4-value" type="text">
+            </li>
+            <li><button class="env-diagram-trash" title="Click here to remove a binding">🗑️</button></li>
+            </ul>
+        </div>
+          <div class="env-diagram-frame">
+                <div>Global frame</div>
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame0-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame0-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame0-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame0-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame0-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame0-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame0-binding2-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame0-binding2-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame0-binding2-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame0-binding3-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame0-binding3-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame0-binding3-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame0-binding4-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame0-binding4-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame0-binding4-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f1: <input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame1-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame1-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame1-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame1-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame1-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame1-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame1-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame1-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame1-return">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame1-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f2: <input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame2-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame2-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame2-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame2-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame2-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame2-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame2-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame2-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame2-return">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame2-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f3: <input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame3-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame3-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame3-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame3-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame3-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame3-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame3-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame3-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame3-return">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame3-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f4: <input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame4-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame4-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame4-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame4-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame4-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame4-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame4-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame4-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame4-return">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame4-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div><div class="env-diagram-frame">
+                
+                <div>
+                f5: <input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame5-funcname">
+                [parent=<input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame5-parent">]
+                </div>
+            
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame5-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame5-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame5-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame5-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame5-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame5-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                <tr>
+                    <td>Return value</td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-curry2-diagram-frame5-return">
+                <button class="env-diagram-connector" id="env-diagram-curry2-diagram-frame5-return-connector">⬤
+                </button>
+            </td>
+                </tr>
+                
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="storable-status"></div>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+            <iframe
+                width="800"
+                height="994"
+                frameborder="0"
+                src="https://pythontutor.com/iframe-embed.html#code=def+curry2%28h%29%3A%0A++++def+f%28x%29%3A%0A++++++++def+g%28y%29%3A%0A++++++++++++return+h%28x%2C+y%29%0A++++++++return+g%0A++++return+f%0A%0Amake_adder+%3D+curry2%28lambda+x%2C+y%3A+x+%2B+y%29%0Aadd_three+%3D+make_adder%283%29%0Aadd_four+%3D+make_adder%284%29%0Afive+%3D+add_three%282%29%0A&codeDivHeight=994&codeDivWidth=350&cumulative=true&curInstr=1&heapPrimitives=nevernest&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false">
+            </iframe>
+        
+            </div>
+        
+
+
+
+<div class="page-break"></div>
+
+
+<h1 id="extra-practice">Extra Practice</h1>
+
+
+<p>This question is particuarly challenging, so it is recommended to attempt if you are feeling confident
+on the previous questions or are studying for the exam.</p>
+
+
+<h3 id="q8-match-maker">Q8: Match Maker</h3>
+
+
+<p>Implement <code>match_k</code>, which takes in an integer <code>k</code> and returns a function
+that takes in a variable <code>x</code> and returns <code>True</code> if all the digits in <code>x</code> that
+are <code>k</code> apart are the same.</p>
+
+<p>For example, <code>match_k(2)</code> returns a one argument function that takes in <code>x</code>
+and checks if digits that are 2 away in <code>x</code> are the same.</p>
+
+<p><code>match_k(2)(1010)</code> has the value of <code>x = 1010</code> and digits 1, 0, 1, 0 going
+from left to right. <code>1 == 1</code> and <code>0 == 0</code>, so the <code>match_k(2)(1010)</code> results
+in <code>True</code>.</p>
+
+<p><code>match_k(2)(2010)</code> has the value of <code>x = 2010</code> and digits 2, 0, 1, 0 going
+from left to right. <code>2 != 1</code> and <code>0 == 0</code>, so the <code>match_k(2)(2010)</code> results
+in <code>False</code>.</p>
+
+<p><strong>Important:</strong> You may not use strings or indexing for this problem.
+You do not have to use all the lines, one staff solution does not use the
+line directly above the while loop.</p>
+
+<p><strong>Hint:</strong> Floor dividing by powers of 10 gets rid of the rightmost digits.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="match_k-input" style="height:522px;"></div>
+            <a href="javascript:void" id="modal-link-match_k-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-match_k-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-match_k-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def match_k(k):\n    &quot;&quot;&quot; Return a function that checks if digits k apart match\n\n    &gt;&gt;&gt; match_k(2)(1010)\n    True\n    &gt;&gt;&gt; match_k(2)(2010)\n    False\n    &gt;&gt;&gt; match_k(1)(1010)\n    False\n    &gt;&gt;&gt; match_k(1)(1)\n    True\n    &gt;&gt;&gt; match_k(1)(2111111111111111)\n    False\n    &gt;&gt;&gt; match_k(3)(123123)\n    True\n    &gt;&gt;&gt; match_k(2)(123123)\n    False\n    &quot;&quot;&quot;\n    ____________________________\n        ____________________________\n        while ____________________________:\n            if ____________________________:\n                return ____________________________\n            ____________________________\n        ____________________________\n    ____________________________\n\n', "python", "match_k-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def match_k(k):
+    &quot;&quot;&quot; Return a function that checks if digits k apart match
+
+    &gt;&gt;&gt; match_k(2)(1010)
+    True
+    &gt;&gt;&gt; match_k(2)(2010)
+    False
+    &gt;&gt;&gt; match_k(1)(1010)
+    False
+    &gt;&gt;&gt; match_k(1)(1)
+    True
+    &gt;&gt;&gt; match_k(1)(2111111111111111)
+    False
+    &gt;&gt;&gt; match_k(3)(123123)
+    True
+    &gt;&gt;&gt; match_k(2)(123123)
+    False
+    &quot;&quot;&quot;
+    def check(x):
+        i = 0
+        while 10 ** (i + k) &lt; x:
+            if (x // 10**i) % 10 != (x // 10 ** (i + k)) % 10:
+                return False
+            i = i + 1
+        return True
+    return check
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+
+<p>Here's an alternate solution:</p>
+
+<pre><code class="python"># BEGIN SOLUTION NO PROMPT
+# Alternate solution
+def match_k_alt(k):
+    &quot;&quot;&quot; Return a function that checks if digits k apart match
+
+    &gt;&gt;&gt; match_k_alt(2)(1010)
+    True
+    &gt;&gt;&gt; match_k_alt(2)(2010)
+    False
+    &gt;&gt;&gt; match_k_alt(1)(1010)
+    False
+    &gt;&gt;&gt; match_k_alt(1)(1)
+    True
+    &gt;&gt;&gt; match_k_alt(1)(2111111111111111)
+    False
+    &gt;&gt;&gt; match_k_alt(3)(123123)
+    True
+    &gt;&gt;&gt; match_k_alt(2)(123123)
+    False
+    &quot;&quot;&quot;
+    def check(x):
+        while x // (10 ** k):
+            if (x % 10) != (x // (10 ** k)) % 10:
+                return False
+            x //= 10
+        return True
+    return check
+# END SOLUTION</code></pre>
+
+
+
+</div>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#call-expressions">Call Expressions</a></li>
+  <ul>
+    <li><a href="#q1-call-diagram">Q1: Call Diagram</a></li>
+    <li><a href="#q2-nested-calls-diagrams">Q2: Nested Calls Diagrams</a></li>
+  </ul>
+  <li><a href="#lambda-expressions">Lambda Expressions</a></li>
+  <ul>
+    <li><a href="#q3-lambda-the-environment-diagram">Q3: Lambda the Environment Diagram</a></li>
+  </ul>
+  <li><a href="#higher-order-functions">Higher Order Functions</a></li>
+  <li><a href="#hofs-in-environment-diagrams">HOFs in Environment Diagrams</a></li>
+  <ul>
+    <li><a href="#q4-make-adder">Q4: Make Adder</a></li>
+    <li><a href="#q5-make-keeper">Q5: Make Keeper</a></li>
+  </ul>
+  <li><a href="#hofs-and-lambdas">HOFs and Lambdas</a></li>
+  <ul>
+    <li><a href="#q6-make-your-own-lambdas">Q6: Make Your Own Lambdas</a></li>
+  </ul>
+  <li><a href="#currying">Currying</a></li>
+  <ul>
+    <li><a href="#q7-curry2-diagram">Q7: Curry2 Diagram</a></li>
+  </ul>
+  <li><a href="#extra-practice">Extra Practice</a></li>
+  <ul>
+    <li><a href="#q8-match-maker">Q8: Match Maker</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

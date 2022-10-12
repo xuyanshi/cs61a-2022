@@ -1,0 +1,998 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/hw.css">
+
+
+    <title>
+Homework 4 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Homework 4 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="hw04.zip" class="label label-outline">hw04.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+<p>You can find solutions for all questions in <a href="hw04.py">hw04.py</a>.</p>
+
+    
+<!-- Data Abstraction, Trees -->
+
+
+<h1 id="required-questions">Required questions</h1>
+
+
+<br>
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+<h2 id="getting-started-videos">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZddKdp5ruGDsAXVg2kRwz5M"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZddKdp5ruGDsAXVg2kRwz5M'> YouTube link </a></p>
+</div>
+
+
+<h3 id="q1-mid-semester-feedback">Q1: Mid-Semester Feedback</h3>
+
+
+<p>As part of this week's homework, please fill out the
+<a href="https://go.cs61a.org/midsem-survey">Mid-Semester Feedback</a> form.</p>
+
+<p>This survey is designed to help us make short term adjustments to the course
+so that it works better for you. We appreciate your feedback. We may not be able
+to make every change that you request, but we will read all the feedback and
+consider it.</p>
+
+<blockquote><p><strong>Confidentiality</strong>:
+Your responses to the survey are confidential, and only the instructors
+and head TAs will be able to see this data unanonymized.
+More specifics on confidentiality can be found on the survey itself.</p></blockquote>
+
+<p>Once you finish the survey, you will be presented with a passphrase (if you miss
+it, it should also be at the bottom of the confirmation email you receive). Put
+this passphrase, as a string, on the line that says
+<code>passphrase = &#x27;*** PASSPHRASE HERE ***&#x27;</code> in the Python file for this assignment.</p>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q midsem_survey<button id="copy-code-python3ok-qmidsem_survey" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmidsem_survey").onclick = () => copyCode('python3 ok -q midsem_survey', "copy-code-python3ok-qmidsem_survey");
+        </script>
+        <br/>
+
+
+<h2 id="arms-length-recursion">Arms-length recursion</h2>
+
+
+<p>Before we get started, a quick comment on recursion with tree data structures. Consider the following function.</p>
+
+<pre><code>def min_depth(t):
+    &quot;&quot;&quot;A simple function to return the distance between t&#x27;s root and its closest leaf&quot;&quot;&quot;
+    if is_leaf(t):
+        return 0 # Base case&#x2d;&#x2d;&#x2d;the distance between a node and itself is zero
+    h = float(&#x27;inf&#x27;) # Python&#x27;s version of infinity
+    for b in branches(t):
+        if is_leaf(b): return 1 # !!!
+        h = min(h, 1 + min_depth(b))
+    return h</code></pre>
+
+<p>The line flagged with <code>!!!</code> is an "arms-length" recursion violation. Although our code works correctly when it is present, by performing this check we are doing work that should be done by the next level of recursion—we already have an if-statement that handles any inputs to <code>min_depth</code> that are leaves, so we should not include this line to eliminate redundancy in our code.</p>
+
+<pre><code>def min_depth(t):
+    &quot;&quot;&quot;A simple function to return the distance between t&#x27;s root and its closest leaf&quot;&quot;&quot;
+    if is_leaf(t):
+        return 0
+    h = float(&#x27;inf&#x27;)
+    for b in branches(t):
+        # Still works fine!
+        h = min(h, 1 + min_depth(b))
+    return h</code></pre>
+
+<p>Arms-length recursion is not only redundant but often complicates our code and obscures the functionality of recursive functions, making writing recursive functions much more difficult. We always want our recursive case to be handling one and only one recursive level. We may or may not be checking your code periodically for things like this.</p>
+
+
+<h2 id="mobiles">Mobiles</h2>
+
+
+<p><strong>Acknowledgements</strong>
+ This mobile example is based on
+a classic problem from MIT Structure and Interpretation of Computer Programs,
+<a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-15.html#%_sec_2.2.2">Section 2.2.2</a>.</p>
+
+<!-- > <strong>Hint:</strong> for more information on this problem (with more pictures!) please refer to <a href="assets/mobiles.pdf">this document</a> -->
+
+<p><img class="img-responsive center-block" src="assets/mobile-planet.png" alt="Mobile example" width="" height=""></p>
+
+<p>We are making a planetarium mobile. A <a href="https://www.northwestnatureshop.com/wp-content/uploads/2015/04/AMSolarSystem.jpg">mobile</a> is a type of hanging sculpture. A binary mobile consists of two
+arms. Each arm is a rod of a certain length, from which hangs either a planet
+or another mobile. For example, the below diagram shows the left and right arms of Mobile A,
+and what hangs at the ends of each of those arms.</p>
+
+<p><img class="img-responsive center-block" src="assets/mobile-planet-labeled.png" alt="Labeled Mobile example" width="" height=""></p>
+
+<p>We will represent a binary mobile using the data abstractions below.</p>
+
+<ul>
+  <li>A <code>mobile</code> must have both a left <code>arm</code> and a right <code>arm</code>.</li>
+  <li>An <code>arm</code> has a positive length and must have something hanging at the end, either a <code>mobile</code> or <code>planet</code>.</li>
+  <li>A <code>planet</code> has a positive mass, and nothing hanging from it.</li>
+</ul>
+
+
+<h3 id="q2-weights">Q2: Weights</h3>
+
+
+<p>Below are the implementations of the various data abstractions used in mobiles.
+The <code>mobile</code> and <code>arm</code> data abstractions have been completed for you.</p>
+
+<p>Your job is to implement the <code>planet</code> data abstraction by completing the <code>planet</code> constructor
+and the <code>mass</code> selector so that a planet is represented using a two-element list
+where the first element is the string <code>&#x27;planet&#x27;</code> and the second element is its mass.</p>
+
+<p><em>Implementation of the Mobile Data Abstraction</em> (<strong>for your reference, no need to do anything here</strong>):</p>
+
+<pre><code>def mobile(left, right):
+    &quot;&quot;&quot;Construct a mobile from a left arm and a right arm.&quot;&quot;&quot;
+    assert is_arm(left), &quot;left must be a arm&quot;
+    assert is_arm(right), &quot;right must be a arm&quot;
+    return [&#x27;mobile&#x27;, left, right]
+
+def is_mobile(m):
+    &quot;&quot;&quot;Return whether m is a mobile.&quot;&quot;&quot;
+    return type(m) == list and len(m) == 3 and m[0] == &#x27;mobile&#x27;
+
+def left(m):
+    &quot;&quot;&quot;Select the left arm of a mobile.&quot;&quot;&quot;
+    assert is_mobile(m), &quot;must call left on a mobile&quot;
+    return m[1]
+
+def right(m):
+    &quot;&quot;&quot;Select the right arm of a mobile.&quot;&quot;&quot;
+    assert is_mobile(m), &quot;must call right on a mobile&quot;
+    return m[2]</code></pre>
+
+<!-- hack -->
+<em>Implementation of the Arm Data Abstraction</em> (<strong>for your reference, no need to do anything here</strong>):
+
+<pre><code>def arm(length, mobile_or_planet):
+    &quot;&quot;&quot;Construct a arm: a length of rod with a mobile or planet at the end.&quot;&quot;&quot;
+    assert is_mobile(mobile_or_planet) or is_planet(mobile_or_planet)
+    return [&#x27;arm&#x27;, length, mobile_or_planet]
+
+def is_arm(s):
+    &quot;&quot;&quot;Return whether s is a arm.&quot;&quot;&quot;
+    return type(s) == list and len(s) == 3 and s[0] == &#x27;arm&#x27;
+
+def length(s):
+    &quot;&quot;&quot;Select the length of a arm.&quot;&quot;&quot;
+    assert is_arm(s), &quot;must call length on a arm&quot;
+    return s[1]
+
+def end(s):
+    &quot;&quot;&quot;Select the mobile or planet hanging at the end of a arm.&quot;&quot;&quot;
+    assert is_arm(s), &quot;must call end on a arm&quot;
+    return s[2]</code></pre>
+
+<!-- hack -->
+(<strong>Your turn!</strong>) <em>Fill out the implementation of the Planet Data Abstraction!</em>
+
+<pre><code>def planet(mass):
+    &quot;&quot;&quot;Construct a planet of some mass.&quot;&quot;&quot;
+    assert mass &gt; 0
+<div class="sol-highlight">    return [&#x27;planet&#x27;, mass]</div>
+def mass(w):
+    &quot;&quot;&quot;Select the mass of a planet.&quot;&quot;&quot;
+    assert is_planet(w), &#x27;must call mass on a planet&#x27;
+<div class="sol-highlight">    return w[1]</div>
+def is_planet(w):
+    &quot;&quot;&quot;Whether w is a planet.&quot;&quot;&quot;
+    return type(w) == list and len(w) == 2 and w[0] == &#x27;planet&#x27;</code></pre>
+
+<p><em>Total Weight implementation</em> (<strong>for your reference and understanding, no need to do anything here</strong>):</p>
+
+<p>The <code>total_weight</code> example is provided to demonstrate use of the mobile, arm,
+and planet abstractions for your reference. You do not need to implement anything here. <strong>You may use
+the <code>total_weight</code> function in questions 3 and 4.</strong></p>
+
+<p>The <code>examples</code> function builds and returns three mobiles. These mobiles are used in the doctest examples
+for <code>total_weight</code>, a function that takes in either a mobile or a planet and returns its total weight. The total weight
+of a planet is just its mass. The total weight of a mobile is the sum of the masses of all the planets hanging from the mobile.
+<!-- hack --></p>
+
+<pre><code>def examples():
+    t = mobile(arm(1, planet(2)),
+               arm(2, planet(1)))
+    u = mobile(arm(5, planet(1)),
+               arm(1, mobile(arm(2, planet(3)),
+                              arm(3, planet(2)))))
+    v = mobile(arm(4, t), arm(2, u))
+    return (t, u, v)
+def total_weight(m):
+    &quot;&quot;&quot;Return the total weight of m, a planet or mobile.
+
+    &gt;&gt;&gt; t, u, v = examples()
+    &gt;&gt;&gt; total_weight(t)
+    3
+    &gt;&gt;&gt; total_weight(u)
+    6
+    &gt;&gt;&gt; total_weight(v)
+    9
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; # checking for abstraction barrier violations by banning indexing
+    &gt;&gt;&gt; check(HW_SOURCE_FILE, &#x27;total_weight&#x27;, [&#x27;Index&#x27;])
+    True
+    &quot;&quot;&quot;
+    if is_planet(m):
+        return mass(m)
+    else:
+        assert is_mobile(m), &quot;must get total weight of a mobile or a planet&quot;
+        return total_weight(end(left(m))) + total_weight(end(right(m)))</code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q total_weight<button id="copy-code-python3ok-qtotal_weight" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qtotal_weight").onclick = () => copyCode('python3 ok -q total_weight', "copy-code-python3ok-qtotal_weight");
+        </script>
+        <br/>
+
+
+<h3 id="q3-balanced">Q3: Balanced</h3>
+
+
+<!-- > <strong>Hint:</strong> for more information on this problem (with more pictures!) please refer to <a href="assets/mobiles.pdf#page=3">this document</a>. -->
+
+<p>Implement the <code>balanced</code> function, which returns whether <code>m</code> is a balanced
+mobile. A mobile is balanced if both of the following conditions are met:</p>
+
+<ol>
+  <li>The torque applied by its left arm is equal to that applied by its right
+  arm. The torque of the left arm is the length of the left rod multiplied by the
+  total weight hanging from that rod. Likewise for the right. For example,
+  if the left arm has a length of <code>5</code>, and there is a <code>mobile</code> hanging at the end
+  of the left arm of total weight <code>10</code>, the torque on the left side of our mobile is <code>50</code>.</li>
+  <li>Each of the mobiles hanging at the end of its arms is itself balanced.</li>
+</ol>
+
+<p>Planets themselves are balanced, as there is nothing hanging off of them.</p>
+
+<blockquote><p><strong>Reminder:</strong> You may use the <code>total_weight</code> function defined for you in Question 2 (as well as any of the
+other functions defined in Question 2).</p></blockquote>
+
+<pre><code>def balanced(m):
+    &quot;&quot;&quot;Return whether m is balanced.
+
+    &gt;&gt;&gt; t, u, v = examples()
+    &gt;&gt;&gt; balanced(t)
+    True
+    &gt;&gt;&gt; balanced(v)
+    True
+    &gt;&gt;&gt; w = mobile(arm(3, t), arm(2, u))
+    &gt;&gt;&gt; balanced(w)
+    False
+    &gt;&gt;&gt; balanced(mobile(arm(1, v), arm(1, w)))
+    False
+    &gt;&gt;&gt; balanced(mobile(arm(1, w), arm(1, v)))
+    False
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; # checking for abstraction barrier violations by banning indexing
+    &gt;&gt;&gt; check(HW_SOURCE_FILE, &#x27;balanced&#x27;, [&#x27;Index&#x27;])
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if is_planet(m):
+        return True
+    else:
+        left_end, right_end = end(left(m)), end(right(m))
+        torque_left = length(left(m)) * total_weight(left_end)
+        torque_right = length(right(m)) * total_weight(right_end)
+        return torque_left == torque_right and balanced(left_end) and balanced(right_end)</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q balanced<button id="copy-code-python3ok-qbalanced" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qbalanced").onclick = () => copyCode('python3 ok -q balanced', "copy-code-python3ok-qbalanced");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>The fact that planets are balanced is important, since we will be solving
+this recursively like many other tree problems (even though this is not
+explicitly a tree).</p>
+
+<ul>
+  <li><p><strong>Base case:</strong> if we are checking a planet, then we know that this is
+  balanced. Why is this an appropriate base case? There are two possible
+  approaches to this:</p>
+
+  <ol>
+    <li>Because we know that our data structures so far are trees, planets
+    are the simplest possible tree since we have chosen to implement
+    them as leaves.</li>
+    <li>We also know that from a data abstraction standpoint, planets are the terminal
+    item in a mobile. There can be no further mobile structures under
+    this planet, so it makes sense to stop check here.</li>
+  </ol></li>
+  <li><strong>Otherwise:</strong> note that it is important to do a recursive call to check
+  if both arms are balanced. However, we also need to do the basic
+  comparison of looking at the total weight of both arms as well as their
+  length. For example if both arms are a planet, trivially, they will
+  both be balanced. However, the torque must be equal in order for the
+  entire mobile to balanced (i.e. it's insufficient to just check if the
+  arms are balanced).</li>
+</ul>
+
+</div>
+
+
+<h3 id="q4-totals">Q4: Totals</h3>
+
+
+<p>Implement <code>totals_tree</code>, which takes in a <code>mobile</code> or <code>planet</code> and returns a
+<code>tree</code> whose root is the total weight of the input. For a <code>planet</code>, <code>totals_tree</code>
+should return a leaf. For a <code>mobile</code>, <code>totals_tree</code> should return a tree whose
+label is that <code>mobile</code>'s total weight, and whose branches are <code>totals_tree</code>s for the
+ends of its arms. As a reminder, the description of the tree data abstraction can be found <a href="http://composingprograms.com/pages/23-sequences.html#trees">here</a>.</p>
+
+<pre><code>def totals_tree(m):
+    &quot;&quot;&quot;Return a tree representing the mobile with its total weight at the root.
+
+    &gt;&gt;&gt; t, u, v = examples()
+    &gt;&gt;&gt; print_tree(totals_tree(t))
+    3
+      2
+      1
+    &gt;&gt;&gt; print_tree(totals_tree(u))
+    6
+      1
+      5
+        3
+        2
+    &gt;&gt;&gt; print_tree(totals_tree(v))
+    9
+      3
+        2
+        1
+      6
+        1
+        5
+          3
+          2
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; # checking for abstraction barrier violations by banning indexing
+    &gt;&gt;&gt; check(HW_SOURCE_FILE, &#x27;totals_tree&#x27;, [&#x27;Index&#x27;])
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if is_planet(m):
+        return tree(mass(m))
+    else:
+        branches = [totals_tree(end(f(m))) for f in [left, right]]
+        return tree(sum([label(b) for b in branches]), branches)</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q totals_tree<button id="copy-code-python3ok-qtotals_tree" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qtotals_tree").onclick = () => copyCode('python3 ok -q totals_tree', "copy-code-python3ok-qtotals_tree");
+        </script>
+        <br/>
+
+
+<h2 id="more-trees">More Trees</h2>
+
+
+<h3 id="q5-replace-loki-at-leaf">Q5: Replace Loki at Leaf</h3>
+
+
+<p>Define <code>replace_loki_at_leaf</code>, which takes a tree <code>t</code> and a value <code>lokis_replacement</code>. <code>replace_loki_at_leaf</code> returns a new tree that's the same as <code>t</code> except
+that every leaf label equal to <code>&quot;loki&quot;</code> has been replaced with <code>lokis_replacement</code>.</p>
+
+<p>If you want to learn about the Norse mythology referenced in this problem, you can read about it <a href="https://en.wikipedia.org/wiki/Yggdrasil">here</a>.</p>
+
+<solution>
+
+<pre><code>def replace_loki_at_leaf(t, lokis_replacement):
+    &quot;&quot;&quot;Returns a new tree where every leaf value equal to &quot;loki&quot; has
+    been replaced with lokis_replacement.
+
+    &gt;&gt;&gt; yggdrasil = tree(&#x27;odin&#x27;,
+    ...                  [tree(&#x27;balder&#x27;,
+    ...                        [tree(&#x27;loki&#x27;),
+    ...                         tree(&#x27;freya&#x27;)]),
+    ...                   tree(&#x27;frigg&#x27;,
+    ...                        [tree(&#x27;loki&#x27;)]),
+    ...                   tree(&#x27;loki&#x27;,
+    ...                        [tree(&#x27;sif&#x27;),
+    ...                         tree(&#x27;loki&#x27;)]),
+    ...                   tree(&#x27;loki&#x27;)])
+    &gt;&gt;&gt; laerad = copy_tree(yggdrasil) # copy yggdrasil for testing purposes
+    &gt;&gt;&gt; print_tree(replace_loki_at_leaf(yggdrasil, &#x27;freya&#x27;))
+    odin
+      balder
+        freya
+        freya
+      frigg
+        freya
+      loki
+        sif
+        freya
+      freya
+    &gt;&gt;&gt; laerad == yggdrasil # Make sure original tree is unmodified
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if is_leaf(t) and label(t) == &quot;loki&quot;:
+        return tree(lokis_replacement)
+    else:
+        bs = [replace_loki_at_leaf(b, lokis_replacement) for b in branches(t)]
+        return tree(label(t), bs)</div></code></pre>
+
+</solution>
+
+<!--
+<br />
+
+<p>Watch the hints video below for somewhere to start:
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/FUIXaJaReOA"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/FUIXaJaReOA'> YouTube link </a></p></p>
+
+<br />
+-->
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q replace_loki_at_leaf<button id="copy-code-python3ok-qreplace_loki_at_leaf" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qreplace_loki_at_leaf").onclick = () => copyCode('python3 ok -q replace_loki_at_leaf', "copy-code-python3ok-qreplace_loki_at_leaf");
+        </script>
+        <br/>
+
+<!--
+<div class="sol-highlight">
+
+<p>We approach this problem recursively.</p>
+
+<ul>
+  <li><p><strong>Base Case:</strong> if the tree is a leaf, we can immediately decide what to
+  do. If the label is loki, we return a tree with the lokis_replacement label. Otherwise, we just return the original tree. In our solution, it
+  looks like we always recurse over the branches:</p>
+
+<pre><code>bs = [replace_loki_at_leaf(b, lokis_replacement) for b in branches(t)]</code></pre>
+
+  <p>But this will not do anything for a leaf, since <code>branches(t)</code> is an
+  empty sequence. It's also possible to have a separate case.</p></li>
+  <li><strong>Otherwise:</strong> we cannot do anything about the current element, since
+  we're only allowed to replace at leaves. Therefore, we need to examine
+  all of our branches, and replace their leaves. After replacing their
+  leaves, we can return an updated tree.</li>
+</ul>
+
+</div>
+-->
+
+
+<h3 id="q6-has-path">Q6: Has Path</h3>
+
+
+<p>Write a function <code>has_path</code> that takes in a tree <code>t</code> and a string <code>word</code>. It
+returns <code>True</code> if there is a path that starts from the root where the entries
+along the path spell out the <code>word</code>, and <code>False</code> otherwise. (This data structure
+is called a trie, and it has a lot of cool applications, such as autocomplete).
+You may assume that every node's <code>label</code> is exactly one character.</p>
+
+<solution>
+
+<pre><code>def has_path(t, word):
+    &quot;&quot;&quot;Return whether there is a path in a tree where the entries along the path
+    spell out a particular word.
+
+    &gt;&gt;&gt; greetings = tree(&#x27;h&#x27;, [tree(&#x27;i&#x27;),
+    ...                        tree(&#x27;e&#x27;, [tree(&#x27;l&#x27;, [tree(&#x27;l&#x27;, [tree(&#x27;o&#x27;)])]),
+    ...                                   tree(&#x27;y&#x27;)])])
+    &gt;&gt;&gt; print_tree(greetings)
+    h
+      i
+      e
+        l
+          l
+            o
+        y
+    &gt;&gt;&gt; has_path(greetings, &#x27;h&#x27;)
+    True
+    &gt;&gt;&gt; has_path(greetings, &#x27;i&#x27;)
+    False
+    &gt;&gt;&gt; has_path(greetings, &#x27;hi&#x27;)
+    True
+    &gt;&gt;&gt; has_path(greetings, &#x27;hello&#x27;)
+    True
+    &gt;&gt;&gt; has_path(greetings, &#x27;hey&#x27;)
+    True
+    &gt;&gt;&gt; has_path(greetings, &#x27;bye&#x27;)
+    False
+    &gt;&gt;&gt; has_path(greetings, &#x27;hint&#x27;)
+    False
+    &quot;&quot;&quot;
+    assert len(word) &gt; 0, &#x27;no path for empty word.&#x27;
+<div class="sol-highlight">    if label(t) != word[0]:
+        return False
+    elif len(word) == 1:
+        return True
+    for b in branches(t):
+        if has_path(b, word[1:]):
+            return True
+    return False</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q has_path<button id="copy-code-python3ok-qhas_path" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qhas_path").onclick = () => copyCode('python3 ok -q has_path', "copy-code-python3ok-qhas_path");
+        </script>
+        <br/>
+
+
+<h1 id="optional-questions">Optional Questions</h1>
+
+
+
+<h2 id="data-abstraction">Data Abstraction</h2>
+
+
+<blockquote><p>Feel free to reference
+<a href="http://composingprograms.com/pages/22-data-abstraction.html">Section 2.2</a>
+for more information on data abstraction.</p></blockquote>
+
+<p><strong>Acknowledgements.</strong> This interval arithmetic example is based on
+a classic problem from Structure and Interpretation of Computer Programs,
+<a href="https://sarabander.github.io/sicp/html/2_002e1.xhtml#g_t2_002e1_002e4">Section 2.1.4</a>.</p>
+
+<p><strong>Introduction.</strong> Alyssa P. Hacker is designing a system to help people
+solve engineering problems. One feature she wants to provide in her
+system is the ability to manipulate inexact quantities (such as
+measurements from physical devices) with known precision, so that
+when computations are done with such approximate quantities the results
+will be numbers of known precision. For example, if a measured quantity
+x lies between two numbers a and b, Alyssa would like her system to
+use this range in computations involving x.</p>
+
+<p>Alyssa's idea is to implement interval arithmetic as a set of
+arithmetic operations for combining "intervals" (objects that represent
+the range of possible values of an inexact quantity). The result of
+adding, subracting, multiplying, or dividing two intervals is also an
+interval, one that represents the range of the result.</p>
+
+<p>Alyssa suggests the existence of an abstraction called an
+"interval" that has two endpoints: a lower bound and an upper bound.
+She also presumes that, given the endpoints of an interval, she can
+create the interval using data abstraction. Using this constructor and the appropriate selectors,
+she defines the following operations:</p>
+
+<pre><code>def str_interval(x):
+    &quot;&quot;&quot;Return a string representation of interval x.&quot;&quot;&quot;
+    return &#x27;{0} to {1}&#x27;.format(lower_bound(x), upper_bound(x))
+
+def add_interval(x, y):
+    &quot;&quot;&quot;Return an interval that contains the sum of any value in interval x and
+    any value in interval y.&quot;&quot;&quot;
+    lower = lower_bound(x) + lower_bound(y)
+    upper = upper_bound(x) + upper_bound(y)
+    return interval(lower, upper)</code></pre>
+
+<!-- hack -->
+
+
+<h3 id="q7-interval-abstraction">Q7: Interval Abstraction</h3>
+
+
+<p>Alyssa's program is incomplete because she has not specified the implementation
+of the interval abstraction. She has implemented the constructor for you; fill
+in the implementation of the selectors.</p>
+
+<pre><code>def interval(a, b):
+    &quot;&quot;&quot;Construct an interval from a to b.&quot;&quot;&quot;
+    assert a &lt;= b, &#x27;Lower bound cannot be greater than upper bound&#x27;
+    return [a, b]
+
+def lower_bound(x):
+    &quot;&quot;&quot;Return the lower bound of interval x.&quot;&quot;&quot;
+<div class="sol-highlight">    return x[0]</div>
+def upper_bound(x):
+    &quot;&quot;&quot;Return the upper bound of interval x.&quot;&quot;&quot;
+<div class="sol-highlight">    return x[1]</div></code></pre>
+
+<p>Use Ok to unlock and test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q interval -u
+python3 ok -q interval<button id="copy-code-python3ok-qinterval-upython3ok-qinterval" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qinterval-upython3ok-qinterval").onclick = () => copyCode('python3 ok -q interval -u\npython3 ok -q interval', "copy-code-python3ok-qinterval-upython3ok-qinterval");
+        </script>
+        <br/>
+
+
+<h3 id="q8-interval-arithmetic">Q8: Interval Arithmetic</h3>
+
+
+<p>After implementing the abstraction, Alyssa decided to implement a few interval arithmetic functions.</p>
+
+<p>This is her current implementation for <strong>interval multiplication</strong>.
+Unfortunately there are some data abstraction violations,
+so your task is to fix this code
+before <a href="https://youtu.be/7zu30DhJLKU?t=444">someone sets it on fire</a>.</p>
+
+<pre><code>def mul_interval(x, y):
+    &quot;&quot;&quot;Return the interval that contains the product of any value in x and any
+    value in y.&quot;&quot;&quot;
+<div class="sol-highlight">    p1 = lower_bound(x) * lower_bound(y)</div><div class="sol-highlight">    p2 = lower_bound(x) * upper_bound(y)</div><div class="sol-highlight">    p3 = upper_bound(x) * lower_bound(y)</div><div class="sol-highlight">    p4 = upper_bound(x) * upper_bound(y)</div><div class="sol-highlight">    return interval(min(p1, p2, p3, p4), max(p1, p2, p3, p4))</div></code></pre>
+
+<p>Use Ok to unlock and test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q mul_interval -u
+python3 ok -q mul_interval<button id="copy-code-python3ok-qmul_interval-upython3ok-qmul_interval" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmul_interval-upython3ok-qmul_interval").onclick = () => copyCode('python3 ok -q mul_interval -u\npython3 ok -q mul_interval', "copy-code-python3ok-qmul_interval-upython3ok-qmul_interval");
+        </script>
+        <br/>
+
+</br>
+
+<p><strong>Interval Subtraction</strong></p>
+
+<p>Using a similar approach as <code>mul_interval</code> and <code>add_interval</code>, define a subtraction function for
+intervals. If you find yourself repeating code, see if you can reuse functions that have already been implemented.</p>
+
+<pre><code>def sub_interval(x, y):
+    &quot;&quot;&quot;Return the interval that contains the difference between any value in x
+    and any value in y.&quot;&quot;&quot;
+<div class="sol-highlight">    negative_y = interval(&#x2d;upper_bound(y), &#x2d;lower_bound(y))
+    return add_interval(x, negative_y)</div></code></pre>
+
+<p>Use Ok to unlock and test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q sub_interval -u
+python3 ok -q sub_interval<button id="copy-code-python3ok-qsub_interval-upython3ok-qsub_interval" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qsub_interval-upython3ok-qsub_interval").onclick = () => copyCode('python3 ok -q sub_interval -u\npython3 ok -q sub_interval', "copy-code-python3ok-qsub_interval-upython3ok-qsub_interval");
+        </script>
+        <br/>
+
+</br>
+
+<p><strong>Interval Division</strong></p>
+
+<p>Alyssa implements division below by multiplying by the reciprocal of
+<code>y</code>. A systems programmer looks over Alyssa's
+shoulder and comments that it is not clear what it means to divide by
+an interval that spans zero. Add an <code>assert</code> statement to Alyssa's code
+to ensure that no such interval is used as a divisor:</p>
+
+<pre><code>def div_interval(x, y):
+    &quot;&quot;&quot;Return the interval that contains the quotient of any value in x divided by
+    any value in y. Division is implemented as the multiplication of x by the
+    reciprocal of y.&quot;&quot;&quot;
+<div class="sol-highlight">    assert not (lower_bound(y) &lt;= 0 &lt;= upper_bound(y)), &#x27;Divide by zero&#x27;</div>    reciprocal_y = interval(1/upper_bound(y), 1/lower_bound(y))
+    return mul_interval(x, reciprocal_y)</code></pre>
+
+<p>Use Ok to unlock and test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q div_interval -u
+python3 ok -q div_interval<button id="copy-code-python3ok-qdiv_interval-upython3ok-qdiv_interval" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdiv_interval-upython3ok-qdiv_interval").onclick = () => copyCode('python3 ok -q div_interval -u\npython3 ok -q div_interval', "copy-code-python3ok-qdiv_interval-upython3ok-qdiv_interval");
+        </script>
+        <br/>
+
+
+<h3 id="q9-par-diff">Q9: Par Diff</h3>
+
+
+<p>After considerable work, Alyssa P. Hacker delivers her finished system.  Several
+years later, after she has forgotten all about it, she gets a frenzied call from
+an irate user, Lem E. Tweakit. It seems that Lem has noticed that the
+<a href="https://en.wikipedia.org/wiki/Series_and_parallel_circuits#Resistors_2">formula for parallel resistors</a>
+can be written in two algebraically equivalent ways:</p>
+
+<pre><code>par1(r1, r2) = (r1 * r2) / (r1 + r2)</code></pre>
+
+<p>or</p>
+
+<pre><code>par2(r1, r2) = 1 / (1/r1 + 1/r2)</code></pre>
+
+<p>He has written the following two programs, each of which computes the
+<code>parallel_resistors</code> formula differently:</p>
+
+<pre><code>def par1(r1, r2):
+    return div_interval(mul_interval(r1, r2), add_interval(r1, r2))
+
+def par2(r1, r2):
+    one = interval(1, 1)
+    rep_r1 = div_interval(one, r1)
+    rep_r2 = div_interval(one, r2)
+    return div_interval(one, add_interval(rep_r1, rep_r2))</code></pre>
+
+<p>Lem points out that Alyssa's program gives different answers for the two ways of computing. Find two intervals <code>r1</code> and <code>r2</code> that demonstrate the difference in behavior between <code>par1</code> and <code>par2</code> when passed into each of the two functions.</p>
+
+<p>Demonstrate that Lem is right. Investigate the behavior of the system
+on a variety of arithmetic expressions. Make some intervals <code>r1</code> and
+<code>r2</code>, and show that <code>par1</code> and <code>par2</code> can give different results.</p>
+
+<pre><code>def check_par():
+    &quot;&quot;&quot;Return two intervals that give different results for parallel resistors.
+
+    &gt;&gt;&gt; r1, r2 = check_par()
+    &gt;&gt;&gt; x = par1(r1, r2)
+    &gt;&gt;&gt; y = par2(r1, r2)
+    &gt;&gt;&gt; lower_bound(x) != lower_bound(y) or upper_bound(x) != upper_bound(y)
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    r1 = interval(1, 2)</div><div class="sol-highlight">    r2 = interval(3, 4)</div>    return r1, r2</code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q check_par<button id="copy-code-python3ok-qcheck_par" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qcheck_par").onclick = () => copyCode('python3 ok -q check_par', "copy-code-python3ok-qcheck_par");
+        </script>
+        <br/>
+
+
+<h1 id="exam-practice">Exam Practice</h1>
+
+
+<p>Homework assignments will also contain prior exam questions for you to try.
+These questions have no submission component; feel free to attempt them if you'd like some practice!</p>
+
+<ol>
+  <li>Summer 2021 MT Q4: <a href="https://cs61a.org/exam/su21/midterm/61a-su21-midterm.pdf#page=10">Maximum Exponen-tree-ation</a></li>
+  <li>Summer 2019 MT Q8: <a href="https://inst.eecs.berkeley.edu/~cs61a/sp20/exam/su19/mt/61a-su19-mt.pdf#page=9">Leaf It To Me</a></li>
+  <li>Summer 2017 MT Q9: <a href="https://inst.eecs.berkeley.edu//~cs61a/su17/assets/pdfs/61a-su17-mt.pdf#page=11">Temmie Flakes</a></li>
+</ol>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#required-questions">Required questions</a></li>
+  <ul>
+    <li><a href="#getting-started-videos">Getting Started Videos</a></li>
+    <ul>
+      <li><a href="#q1-mid-semester-feedback">Q1: Mid-Semester Feedback</a></li>
+    </ul>
+    <li><a href="#arms-length-recursion">Arms-length recursion</a></li>
+    <li><a href="#mobiles">Mobiles</a></li>
+    <ul>
+      <li><a href="#q2-weights">Q2: Weights</a></li>
+      <li><a href="#q3-balanced">Q3: Balanced</a></li>
+      <li><a href="#q4-totals">Q4: Totals</a></li>
+    </ul>
+    <li><a href="#more-trees">More Trees</a></li>
+    <ul>
+      <li><a href="#q5-replace-loki-at-leaf">Q5: Replace Loki at Leaf</a></li>
+      <li><a href="#q6-has-path">Q6: Has Path</a></li>
+    </ul>
+  </ul>
+  <li><a href="#optional-questions">Optional Questions</a></li>
+  <ul>
+    <li><a href="#data-abstraction">Data Abstraction</a></li>
+    <ul>
+      <li><a href="#q7-interval-abstraction">Q7: Interval Abstraction</a></li>
+      <li><a href="#q8-interval-arithmetic">Q8: Interval Arithmetic</a></li>
+      <li><a href="#q9-par-diff">Q9: Par Diff</a></li>
+    </ul>
+  </ul>
+  <li><a href="#exam-practice">Exam Practice</a></li>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,988 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/disc.css">
+
+
+    <title>
+Discussion 4 | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 4: Tree Recursion, Python Lists
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc04.pdf" class="label label-outline">disc04.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<div class="alert storable-login-status"></div>
+
+This is an online worksheet that you can work on during discussions.
+Your work is not graded and you do not need to submit anything.
+
+
+    
+<div class="sol-highlight">
+
+<h2 id="walkthrough-videos">Walkthrough Videos</h2>
+
+
+<p>Feel free to try these problems on the worksheet in discussion or on
+your own, and then come back to reference these walkthrough videos
+as you study.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p>
+
+<p><strong>Note</strong>: We unfortunately only have walkthrough videos for some of the problems on this worksheet this semester, please use the problem names to find the corresponding videos.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZfJg2KK9QpL8tvWGagSuqd4"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZfJg2KK9QpL8tvWGagSuqd4'> YouTube link </a></p>
+</div>
+
+
+
+
+<h1 id="tree-recursion">Tree Recursion</h1>
+
+
+<p>A tree recursive function is a recursive function that makes more than one call
+to itself, resulting in a tree-like series of calls.</p>
+
+<p>For example, let's say we want to recursively calculate the
+<code>n</code>th
+<a href="https://en.wikipedia.org/wiki/Fibonacci_number">Virahanka-Fibonacci number</a>,
+defined as:</p>
+
+<pre><code>def virfib(n):
+    if n == 0 or n == 1:
+        return n
+    return virfib(n &#x2d; 1) + virfib(n &#x2d; 2)</code></pre>
+
+<p>Calling <code>virfib(6)</code> results in the following call structure that looks like
+an upside-down tree (where <code>f</code> is <code>virfib</code>):</p>
+
+<p><img class="img-responsive center-block" src="assets/f6-call-tree.png" alt="Virahanka-Fibonacci Tree" title="Virahanka-Fibonacci Tree" width="" height=""></p>
+
+<p>Each <code>f(i)</code> node represents a recursive call to <code>virfib</code>.
+Each recursive call <code>f(i)</code> makes another two recursive calls,
+which are to <code>f(i&#x2d;1)</code> and <code>f(i&#x2d;2)</code>.
+Whenever we reach a <code>f(0)</code> or <code>f(1)</code> node, we can directly return <code>0</code> or <code>1</code>
+rather than making more recursive calls, since these are our base cases.</p>
+
+<p>In other words, base cases have the information needed to return an answer
+directly, without depending upon results from other recursive calls.
+Once we've reached a base case, we can then begin returning back from the
+recursive calls that led us to the base case in the first place.</p>
+
+<p>Generally, tree recursion can be effective for problems where
+there are multiple possibilities or choices at a current state.
+In these types of problems, you make a recursive call for each choice or
+for a group of choices.</p>
+
+<div class="page-break"></div>
+
+
+<h3 id="q1-count-stair-ways">Q1: Count Stair Ways</h3>
+
+
+<p>Imagine that you want to go up a flight of stairs that has <code>n</code> steps,
+where <code>n</code> is a positive integer.
+You can either take 1 or 2 steps each time. How many different ways can you go up this flight of stairs?
+In this question, you'll write a function <code>count_stair_ways</code> that solves this problem.
+Before you code your approach, consider these questions.</p>
+
+<p>How many different ways are there to go up a flight of stairs with <code>n = 1</code> step? How about <code>n = 2</code> steps? Try writing out some other examples and see if you notice any patterns.</p>
+
+
+            <label class="sr-only" for="count-stair-ways-howmany-input">Your Answer:</label>
+            <input class="form-control storable" id="count-stair-ways-howmany-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p><strong>Solution</strong>:
+When there is only one step, there is only one way to go up the stair.
+When there are two steps, we can go up in two ways:
+take a single 2-step, or take two 1-steps.</p>
+
+</div>
+
+<p>What’s the base case for this question? What is the simplest input?</p>
+
+
+            <label class="sr-only" for="count-stair-ways-basecase-input">Your Answer:</label>
+            <input class="form-control storable" id="count-stair-ways-basecase-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p><strong>Solution</strong>:
+Our first base case is when there is one step left.
+This is, by definition, the smallest input since it is the smallest positive integer.
+Our second base case is when we have two steps left.
+We need this base case for a similar reason that <code>fibonacci</code> needs 2 base cases:
+to cover both recursive calls.</p>
+
+<p><strong>Alternate solution</strong>:
+Our first base case is where there are no steps left.
+This means that we took an action in the previous recursive step that led to our goal of reaching the top.
+Our second base case is where we have overstepped.
+This means that the action we took is not valid, as it caused us to step over our goal.</p>
+
+</div>
+
+
+
+<p>What do <code>count_stair_ways(n &#x2d; 1)</code> and <code>count_stair_ways(n &#x2d; 2)</code> represent?</p>
+
+
+            <label class="sr-only" for="count-stair-ways-represent-input">Your Answer:</label>
+            <input class="form-control storable" id="count-stair-ways-represent-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p><strong>Solution</strong>:
+<code>count_stair_ways(n &#x2d; 1)</code> represents the number of different ways to go up the
+last <code>n&#x2d;1</code> stairs (this  is the case where we take 1 step as our move).
+<code>count_stair_ways(n &#x2d; 2)</code> represents the number of different ways to go up the
+last <code>n&#x2d;2</code> stairs (this is the case where we take 2 steps as our move).</p>
+
+</div>
+
+<p>Fill in the code for <code>count_stair_ways</code>:</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="count_stair_ways-input" style="height:252px;"></div>
+            <a href="javascript:void" id="modal-link-count_stair_ways-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-count_stair_ways-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-count_stair_ways-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def count_stair_ways(n):\n    &quot;&quot;&quot;Returns the number of ways to climb up a flight of\n    n stairs, moving either 1 step or 2 steps at a time.\n    &gt;&gt;&gt; count_stair_ways(4)\n    5\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "count_stair_ways-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def count_stair_ways(n):
+    &quot;&quot;&quot;Returns the number of ways to climb up a flight of
+    n stairs, moving either 1 step or 2 steps at a time.
+    &gt;&gt;&gt; count_stair_ways(4)
+    5
+    &quot;&quot;&quot;
+    if n == 1:
+        return 1
+    elif n == 2:
+        return 2
+    return count_stair_ways(n&#x2d;1) + count_stair_ways(n&#x2d;2)
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+Here's an alternate solution corresponding to the alternate base case presented above:
+
+<pre><code class="{python}">def count_stair_ways_alt(n):
+    &quot;&quot;&quot;Returns the number of ways to climb up a flight of
+    n stairs, moving either 1 step or 2 steps at a time.
+    &gt;&gt;&gt; count_stair_ways_alt(4)
+    5
+    &quot;&quot;&quot;
+    if n == 0:
+        return 1
+    elif n &lt; 0:
+        return 0
+    return count_stair_ways_alt(n&#x2d;1) + count_stair_ways_alt(n&#x2d;2)</code></pre>
+
+
+
+<p>You can use <a href="https://www.recursionvisualizer.com/?function_definition=def%20count_stair_ways(n)%3A%0A%20%20%20%20if%20n%20%3D%3D%201%3A%0A%20%20%20%20%20%20%20%20return%201%0A%20%20%20%20elif%20n%20%3D%3D%202%3A%0A%20%20%20%20%20%20%20%20return%202%0A%20%20%20%20return%20count_stair_ways(n-1)%20%2B%20count_stair_ways(n-2)&function_call=count_stair_ways(4)">recursion visualizer</a> to step through the calls made to <code>count_stair_ways(4)</code> for the original approach.</p>
+
+<!--Check out these video walkthroughs explaining the approach:
+
+<ul>
+  <li><a href="https://youtu.be/VcZPTlE56G8?t=1h7m6s">Leap of faith</a></li>
+  <li><a href="https://www.youtube.com/watch?v=sgNGso3LhD8&index=6&list=PLx38hZJ5RLZd35oDi3TGz5p9DyyxU3WwA">Diagramming trees</a>
+  -->
+  </div></li>
+</ul>
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q2-count-k">Q2: Count K</h3>
+
+
+<p>Consider a special version of the <code>count_stair_ways</code> problem, where instead of taking 1 or 2 steps, we are able to take up to and including <code>k</code> steps at a time. Write a function <code>count_k</code> that figures out the number of paths for this scenario.  Assume <code>n</code> and <code>k</code> are positive.</p>
+
+<blockquote><p><em>Hint</em>: Your solution will follow a very similar logic to what you did for <code>count_stair_ways</code>.</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="count-k:count-while-input" style="height:468px;"></div>
+            <a href="javascript:void" id="modal-link-count-k:count-while-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-count-k:count-while-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-count-k:count-while-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def count_k(n, k):\n    &quot;&quot;&quot; Counts the number of paths up a flight of n stairs\n    when taking up to and including k steps at a time.\n    &gt;&gt;&gt; count_k(3, 3) # 3, 2 + 1, 1 + 2, 1 + 1 + 1\n    4\n    &gt;&gt;&gt; count_k(4, 4)\n    8\n    &gt;&gt;&gt; count_k(10, 3)\n    274\n    &gt;&gt;&gt; count_k(300, 1) # Only one step at a time\n    1\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "count-k:count-while-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def count_k(n, k):
+    &quot;&quot;&quot; Counts the number of paths up a flight of n stairs
+    when taking up to and including k steps at a time.
+    &gt;&gt;&gt; count_k(3, 3) # 3, 2 + 1, 1 + 2, 1 + 1 + 1
+    4
+    &gt;&gt;&gt; count_k(4, 4)
+    8
+    &gt;&gt;&gt; count_k(10, 3)
+    274
+    &gt;&gt;&gt; count_k(300, 1) # Only one step at a time
+    1
+    &quot;&quot;&quot;
+    if n == 0:
+        return 1
+    elif n &lt; 0:
+        return 0
+    else:
+        total = 0
+        i = 1
+        while i &lt;= k:
+            total += count_k(n &#x2d; i, k)
+            i += 1
+        return total
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+
+<p>We need to include the while loop from the <code>count_k</code> solution and keep track of a running total for the number of successful ways because we can take <em>up to</em> k steps. The while loop will count how many successful ways if we take 1, 2, 3, ... k steps. We also need to keep track of how many successful ways there are for each value of k, so we use the <code>total</code> variable to remember how many successful ways there are so far.</p>
+
+<p>You can use <a href="https://www.recursionvisualizer.com/?function_definition=def%20count_k(n%2C%20k)%3A%0A%20%20%20%20if%20n%20%3D%3D%200%3A%0A%20%20%20%20%20%20%20%20return%201%0A%20%20%20%20elif%20n%20%3C%200%3A%0A%20%20%20%20%20%20%20%20return%200%0A%20%20%20%20else%3A%0A%20%20%20%20%20%20%20%20total%20%3D%200%0A%20%20%20%20%20%20%20%20i%20%3D%201%0A%20%20%20%20%20%20%20%20while%20i%20%3C%3D%20k%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20total%20%2B%3D%20count_k(n%20-%20i%2C%20k)%0A%20%20%20%20%20%20%20%20%20%20%20%20i%20%2B%3D%201%0A%20%20%20%20%20%20%20%20return%20total&function_call=count_k(3%2C%203)">recursion visualizer</a> to step
+through the calls made to <code>count_k(3, 3)</code>.</p>
+
+<!--
+<a href="https://www.youtube.com/watch?v=oGBcPguM9vo&list=PLx38hZJ5RLZd35oDi3TGz5p9DyyxU3WwA&index=5">Video walkthrough</a>.
+-->
+
+</div>
+
+
+
+<div class="page-break"></div>
+
+
+<h1 id="lists">Lists</h1>
+
+
+<p>A list is a data structure that can store multiple elements.
+Each element can be of any type, even a list itself.
+We write a list as a comma-separated list of expressions in square brackets:</p>
+
+<pre><code>&gt;&gt;&gt; list_of_ints = [1, 2, 3, 4]
+&gt;&gt;&gt; list_of_bools = [True, True, False, False]
+&gt;&gt;&gt; nested_lists = [1, [2, 3], [4, [5]]]</code></pre>
+
+<p>Each element in the list has an index, with the index of the first element
+starting at <code>0</code>. We say that lists are therefore "zero-indexed."</p>
+
+<p>With list indexing, we can specify the index of the element we want to retrieve.
+A negative index represents starting from the end of the list, so the
+negative index <code>&#x2d;i</code> is equivalent to the positive index <code>len(lst)&#x2d;i</code>.</p>
+
+<pre><code>&gt;&gt;&gt; lst = [6, 5, 4, 3, 2, 1, 0]
+&gt;&gt;&gt; lst[0]
+6
+&gt;&gt;&gt; lst[3]
+3
+&gt;&gt;&gt; lst[&#x2d;1] # Same as lst[6]
+0</code></pre>
+
+
+<h2 id="list-slicing">List slicing</h2>
+
+
+<p>To create a copy of part or all of a list, we can use list slicing.
+The syntax to slice a list <code>lst</code> is:
+<code>lst[&lt;start index&gt;:&lt;end index&gt;:&lt;step size&gt;]</code>.</p>
+
+<p>This expression evaluates to a new list containing the elements of <code>lst</code>:</p>
+
+<ul>
+  <li>Starting at and including the element at <code>&lt;start index&gt;</code>.</li>
+  <li>Up to but not including the element at <code>&lt;end index&gt;</code>.</li>
+  <li>With <code>&lt;step size&gt;</code> as the difference between indices of elements to include.</li>
+</ul>
+
+<p>If the start, end, or step size are not explicitly specified, Python has
+default values for them. A negative step size indicates that we are stepping
+backwards through a list when including elements.</p>
+
+<pre><code>&gt;&gt;&gt; lst[:3]   # Start index defaults to 0
+[6, 5, 4]
+&gt;&gt;&gt; lst[3:]   # End index defaults to len(lst)
+[3, 2, 1, 0]
+&gt;&gt;&gt; lst[::&#x2d;1]   # Make a reversed copy of the entire list
+[0, 1, 2, 3, 4, 5, 6]
+&gt;&gt;&gt; lst[::2]  # Skip every other; step size defaults to 1 otherwise
+[6, 4, 2, 0]</code></pre>
+
+
+<h2 id="list-comprehensions">List comprehensions</h2>
+
+
+<p>List comprehensions are a compact and powerful way of creating new lists
+out of sequences.
+The general syntax for a list comprehension is the following:</p>
+
+<pre><code>[&lt;expression&gt; for &lt;element&gt; in &lt;sequence&gt; if &lt;conditional&gt;]</code></pre>
+
+<p>where the <code>if &lt;conditional&gt;</code> section is optional.</p>
+
+<p>The syntax is designed to read like English:
+"Compute the expression for each element in the sequence
+(if the conditional is true for that element)."</p>
+
+<pre><code>&gt;&gt;&gt; [i**2 for i in [1, 2, 3, 4] if i % 2 == 0]
+[4, 16]</code></pre>
+
+<p>This list comprehension will:</p>
+
+<ul>
+  <li>Compute the expression <code>i**2</code></li>
+  <li>For each element <code>i</code> in the sequence <code>[1, 2, 3, 4]</code></li>
+  <li>Where <code>i % 2 == 0</code> (<code>i</code> is an even number),</li>
+</ul>
+
+<p>and then put the resulting values of the expressions into a new list.</p>
+
+<p>In other words, this list comprehension will create a new list that contains
+the square of every even element of the original list <code>[1, 2, 3, 4]</code>.</p>
+
+<p>We can also rewrite a list comprehension as an equivalent <code>for</code> statement,
+such as for the example above:</p>
+
+<pre><code>&gt;&gt;&gt; lst = []
+&gt;&gt;&gt; for i in [1, 2, 3, 4]:
+...     if i % 2 == 0:
+...         lst = lst + [i**2]
+&gt;&gt;&gt; lst
+[4, 16]</code></pre>
+
+<div class="page-break"></div>
+
+
+<h3 id="q3-wwpd-lists">Q3: WWPD: Lists</h3>
+
+
+<p>What would Python display?</p>
+
+<pre><code>&gt;&gt;&gt; a = [1, 5, 4, [2, 3], 3]
+&gt;&gt;&gt; print(a[0], a[&#x2d;1])</code></pre>
+
+
+
+            <label class="sr-only" for="wwpd-lists-1-input">Your Answer:</label>
+            <input class="form-control storable" id="wwpd-lists-1-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+1 3
+</div>
+
+<pre><code>&gt;&gt;&gt;len(a)</code></pre>
+
+
+
+            <label class="sr-only" for="wwpd-lists-2-input">Your Answer:</label>
+            <input class="form-control storable" id="wwpd-lists-2-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+5
+</div>
+
+<pre><code>&gt;&gt;&gt; 2 in a</code></pre>
+
+
+
+            <label class="sr-only" for="wwpd-lists-3-input">Your Answer:</label>
+            <input class="form-control storable" id="wwpd-lists-3-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+False
+</div>
+
+<pre><code>&gt;&gt;&gt; a[3][0]</code></pre>
+
+
+
+            <label class="sr-only" for="wwpd-lists-5-input">Your Answer:</label>
+            <input class="form-control storable" id="wwpd-lists-5-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+2
+</div>
+
+<div class="sol-highlight">
+
+<p><a href="https://www.youtube.com/watch?v=zP4jWZpwACM&index=1&list=PLx38hZJ5RLZcgrSJp16YmzNwn9hL5JD8q&vq=hd1080&t=14m22s">Video walkthrough</a></p>
+
+</div>
+
+
+<h3 id="q4-even-weighted">Q4: Even weighted</h3>
+
+
+<p>Write a function that takes a list <code>s</code> and returns a new list that keeps only
+the even-indexed elements of <code>s</code> and multiplies them by their corresponding
+index.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="even-weighted-input" style="height:180px;"></div>
+            <a href="javascript:void" id="modal-link-even-weighted-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-even-weighted-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-even-weighted-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def even_weighted(s):\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; x = [1, 2, 3, 4, 5, 6]\n    &gt;&gt;&gt; even_weighted(x)\n    [0, 6, 20]\n    &quot;&quot;&quot;\n    return [_________________________________________________]\n\n', "python", "even-weighted-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def even_weighted(s):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; x = [1, 2, 3, 4, 5, 6]
+    &gt;&gt;&gt; even_weighted(x)
+    [0, 6, 20]
+    &quot;&quot;&quot;
+    return [i * s[i] for i in range(len(s)) if i % 2 == 0]
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+
+<p>The key point to note is that instead of iterating over each element in the
+list, we must instead iterate over the indices of the list. Otherwise, there's
+no way to tell if we should keep a given element.</p>
+
+<p>One way of solving these problems is to try and write your solution as a <code>for</code>
+loop first, and then transform it into a list comprehension.
+The <code>for</code> loop solution might look something like this:</p>
+
+<pre><code>result = []
+for i in range(len(s)):
+    if i % 2 == 0:
+        result = result + [i * s[i]]
+return result</code></pre>
+
+<!--<a href="https://www.youtube.com/watch?v=Am6m8YgAnYY&list=PLx38hZJ5RLZdJgRCgpaTbmRXKAHOUmomO&index=4">Video walkthrough</a> -->
+
+</div>
+
+<div class="page-break"></div>
+
+
+<h3 id="q5-max-product">Q5: Max Product</h3>
+
+
+<p>Write a function that takes in a list and returns the maximum product that
+can be formed using nonconsecutive elements of the list. The input list
+will contain only numbers greater than or equal to 1.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="max-product-input" style="height:306px;"></div>
+            <a href="javascript:void" id="modal-link-max-product-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-max-product-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-max-product-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def max_product(s):\n    &quot;&quot;&quot;Return the maximum product that can be formed using\n    non&#x2d;consecutive elements of s.\n    &gt;&gt;&gt; max_product([10,3,1,9,2]) # 10 * 9\n    90\n    &gt;&gt;&gt; max_product([5,10,5,10,5]) # 5 * 5 * 5\n    125\n    &gt;&gt;&gt; max_product([])\n    1\n    &quot;&quot;&quot;\n\n', "python", "max-product-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def max_product(s):
+    &quot;&quot;&quot;Return the maximum product that can be formed using
+    non&#x2d;consecutive elements of s.
+    &gt;&gt;&gt; max_product([10,3,1,9,2]) # 10 * 9
+    90
+    &gt;&gt;&gt; max_product([5,10,5,10,5]) # 5 * 5 * 5
+    125
+    &gt;&gt;&gt; max_product([])
+    1
+    &quot;&quot;&quot;
+    if s == []:
+        return 1
+    else:
+        return max(max_product(s[1:]), s[0] * max_product(s[2:]))
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+
+<p>At each step, we choose if we want to include the current number in our product
+or not:</p>
+
+<ul>
+  <li>If we include the current number, we cannot use the adjacent number.</li>
+  <li>If we don't use the current number, we try the adjacent number (and
+  obviously ignore the current number).</li>
+</ul>
+
+<p>The recursive calls represent these two alternate realities. Finally, we pick
+the one that gives us the largest product.</p>
+
+<!--<a href="https://www.youtube.com/watch?v=Am6m8YgAnYY&list=PLx38hZJ5RLZdJgRCgpaTbmRXKAHOUmomO&index=4&t=3m0s">Video walkthrough</a>-->
+
+</div>
+
+<div class="page-break"></div>
+
+
+<h1 id="dictionaries">Dictionaries</h1>
+
+
+<p>Dictionaries are data structures which map keys to values.
+Dictionaries in Python are unordered, unlike real-world dictionaries --- in
+other words, key-value pairs are not arranged in the dictionary in any
+particular order. Let's look at an example:</p>
+
+<pre><code>&gt;&gt;&gt; pokemon = {&#x27;pikachu&#x27;: 25, &#x27;dragonair&#x27;: 148, &#x27;mew&#x27;: 151}
+&gt;&gt;&gt; pokemon[&#x27;pikachu&#x27;]
+25
+&gt;&gt;&gt; pokemon[&#x27;jolteon&#x27;] = 135
+&gt;&gt;&gt; pokemon
+{&#x27;jolteon&#x27;: 135, &#x27;pikachu&#x27;: 25, &#x27;dragonair&#x27;: 148, &#x27;mew&#x27;: 151}
+&gt;&gt;&gt; pokemon[&#x27;ditto&#x27;] = 25
+&gt;&gt;&gt; pokemon
+{&#x27;jolteon&#x27;: 135, &#x27;pikachu&#x27;: 25, &#x27;dragonair&#x27;: 148,
+&#x27;ditto&#x27;: 25, &#x27;mew&#x27;: 151}</code></pre>
+
+<p>The <em>keys</em> of a dictionary can be any <em>immutable</em> value, such as
+numbers, strings, and tuples.[1]
+Dictionaries themselves are mutable; we can add,
+remove, and change entries after creation. There is only one value per key,
+however --- if we assign a new value to the same key, it overrides any previous
+value which might have existed.</p>
+
+<p>To access the value of <code>dictionary</code> at <code>key</code>, use the syntax
+<code>dictionary[key]</code>.</p>
+
+<p>Element selection and reassignment work similarly to sequences, except the
+square brackets contain the key, not an index.</p>
+
+<p>[1]To be exact, keys must be 
+<em>hashable</em>, which is out of scope for this course. This means that some
+mutable objects, such as classes, can be used as dictionary keys.</p>
+
+
+<h3 id="q6-wwpd-dictionaries">Q6: WWPD: Dictionaries</h3>
+
+
+<p>What would Python display?</p>
+
+<pre><code>&gt;&gt;&gt; pokemon = {&#x27;pikachu&#x27;: 25, &#x27;dragonair&#x27;: 148}
+&gt;&gt;&gt; pokemon</code></pre>
+
+
+
+            <label class="sr-only" for="wwpd-dict-1-input">Your Answer:</label>
+            <input class="form-control storable" id="wwpd-dict-1-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+{'pikachu': 25, 'dragonair': 148}
+</div>
+
+<pre><code>&gt;&gt;&gt; &#x27;mewtwo&#x27; in pokemon</code></pre>
+
+
+
+
+            <label class="sr-only" for="wwpd-dict-2-input">Your Answer:</label>
+            <input class="form-control storable" id="wwpd-dict-2-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">False </div>
+
+<pre><code>&gt;&gt;&gt; len(pokemon)</code></pre>
+
+
+
+
+            <label class="sr-only" for="wwpd-dict-3-input">Your Answer:</label>
+            <input class="form-control storable" id="wwpd-dict-3-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">2</div>
+
+<pre><code>&gt;&gt;&gt; pokemon[&#x27;mew&#x27;] = pokemon[&#x27;pikachu&#x27;]
+&gt;&gt;&gt; pokemon[25] = &#x27;pikachu&#x27;
+&gt;&gt;&gt; pokemon</code></pre>
+
+
+
+
+            <label class="sr-only" for="wwpd-dict-4-input">Your Answer:</label>
+            <input class="form-control storable" id="wwpd-dict-4-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+{'pikachu': 25, 'dragonair': 148, 'mew': 25, 25: 'pikachu'}
+</div>
+
+<pre><code>&gt;&gt;&gt; pokemon[&#x27;mewtwo&#x27;] = pokemon[&#x27;mew&#x27;] * 2
+&gt;&gt;&gt; pokemon</code></pre>
+
+
+
+
+            <label class="sr-only" for="wwpd-dict-5-input">Your Answer:</label>
+            <input class="form-control storable" id="wwpd-dict-5-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+{'pikachu': 25, 'dragonair': 148, 'mew': 25, 25: 'pikachu', 'mewtwo': 50}
+</div>
+
+<pre><code>&gt;&gt;&gt; pokemon[[&#x27;firetype&#x27;, &#x27;flying&#x27;]] = 146</code></pre>
+
+
+
+            <label class="sr-only" for="wwpd-dict-6-input">Your Answer:</label>
+            <input class="form-control storable" id="wwpd-dict-6-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">Error: unhashable type</div>
+
+<p>Note that the last example demonstrates that dictionaries cannot use
+other mutable data structures as keys. However, dictionaries can be
+arbitrarily deep, meaning the <em>values</em> of a dictionary can be themselves
+dictionaries.</p>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#walkthrough-videos">Walkthrough Videos</a></li>
+  <li><a href="#tree-recursion">Tree Recursion</a></li>
+  <ul>
+    <li><a href="#q1-count-stair-ways">Q1: Count Stair Ways</a></li>
+    <li><a href="#q2-count-k">Q2: Count K</a></li>
+  </ul>
+  <li><a href="#lists">Lists</a></li>
+  <ul>
+    <li><a href="#list-slicing">List slicing</a></li>
+    <li><a href="#list-comprehensions">List comprehensions</a></li>
+    <ul>
+      <li><a href="#q3-wwpd-lists">Q3: WWPD: Lists</a></li>
+      <li><a href="#q4-even-weighted">Q4: Even weighted</a></li>
+      <li><a href="#q5-max-product">Q5: Max Product</a></li>
+    </ul>
+  </ul>
+  <li><a href="#dictionaries">Dictionaries</a></li>
+  <ul>
+    <li><a href="#q6-wwpd-dictionaries">Q6: WWPD: Dictionaries</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

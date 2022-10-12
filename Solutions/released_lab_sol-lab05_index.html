@@ -1,0 +1,1006 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/lab.css">
+
+
+    <title>
+Lab 5 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Lab 5 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="lab05.zip" class="label label-outline">lab05.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+
+
+    
+<h1 id="topics">Topics</h1>
+
+
+<p>Consult this section if you need a refresher on the material for this lab. It's
+okay to skip directly to <a href="#required-questions">the questions</a> and refer back
+here should you get stuck.</p>
+
+<br>
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Data Abstraction<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+
+<h2 id="data-abstraction">Data Abstraction</h2>
+
+
+<p>Data abstraction is a powerful concept in computer science that
+allows programmers to treat code as objects.
+For example, using code to represent cars, chairs, people, and so on.
+That way, programmers don't have to worry about <em>how</em> code is implemented;
+they just have to know <em>what</em> it does.</p>
+
+<p>Data abstraction mimics how we think about the world.
+If you want to drive a car, you don't need to know how the
+engine was built or what kind of material the tires are made of to do so.
+You just have to know how to use the car for driving itself,
+such as how to turn the wheel or press the gas pedal.</p>
+
+<p>A data abstraction consists of two types of functions:</p>
+
+<ul>
+  <li><strong>Constructors</strong>: functions that build the abstract data type.</li>
+  <li><strong>Selectors</strong>: functions that retrieve information from the data type.</li>
+</ul>
+
+<p>Programmers design data abstractions to abstract away how information is stored and
+calculated such that the end user does <em>not</em> need to know how constructors and
+selectors are implemented. The nature of <em>abstraction</em> allows whoever uses them to
+assume that the functions have been written correctly and
+work as described.</p>
+
+</div>
+<br>
+
+<br>
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Trees<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+
+
+<h2 id="trees">Trees</h2>
+
+
+<p>A <code>tree</code> is a data structure that represents a hierarchy of information. A file system is a good example of a tree structure. For example, within your <code>cs61a</code> folder, you have folders separating your <code>projects</code>, <code>lab</code> assignments, and <code>homework</code>. The next level is folders that separate different assignments, <code>hw01</code>, <code>lab01</code>, <code>hog</code>, etc., and inside those are the files themselves, including the starter files and <code>ok</code>. Below is an incomplete diagram of what your <code>cs61a</code> directory might look like.</p>
+
+<p><img class="img-responsive center-block" src="assets/cs61a-tree.png" alt="cs61a_tree" width="" height=""></p>
+
+<p>As you can see, unlike trees in nature, the tree abstract data type is drawn with the root at the top and the leaves at the bottom.</p>
+
+<p>Some tree terminology:</p>
+
+<ul>
+  <li><strong>root</strong>: the node at the top of the tree</li>
+  <li><strong>label</strong>: the value in a node</li>
+  <li><strong>branches</strong>: a list of trees directly under the tree's root</li>
+  <li><strong>leaf</strong>: a tree with zero branches</li>
+  <li><strong>node</strong>: any location within the tree (e.g., root node, leaf nodes, etc.)</li>
+</ul>
+
+<p>Our <code>tree</code> abstract data type consists of a root and a list of its
+<code>branches</code>. To create a tree and access its root value and branches, use the
+following constructor and selectors:</p>
+
+<ul>
+  <li><p>Constructor</p>
+
+  <ul>
+    <li><code>tree(label, branches=[])</code>: creates a tree object with the given <code>label</code>
+    value at its root node and list of <code>branches</code>. Notice that the second argument
+    to this constructor, <code>branches</code>, is optional - if you want to make a tree with
+    no branches, leave this argument empty.</li>
+  </ul></li>
+  <li><p>Selectors</p>
+
+  <ul>
+    <li><code>label(tree)</code>: returns the value in the root node of <code>tree</code>.</li>
+    <li><code>branches(tree)</code>: returns the list of branches of the given <code>tree</code>.</li>
+  </ul></li>
+  <li><p>Convenience function</p>
+
+  <ul>
+    <li><code>is_leaf(tree)</code>: returns <code>True</code> if <code>tree</code>'s list of <code>branches</code> is empty, and
+    <code>False</code> otherwise.</li>
+  </ul></li>
+</ul>
+
+<p>For example, the tree generated by</p>
+
+<pre><code>number_tree = tree(1,
+         [tree(2),
+          tree(3,
+               [tree(4),
+                tree(5)]),
+          tree(6,
+               [tree(7)])])</code></pre>
+
+<p>would look like this:</p>
+
+<pre><code>   1
+ / | \
+2  3  6
+  / \  \
+ 4   5  7</code></pre>
+
+<p>To extract the number <code>3</code> from this tree, which is the label of the root of its second branch, we would do this:</p>
+
+<pre><code>label(branches(number_tree)[1])</code></pre>
+
+<p>The <code>print_tree</code> function prints out a tree in a
+human-readable form. The exact form follows the pattern illustrated
+above, where the root is unindented, and each of its branches is
+indented one level further.</p>
+
+<pre><code>def print_tree(t, indent=0):
+    &quot;&quot;&quot;Print a representation of this tree in which each node is
+    indented by two spaces times its depth from the root.
+
+    &gt;&gt;&gt; print_tree(tree(1))
+    1
+    &gt;&gt;&gt; print_tree(tree(1, [tree(2)]))
+    1
+      2
+    &gt;&gt;&gt; numbers = tree(1, [tree(2), tree(3, [tree(4), tree(5)]), tree(6, [tree(7)])])
+    &gt;&gt;&gt; print_tree(numbers)
+    1
+      2
+      3
+        4
+        5
+      6
+        7
+    &quot;&quot;&quot;
+    print(&#x27;  &#x27; * indent + str(label(t)))
+    for b in branches(t):
+        print_tree(b, indent + 1)</code></pre>
+
+</div>
+<br>
+
+
+<h1 id="required-questions">Required Questions</h1>
+
+
+<br>
+
+        <button id='toggle-3' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-3">
+
+<h2 id="getting-started-videos">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZcst37h13L6ZsqC5wNE4mOX"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZcst37h13L6ZsqC5wNE4mOX'> YouTube link </a></p>
+</div>
+
+
+<h2 id="lists">Lists</h2>
+
+
+
+<h3 id="q1-flatten">Q1: Flatten</h3>
+
+
+<p>Write a function <code>flatten</code> that takes a list and returns a 
+"flattened" version of it. The list could be a deep list, 
+meaning that there could be a multiple layers of nesting 
+within the list.</p>
+
+<p>Make sure your solution does not mutate the input list.</p>
+
+<p>For example, one use case of <code>flatten</code> could be the following:</p>
+
+<pre><code>&gt;&gt;&gt; lst = [1, [[2], 3], 4, [5, 6]]
+&gt;&gt;&gt; flatten(lst)
+[1, 2, 3, 4, 5, 6]</code></pre>
+
+<blockquote><p><strong>Hint</strong>: you can check if something is a list by using the built-in
+<code>type</code> function. For example:</p>
+
+<pre><code>&gt;&gt;&gt; type(3) == list
+False
+&gt;&gt;&gt; type([1, 2, 3]) == list
+True</code></pre></blockquote>
+
+<solution>
+
+<pre><code>def flatten(s):
+    &quot;&quot;&quot;Returns a flattened version of list s.
+
+    &gt;&gt;&gt; flatten([1, 2, 3])     # normal list
+    [1, 2, 3]
+    &gt;&gt;&gt; x = [1, [2, 3], 4]     # deep list
+    &gt;&gt;&gt; flatten(x)
+    [1, 2, 3, 4]
+    &gt;&gt;&gt; x # Ensure x is not mutated
+    [1, [2, 3], 4]
+    &gt;&gt;&gt; x = [[1, [1, 1]], 1, [1, 1]] # deep list
+    &gt;&gt;&gt; flatten(x)
+    [1, 1, 1, 1, 1, 1]
+    &gt;&gt;&gt; x
+    [[1, [1, 1]], 1, [1, 1]]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if not s:
+        return []
+    elif type(s[0]) == list:
+        return flatten(s[0]) + flatten(s[1:])
+    else:
+        return [s[0]] + flatten(s[1:])</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q flatten<button id="copy-code-python3ok-qflatten" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qflatten").onclick = () => copyCode('python3 ok -q flatten', "copy-code-python3ok-qflatten");
+        </script>
+        <br/>
+
+
+<h2 id="data-abstraction-2">Data Abstraction</h2>
+
+
+<p>Say we have an abstract data type for cities. A city has a name, a latitude
+coordinate, and a longitude coordinate.</p>
+
+<p>Our data abstraction has one <strong>constructor</strong>:</p>
+
+<ul>
+  <li><code>make_city(name, lat, lon)</code>: Creates a city object with the given name,
+  latitude, and longitude.</li>
+</ul>
+
+<p>We also have the following <strong>selectors</strong> in order to get the information for
+each city:</p>
+
+<ul>
+  <li><code>get_name(city)</code>: Returns the city's name</li>
+  <li><code>get_lat(city)</code>: Returns the city's latitude</li>
+  <li><code>get_lon(city)</code>: Returns the city's longitude</li>
+</ul>
+
+<p>Here is how we would use the constructor and selectors to create cities and
+extract their information:</p>
+
+<pre><code>&gt;&gt;&gt; berkeley = make_city(&#x27;Berkeley&#x27;, 122, 37)
+&gt;&gt;&gt; get_name(berkeley)
+&#x27;Berkeley&#x27;
+&gt;&gt;&gt; get_lat(berkeley)
+122
+&gt;&gt;&gt; new_york = make_city(&#x27;New York City&#x27;, 74, 40)
+&gt;&gt;&gt; get_lon(new_york)
+40</code></pre>
+
+<p>All of the selector and constructor functions can be found in the lab file,
+if you are curious to see how they are implemented. However, the point of data
+abstraction is that we do not need to know how an abstract data type is
+implemented, but rather just how we can interact with and use the data type.</p>
+
+
+<h3 id="q2-distance">Q2: Distance</h3>
+
+
+<p>We will now implement the function <code>distance</code>, which computes the
+distance between two city objects. Recall that the distance between two
+coordinate pairs <code>(x1, y1)</code> and <code>(x2, y2)</code> can be found by calculating
+the <code>sqrt</code> of <code>(x1 &#x2d; x2)**2 + (y1 &#x2d; y2)**2</code>. We have already imported
+<code>sqrt</code> for your convenience. Use the latitude and longitude of a city as
+its coordinates; you'll need to use the selectors to access this info!</p>
+
+<solution>
+
+<pre><code>from math import sqrt
+def distance(city_a, city_b):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; city_a = make_city(&#x27;city_a&#x27;, 0, 1)
+    &gt;&gt;&gt; city_b = make_city(&#x27;city_b&#x27;, 0, 2)
+    &gt;&gt;&gt; distance(city_a, city_b)
+    1.0
+    &gt;&gt;&gt; city_c = make_city(&#x27;city_c&#x27;, 6.5, 12)
+    &gt;&gt;&gt; city_d = make_city(&#x27;city_d&#x27;, 2.5, 15)
+    &gt;&gt;&gt; distance(city_c, city_d)
+    5.0
+    &quot;&quot;&quot;
+<div class="sol-highlight">    lat_1, lon_1 = get_lat(city_a), get_lon(city_a)
+    lat_2, lon_2 = get_lat(city_b), get_lon(city_b)
+    return sqrt((lat_1 &#x2d; lat_2)**2 + (lon_1 &#x2d; lon_2)**2)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q distance<button id="copy-code-python3ok-qdistance" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdistance").onclick = () => copyCode('python3 ok -q distance', "copy-code-python3ok-qdistance");
+        </script>
+        <br/>
+
+
+<h3 id="q3-closer-city">Q3: Closer city</h3>
+
+
+<p>Next, implement <code>closer_city</code>, a function that takes a latitude,
+longitude, and two cities, and returns the name of the city that is
+relatively closer to the provided latitude and longitude.</p>
+
+<p>You may only use the selectors and constructors introduced above and the
+<code>distance</code> function you just defined for this question.</p>
+
+<blockquote><p><strong>Hint</strong>: How can you use your <code>distance</code> function to find the distance between
+the given location and each of the given cities?</p></blockquote>
+
+<solution>
+
+<pre><code>def closer_city(lat, lon, city_a, city_b):
+    &quot;&quot;&quot;
+    Returns the name of either city_a or city_b, whichever is closest to
+    coordinate (lat, lon). If the two cities are the same distance away
+    from the coordinate, consider city_b to be the closer city.
+
+    &gt;&gt;&gt; berkeley = make_city(&#x27;Berkeley&#x27;, 37.87, 112.26)
+    &gt;&gt;&gt; stanford = make_city(&#x27;Stanford&#x27;, 34.05, 118.25)
+    &gt;&gt;&gt; closer_city(38.33, 121.44, berkeley, stanford)
+    &#x27;Stanford&#x27;
+    &gt;&gt;&gt; bucharest = make_city(&#x27;Bucharest&#x27;, 44.43, 26.10)
+    &gt;&gt;&gt; vienna = make_city(&#x27;Vienna&#x27;, 48.20, 16.37)
+    &gt;&gt;&gt; closer_city(41.29, 174.78, bucharest, vienna)
+    &#x27;Bucharest&#x27;
+    &quot;&quot;&quot;
+<div class="sol-highlight">    new_city = make_city(&#x27;arb&#x27;, lat, lon)
+    dist1 = distance(city_a, new_city)
+    dist2 = distance(city_b, new_city)
+    if dist1 &lt; dist2:
+         return get_name(city_a)
+    return get_name(city_b)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q closer_city<button id="copy-code-python3ok-qcloser_city" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qcloser_city").onclick = () => copyCode('python3 ok -q closer_city', "copy-code-python3ok-qcloser_city");
+        </script>
+        <br/>
+
+
+<h3 id="q4-don-t-violate-the-abstraction-barrier">Q4: Don't violate the abstraction barrier!</h3>
+
+
+<blockquote><p>Note:
+this question has no code-writing component
+(if you implemented the previous two questions correctly).</p></blockquote>
+
+<p>When writing functions that use an data abstraction, we should use the
+constructor(s) and selector(s) whenever possible instead of assuming the
+data abstraction's implementation.
+Relying on a data abstraction's underlying implementation is known as
+<em>violating the abstraction barrier</em>, and we never want to do this!</p>
+
+<p>It's possible that you passed the doctests for the previous questions
+even if you violated the abstraction barrier. To check whether or not you
+did so, run the following command:</p>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q check_city_abstraction<button id="copy-code-python3ok-qcheck_city_abstraction" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qcheck_city_abstraction").onclick = () => copyCode('python3 ok -q check_city_abstraction', "copy-code-python3ok-qcheck_city_abstraction");
+        </script>
+        <br/>
+
+<p>The <code>check_city_abstraction</code> function exists only for the doctest, which swaps
+out the implementations of the original abstraction with something else, runs
+the tests from the previous two parts, then restores the original abstraction.</p>
+
+<p>The nature of the abstraction barrier guarantees that changing the
+implementation of an data abstraction shouldn't affect the functionality of
+any programs that use that data abstraction, as long as the constructors and
+selectors were used properly.</p>
+
+<p>If you passed the Ok tests for the previous questions but not this one,
+the fix is simple!  Just replace any code that violates the abstraction
+barrier with the appropriate constructor or selector.</p>
+
+<p>Make sure that your functions pass the tests with both the first and the
+second implementations of the data abstraction and that you understand why
+they should work for both before moving on.</p>
+
+
+<h2 id="trees-2">Trees</h2>
+
+
+
+<h3 id="q5-finding-berries">Q5: Finding Berries!</h3>
+
+
+<p>The squirrels on campus need your help! There are a lot of trees on campus and
+the squirrels would like to know which ones contain berries. Define the function
+<code>berry_finder</code>, which takes in a tree and returns <code>True</code> if the tree contains a
+node with the value <code>&#x27;berry&#x27;</code> and <code>False</code> otherwise.</p>
+
+<blockquote><p><strong>Hint</strong>:
+To iterate through each of the branches of a particular tree,
+you can consider using a <code>for</code> loop to get each branch.</p></blockquote>
+
+<solution>
+
+<pre><code class="python">def berry_finder(t):
+    &quot;&quot;&quot;Returns True if t contains a node with the value &#x27;berry&#x27; and 
+    False otherwise.
+
+    &gt;&gt;&gt; scrat = tree(&#x27;berry&#x27;)
+    &gt;&gt;&gt; berry_finder(scrat)
+    True
+    &gt;&gt;&gt; sproul = tree(&#x27;roots&#x27;, [tree(&#x27;branch1&#x27;, [tree(&#x27;leaf&#x27;), tree(&#x27;berry&#x27;)]), tree(&#x27;branch2&#x27;)])
+    &gt;&gt;&gt; berry_finder(sproul)
+    True
+    &gt;&gt;&gt; numbers = tree(1, [tree(2), tree(3, [tree(4), tree(5)]), tree(6, [tree(7)])])
+    &gt;&gt;&gt; berry_finder(numbers)
+    False
+    &gt;&gt;&gt; t = tree(1, [tree(&#x27;berry&#x27;,[tree(&#x27;not berry&#x27;)])])
+    &gt;&gt;&gt; berry_finder(t)
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if label(t) == &#x27;berry&#x27;:
+        return True
+    for b in branches(t):
+        if berry_finder(b):
+            return True
+    return False
+
+# Alternative solution
+def berry_finder_alt(t):
+    if label(t) == &#x27;berry&#x27;:
+        return True
+    return True in [berry_finder(b) for b in branches(t)]</div></code></pre>
+
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q berry_finder<button id="copy-code-python3ok-qberry_finder" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qberry_finder").onclick = () => copyCode('python3 ok -q berry_finder', "copy-code-python3ok-qberry_finder");
+        </script>
+        <br/>
+
+
+<h3 id="q6-sprout-leaves">Q6: Sprout leaves</h3>
+
+
+<p>Define a function <code>sprout_leaves</code> that takes in a tree, <code>t</code>, and a list of
+leaves, <code>leaves</code>. It produces a new tree that is identical to <code>t</code>, but where each
+old leaf node has new branches, one for each leaf in <code>leaves</code>.</p>
+
+<p>For example, say we have the tree <code>t = tree(1, [tree(2), tree(3, [tree(4)])])</code>:</p>
+
+<pre><code>  1
+ / \
+2   3
+    |
+    4</code></pre>
+
+<p>If we call <code>sprout_leaves(t, [5, 6])</code>, the result is the following tree:</p>
+
+<pre><code>       1
+     /   \
+    2     3
+   / \    |
+  5   6   4
+         / \
+        5   6</code></pre>
+
+<solution>
+
+<pre><code>def sprout_leaves(t, leaves):
+    &quot;&quot;&quot;Sprout new leaves containing the data in leaves at each leaf in
+    the original tree t and return the resulting tree.
+
+    &gt;&gt;&gt; t1 = tree(1, [tree(2), tree(3)])
+    &gt;&gt;&gt; print_tree(t1)
+    1
+      2
+      3
+    &gt;&gt;&gt; new1 = sprout_leaves(t1, [4, 5])
+    &gt;&gt;&gt; print_tree(new1)
+    1
+      2
+        4
+        5
+      3
+        4
+        5
+
+    &gt;&gt;&gt; t2 = tree(1, [tree(2, [tree(3)])])
+    &gt;&gt;&gt; print_tree(t2)
+    1
+      2
+        3
+    &gt;&gt;&gt; new2 = sprout_leaves(t2, [6, 1, 2])
+    &gt;&gt;&gt; print_tree(new2)
+    1
+      2
+        3
+          6
+          1
+          2
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if is_leaf(t):
+        return tree(label(t), [tree(leaf) for leaf in leaves])
+    return tree(label(t), [sprout_leaves(s, leaves) for s in branches(t)])</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q sprout_leaves<button id="copy-code-python3ok-qsprout_leaves" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qsprout_leaves").onclick = () => copyCode('python3 ok -q sprout_leaves', "copy-code-python3ok-qsprout_leaves");
+        </script>
+        <br/>
+
+
+<h3 id="q7-don-t-violate-the-abstraction-barrier">Q7: Don't violate the abstraction barrier!</h3>
+
+
+<blockquote><p>Note:
+this question has no code-writing component
+(if you implemented the previous two questions correctly).</p></blockquote>
+
+<p>When writing functions that use an data abstraction, we should use the
+constructor(s) and selector(s) whenever possible instead of assuming the
+data abstraction's implementation.
+Relying on a data abstraction's underlying implementation is known as
+<em>violating the abstraction barrier</em>, and we never want to do this!</p>
+
+<p>It's possible that you passed the doctests for the previous questions
+even if you violated the abstraction barrier. To check whether or not you
+did so, run the following command:</p>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q check_abstraction<button id="copy-code-python3ok-qcheck_abstraction" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qcheck_abstraction").onclick = () => copyCode('python3 ok -q check_abstraction', "copy-code-python3ok-qcheck_abstraction");
+        </script>
+        <br/>
+
+<p>The <code>check_abstraction</code> function exists only for the doctest, which swaps
+out the implementations of the original abstraction with something else, runs
+the tests from the previous two parts, then restores the original abstraction.</p>
+
+<p>The nature of the abstraction barrier guarantees that changing the
+implementation of an data abstraction shouldn't affect the functionality of
+any programs that use that data abstraction, as long as the constructors and
+selectors were used properly.</p>
+
+<p>If you passed the Ok tests for the previous questions but not this one,
+the fix is simple!  Just replace any code that violates the abstraction
+barrier with the appropriate constructor or selector.</p>
+
+<p>Make sure that your functions pass the tests with both the first and the
+second implementations of the data abstraction and that you understand why
+they should work for both before moving on.</p>
+
+
+<h2 id="submit">Submit</h2>
+
+
+<p>Make sure to submit this assignment by running:</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;submit</code></pre>
+
+
+<h1 id="optional-questions">Optional Questions</h1>
+
+
+
+<h3 id="q8-preorder">Q8: Preorder</h3>
+
+
+<p>Define the function <code>preorder</code>, which takes in a tree as an argument and
+returns a list of all the entries in the tree in the order that
+<code>print_tree</code> would print them.</p>
+
+<p>The following diagram shows the order that the nodes would get printed,
+with the arrows representing function calls.</p>
+
+<p><img class="img-responsive center-block" src="assets/preorder.png" alt="preorder" width="" height=""></p>
+
+<blockquote><p>Note: This ordering of the nodes in a tree is called a preorder traversal.</p></blockquote>
+
+<solution>
+
+<pre><code>def preorder(t):
+    &quot;&quot;&quot;Return a list of the entries in this tree in the order that they
+    would be visited by a preorder traversal (see problem description).
+
+    &gt;&gt;&gt; numbers = tree(1, [tree(2), tree(3, [tree(4), tree(5)]), tree(6, [tree(7)])])
+    &gt;&gt;&gt; preorder(numbers)
+    [1, 2, 3, 4, 5, 6, 7]
+    &gt;&gt;&gt; preorder(tree(2, [tree(4, [tree(6)])]))
+    [2, 4, 6]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if branches(t) == []:
+        return [label(t)]
+    flattened_branches = []
+    for child in branches(t):
+        flattened_branches += preorder(child)
+    return [label(t)] + flattened_branches
+
+# Alternate solution
+from functools import reduce
+
+def preorder_alt(t):
+    return reduce(add, [preorder_alt(child) for child in branches(t)], [label(t)])</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q preorder<button id="copy-code-python3ok-qpreorder" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qpreorder").onclick = () => copyCode('python3 ok -q preorder', "copy-code-python3ok-qpreorder");
+        </script>
+        <br/>
+
+
+<h3 id="q9-add-trees">Q9: Add trees</h3>
+
+
+<p>Define the function <code>add_trees</code>, which takes in two trees and returns a new
+tree where each corresponding node from the first tree is added with the node
+from the second tree. If a node at any particular position is present in one
+tree but not the other, it should be present in the new tree as well. At each level of the tree, nodes correspond to each other starting from the leftmost node.</p>
+
+<blockquote><p><em>Hint</em>: You may want to use the built-in zip function to iterate over
+multiple sequences at once.</p>
+
+<p><em>Note</em>: If you feel that this one's a lot harder than the previous tree
+problems, that's totally fine! This is a pretty difficult problem, but you
+can do it! Talk about it with other students, and come back to it if you need
+to.</p></blockquote>
+
+<solution>
+
+<pre><code>def add_trees(t1, t2):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; numbers = tree(1,
+    ...                [tree(2,
+    ...                      [tree(3),
+    ...                       tree(4)]),
+    ...                 tree(5,
+    ...                      [tree(6,
+    ...                            [tree(7)]),
+    ...                       tree(8)])])
+    &gt;&gt;&gt; print_tree(add_trees(numbers, numbers))
+    2
+      4
+        6
+        8
+      10
+        12
+          14
+        16
+    &gt;&gt;&gt; print_tree(add_trees(tree(2), tree(3, [tree(4), tree(5)])))
+    5
+      4
+      5
+    &gt;&gt;&gt; print_tree(add_trees(tree(2, [tree(3)]), tree(2, [tree(3), tree(4)])))
+    4
+      6
+      4
+    &gt;&gt;&gt; print_tree(add_trees(tree(2, [tree(3, [tree(4), tree(5)])]), \
+    tree(2, [tree(3, [tree(4)]), tree(5)])))
+    4
+      6
+        8
+        5
+      5
+    &quot;&quot;&quot;
+<div class="sol-highlight">    # Base case one (or both) are a leaf
+    if is_leaf(t1) or is_leaf(t2):
+        # Branches will be an empty list for the tree which is a leaf
+        return tree(label(t1) + label(t2), branches(t2) + branches(t1))
+    else:
+        new_branches = []
+
+        # Recursively call add_trees when both t1 and t2 have a branch
+        for i in range(min(len(branches(t1)), len(branches(t2)))):
+            new_branches += [add_trees(branches(t1)[i], branches(t2)[i])]
+        # Now add the leftover branches to new_branches
+        for i in range(min(len(branches(t1)), len(branches(t2))), max(len(branches(t1)), len(branches(t2)))):
+            if len(branches(t1)) &gt; len(branches(t2)):
+                new_branches += [branches(t1)[i]]
+            else:
+                new_branches += [branches(t2)[i]]
+
+    return tree(label(t1) + label(t2), new_branches)
+
+# Alternative solution using zip
+def add_trees_alternate(t1, t2):
+    if not t1:
+        return t2
+    if not t2:
+        return t1
+    new_label = label(t1) + label(t2)
+    t1_branches, t2_branches = branches(t1), branches(t2)
+    length_t1, length_t2 = len(t1_branches), len(t2_branches)
+    if length_t1 &lt; length_t2:
+        t1_branches += [None for _ in range(length_t1, length_t2)]
+    elif length_t1 &gt; length_t2:
+        t2_branches += [None for _ in range(length_t2, length_t1)]
+    return tree(new_label, [add_trees(branch1, branch2) for branch1, branch2 in zip(t1_branches, t2_branches)])
+</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q add_trees<button id="copy-code-python3ok-qadd_trees" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qadd_trees").onclick = () => copyCode('python3 ok -q add_trees', "copy-code-python3ok-qadd_trees");
+        </script>
+        <br/>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#topics">Topics</a></li>
+  <ul>
+    <li><a href="#data-abstraction">Data Abstraction</a></li>
+    <li><a href="#trees">Trees</a></li>
+  </ul>
+  <li><a href="#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="#getting-started-videos">Getting Started Videos</a></li>
+    <li><a href="#lists">Lists</a></li>
+    <ul>
+      <li><a href="#q1-flatten">Q1: Flatten</a></li>
+    </ul>
+    <li><a href="#data-abstraction-2">Data Abstraction</a></li>
+    <ul>
+      <li><a href="#q2-distance">Q2: Distance</a></li>
+      <li><a href="#q3-closer-city">Q3: Closer city</a></li>
+      <li><a href="#q4-don-t-violate-the-abstraction-barrier">Q4: Don't violate the abstraction barrier!</a></li>
+    </ul>
+    <li><a href="#trees-2">Trees</a></li>
+    <ul>
+      <li><a href="#q5-finding-berries">Q5: Finding Berries!</a></li>
+      <li><a href="#q6-sprout-leaves">Q6: Sprout leaves</a></li>
+      <li><a href="#q7-don-t-violate-the-abstraction-barrier">Q7: Don't violate the abstraction barrier!</a></li>
+    </ul>
+    <li><a href="#submit">Submit</a></li>
+  </ul>
+  <li><a href="#optional-questions">Optional Questions</a></li>
+  <ul>
+    <li><a href="#q8-preorder">Q8: Preorder</a></li>
+    <li><a href="#q9-add-trees">Q9: Add trees</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

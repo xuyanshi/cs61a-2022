@@ -1,0 +1,1080 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/disc.css">
+
+
+    <title>
+Discussion 1 | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 1: Control, Environment Diagrams
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc01.pdf" class="label label-outline">disc01.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<div class="alert storable-login-status"></div>
+
+This is an online worksheet that you can work on during discussions.
+Your work is not graded and you do not need to submit anything.
+
+
+    
+
+
+
+<h1 id="control-structures">Control structures</h1>
+
+
+<p><strong>Control structures</strong> direct the flow of a program using logical statements.
+For example, conditionals (<code>if&#x2d;elif&#x2d;else</code>) allow a program to skip sections of
+code, and iteration (<code>while</code>), allows a program to repeat a section.</p>
+
+
+<h2 id="conditional-statements">Conditional statements</h2>
+
+
+
+
+<p><strong>Conditional statements</strong> let programs execute different lines of code
+depending on certain conditions. Let’s review the <code>if&#x2d;elif&#x2d;else</code> syntax:</p>
+
+<ul>
+  <li>The <code>elif</code> and <code>else</code> clauses are optional, and you can have any number of
+  <code>elif</code> clauses.</li>
+  <li>A <strong>conditional expression</strong> is an expression that evaluates to either a
+  truthy value (<code>True</code>, a non-zero integer, etc.) or a falsy value (<code>False</code>, <code>0</code>,
+  <code>None</code>, <code>&quot;&quot;</code>, <code>[]</code>, etc.).</li>
+  <li>Only the first <code>if</code>/<code>elif</code> expression that evaluates to a <strong>truthy</strong> value
+  will have its corresponding indented suite be executed.</li>
+  <li>If none of the conditional expressions evaluate to a true value, then the
+  <code>else</code> suite is executed. There can only be one <code>else</code> clause in a conditional
+  statement.</li>
+</ul>
+
+<p>Here's the general form:</p>
+
+<pre><code>if &lt;conditional expression&gt;:
+    &lt;suite of statements&gt;
+elif &lt;conditional expression&gt;:
+    &lt;suite of statements&gt;
+else:
+    &lt;suite of statements&gt;</code></pre>
+
+
+<h2 id="boolean-operators">Boolean Operators</h2>
+
+
+</p>
+
+<p>Python also includes the <strong>boolean operators</strong> <code>and</code>, <code>or</code>, and <code>not</code>. These
+operators are used to combine and manipulate boolean values.</p>
+
+<ul>
+  <li><code>not</code> returns the opposite boolean value of the following expression, and
+  will always return either <code>True</code> or <code>False</code>.</li>
+  <li><code>and</code> evaluates expressions in order and stops evaluating (short-circuits)
+  once it reaches the first falsy value, and then returns it. If all values
+  evaluate to a truthy value, the last value is returned.</li>
+  <li><code>or</code> evalutes expressions in order and short-circuits at the first truthy
+  value and returns it. If all values evaluate to a falsy value, the last value
+  is returned.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<p>For example:</p>
+
+<pre><code>&gt;&gt;&gt; not None
+True
+&gt;&gt;&gt; not True
+False
+&gt;&gt;&gt; &#x2d;1 and 0 and 1
+0
+&gt;&gt;&gt; False or 9999 or 1/0
+9999</code></pre>
+
+
+<h3 id="q1-case-conundrum">Q1: Case Conundrum</h3>
+
+
+<p>In this question, we will explore the difference between <code>if</code> and <code>elif</code>.</p>
+
+<p>What is the result of evaluating the following code?</p>
+
+<pre><code>def special_case():
+    x = 10
+    if x &gt; 0:
+        x += 2
+    elif x &lt; 13:
+        x += 3
+    elif x % 2 == 1:
+        x += 4
+    return x
+
+special_case()</code></pre>
+
+
+            <label class="sr-only" for="special-case-input">Your Answer:</label>
+            <input class="form-control storable" id="special-case-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<p>What is the result of evaluating this piece of code?</p>
+
+<pre><code>def just_in_case():
+    x = 10
+    if x &gt; 0:
+        x += 2
+    if x &lt; 13:
+        x += 3
+    if x % 2 == 1:
+        x += 4
+    return x
+
+just_in_case()</code></pre>
+
+
+            <label class="sr-only" for="just-in-case-input">Your Answer:</label>
+            <input class="form-control storable" id="just-in-case-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="page-break"></div>
+How about this piece of code?
+
+<pre><code>def case_in_point():
+    x = 10
+    if x &gt; 0:
+        return x + 2
+    if x &lt; 13:
+        return x + 3
+    if x % 2 == 1:
+        return x + 4
+    return x
+
+case_in_point()</code></pre>
+
+
+            <label class="sr-only" for="case-in-point-input">Your Answer:</label>
+            <input class="form-control storable" id="case-in-point-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<p>Which of these code snippets result in the same output, and why? Based on your
+findings, when do you think using a series of <code>if</code> statements has the same
+effect as using both <code>if</code> and <code>elif</code> cases?</p>
+
+
+            <label class="sr-only" for="case-reasoning-input">Your Answer:</label>
+            <input class="form-control storable" id="case-reasoning-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p>The calls to <code>special_case</code> and <code>case_in_point</code> both return 12, while the
+call to <code>just_in_case</code> returns 19. Since the number 10 satisfies all three
+conditions in each function, the value of the variable <code>x</code> is incremented
+three times when <code>just_in_case</code> is called. A series of <code>if</code> statements has the
+same effect as using both <code>if</code> and <code>elif</code> cases if each <code>if</code> clause ends in a
+<code>return</code> statement.</p>
+
+</div>
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q2-jacket-weather">Q2: Jacket Weather?</h3>
+
+
+<p>Alfonso will only wear a jacket outside if it is below 60 degrees or it is
+raining.</p>
+
+<p>Write a function that takes in the current temperature and a boolean value
+telling if it is raining. This function should return <code>True</code> if Alfonso will
+wear a jacket and <code>False</code> otherwise.</p>
+
+<p>Try solving this problem using an <code>if</code> statement.</p>
+
+<blockquote><p><strong>Note:</strong>
+Since we'll either return <code>True</code> or <code>False</code> based on a single condition,
+whose truthiness value will also be either <code>True</code> or <code>False</code>.
+Knowing this, try to write this function using a single line.</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="disc01-q6-input" style="height:360px;"></div>
+            <a href="javascript:void" id="modal-link-disc01-q6-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-disc01-q6-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-disc01-q6-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def wears_jacket_with_if(temp, raining):\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; wears_jacket_with_if(90, False)\n    False\n    &gt;&gt;&gt; wears_jacket_with_if(40, False)\n    True\n    &gt;&gt;&gt; wears_jacket_with_if(100, True)\n    True\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "scheme", "disc01-q6-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def wears_jacket_with_if(temp, raining):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; wears_jacket_with_if(90, False)
+    False
+    &gt;&gt;&gt; wears_jacket_with_if(40, False)
+    True
+    &gt;&gt;&gt; wears_jacket_with_if(100, True)
+    True
+    &quot;&quot;&quot;
+    if temp &lt; 60 or raining:
+        return True
+    else:
+        return False
+
+#Alternate Solution
+def wears_jacket_alt(temp, raining):
+    return temp &lt; 60 or raining
+</code></pre>
+
+            </div>
+        
+
+
+
+<div class="page-break"></div>
+
+
+<h2 id="while-loops">While loops</h2>
+
+
+<p>To repeat the same statements multiple times in a program, we can use
+iteration. In Python, one way we can do this is with a <strong>while loop</strong>.</p>
+
+<pre><code>while &lt;conditional clause&gt;:
+    &lt;statements body&gt;</code></pre>
+
+<p>As long as <code>&lt;conditional clause&gt;</code> evaluates to a true value,
+<code>&lt;statements body&gt;</code> will continue to be executed. The conditional clause
+gets evaluated each time the body finishes executing.</p>
+
+
+<h3 id="q3-square-so-slow">Q3: Square So Slow</h3>
+
+
+<p>What is the result of evaluating the following code?</p>
+
+<pre><code>def square(x):
+    print(&quot;here!&quot;)
+    return x * x
+
+def so_slow(num):
+    x = num
+    while x &gt; 0:
+        x = x + 1
+    return x / 0
+
+square(so_slow(5))</code></pre>
+
+<blockquote><p><strong>Hint:</strong>
+What happens to <code>x</code> over time?</p></blockquote>
+
+
+            <label class="sr-only" for="square-so-slow-input">Your Answer:</label>
+            <input class="form-control storable" id="square-so-slow-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p><strong>Solution:</strong> This program results in an infinite loop because <code>x</code> will always
+be greater than 0; <code>x / 0</code> is never executed. We also know that <code>here!</code>
+is never printed since the operand <code>so_slow(5)</code> must be evaluated
+before <code>function square(x)</code> can be called.</p>
+
+<p>Here's a <a href="https://www.youtube.com/watch?v=Fiw0f5yuQgo&vq=hd1080&t=39m34s">video walkthrough</a>.</p>
+
+</div>
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q4-is-prime">Q4: Is Prime?</h3>
+
+
+<p>Write a function that returns <code>True</code> if a positive integer <code>n</code> is a prime
+number and <code>False</code> otherwise.</p>
+
+<p>A prime number n is a number that is not divisible by any numbers other than
+1 and n itself. For example, 13 is prime, since it is only divisible by 1 and
+13, but 14 is not, since it is divisible by 1, 2, 7, and 14.</p>
+
+<blockquote><p><strong>Hint:</strong>
+Use the <code>%</code> operator:
+<code>x % y</code> returns the remainder of <code>x</code> when divided by <code>y</code>.</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="disc01-q7-input" style="height:360px;"></div>
+            <a href="javascript:void" id="modal-link-disc01-q7-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-disc01-q7-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-disc01-q7-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def is_prime(n):\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; is_prime(10)\n    False\n    &gt;&gt;&gt; is_prime(7)\n    True\n    &gt;&gt;&gt; is_prime(1) # one is not a prime number!!\n    False\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "scheme", "disc01-q7-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def is_prime(n):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; is_prime(10)
+    False
+    &gt;&gt;&gt; is_prime(7)
+    True
+    &gt;&gt;&gt; is_prime(1) # one is not a prime number!!
+    False
+    &quot;&quot;&quot;
+    if n == 1:
+        return False
+    k = 2
+    while k &lt; n:
+        if n % k == 0:
+            return False
+        k += 1
+    return True
+</code></pre>
+
+            </div>
+        
+
+
+
+
+<h3 id="q5-fizzbuzz">Q5: Fizzbuzz</h3>
+
+
+<p>Implement the fizzbuzz sequence, which prints out a <em>single statement</em> for each
+number from 1 to <code>n</code>. For a number <code>i</code>,</p>
+
+<ul>
+  <li>If <code>i</code> is divisible by 3 only, then we print "fizz".</li>
+  <li>If <code>i</code> is divisible by 5 only, then we print "buzz".</li>
+  <li>If <code>i</code> is divisible by both 3 and 5, then we print "fizzbuzz".</li>
+  <li>Otherwise, we print the number <code>i</code> by itself.</li>
+</ul>
+
+<p>Implement <code>fizzbuzz(n)</code> here:</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="disc01-q8-input" style="height:648px;"></div>
+            <a href="javascript:void" id="modal-link-disc01-q8-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-disc01-q8-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-disc01-q8-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def fizzbuzz(n):\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; result = fizzbuzz(16)\n    1\n    2\n    fizz\n    4\n    buzz\n    fizz\n    7\n    8\n    fizz\n    buzz\n    11\n    fizz\n    13\n    14\n    fizzbuzz\n    16\n    &gt;&gt;&gt; result is None  # No return value\n    True\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "scheme", "disc01-q8-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def fizzbuzz(n):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; result = fizzbuzz(16)
+    1
+    2
+    fizz
+    4
+    buzz
+    fizz
+    7
+    8
+    fizz
+    buzz
+    11
+    fizz
+    13
+    14
+    fizzbuzz
+    16
+    &gt;&gt;&gt; result is None  # No return value
+    True
+    &quot;&quot;&quot;
+    i = 1
+    while i &lt;= n:
+        if i % 3 == 0 and i % 5 == 0:
+            print(&#x27;fizzbuzz&#x27;)
+        elif i % 3 == 0:
+            print(&#x27;fizz&#x27;)
+        elif i % 5 == 0:
+            print(&#x27;buzz&#x27;)
+        else:
+            print(i)
+        i += 1
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+
+<p>To print something for each number from 1 to <code>n</code>, we can use a loop that goes
+through each number, and then check which of the cases applies using
+<code>if&#x2d;elif&#x2d;else</code> to figure out what to print.</p>
+
+<p>Students should be careful about the order in which they have their <code>if&#x2d;elif</code>
+statements: we want to first check if <code>i</code> is divisible by both 3 and 5, or
+otherwise we will end up printing "fizz" if the student checked for
+divisibility by 3 first (or "buzz" if the student checked for
+divisibility by 5 first) rather than "fizzbuzz".</p>
+
+<p><a href="https://youtu.be/-Y2JdHG1aK8">Video walkthrough</a></p>
+
+</div>
+
+
+<h3 id="q6-unique-digits">Q6: Unique Digits</h3>
+
+
+<p>Write a function that returns the number of unique digits in a positive integer.</p>
+
+<blockquote><p><strong>Hints:</strong> You can use <code>//</code> and <code>%</code> to separate a positive integer into
+its one's digit and the rest of its digits.</p>
+
+<p>You may find it helpful to first define a function
+<code>has_digit(n, k)</code>, which determines whether a number <code>n</code> has digit <code>k</code>.</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="disc01-q9-input" style="height:900px;"></div>
+            <a href="javascript:void" id="modal-link-disc01-q9-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-disc01-q9-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-disc01-q9-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def unique_digits(n):\n    &quot;&quot;&quot;Return the number of unique digits in positive integer n.\n\n    &gt;&gt;&gt; unique_digits(8675309) # All are unique\n    7\n    &gt;&gt;&gt; unique_digits(1313131) # 1 and 3\n    2\n    &gt;&gt;&gt; unique_digits(13173131) # 1, 3, and 7\n    3\n    &gt;&gt;&gt; unique_digits(10000) # 0 and 1\n    2\n    &gt;&gt;&gt; unique_digits(101) # 0 and 1\n    2\n    &gt;&gt;&gt; unique_digits(10) # 0 and 1\n    2\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\ndef has_digit(n, k):\n    &quot;&quot;&quot;Returns whether K is a digit in N.\n    &gt;&gt;&gt; has_digit(10, 1)\n    True\n    &gt;&gt;&gt; has_digit(12, 7)\n    False\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "scheme", "disc01-q9-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def unique_digits(n):
+    &quot;&quot;&quot;Return the number of unique digits in positive integer n.
+
+    &gt;&gt;&gt; unique_digits(8675309) # All are unique
+    7
+    &gt;&gt;&gt; unique_digits(1313131) # 1 and 3
+    2
+    &gt;&gt;&gt; unique_digits(13173131) # 1, 3, and 7
+    3
+    &gt;&gt;&gt; unique_digits(10000) # 0 and 1
+    2
+    &gt;&gt;&gt; unique_digits(101) # 0 and 1
+    2
+    &gt;&gt;&gt; unique_digits(10) # 0 and 1
+    2
+    &quot;&quot;&quot;
+    unique = 0
+    while n &gt; 0:
+        last = n % 10
+        n = n // 10
+        if not has_digit(n, last):
+            unique += 1
+    return unique
+
+def has_digit(n, k):
+    &quot;&quot;&quot;Returns whether K is a digit in N.
+    &gt;&gt;&gt; has_digit(10, 1)
+    True
+    &gt;&gt;&gt; has_digit(12, 7)
+    False
+    &quot;&quot;&quot;
+    while n &gt; 0:
+        last = n % 10
+        n = n // 10
+        if last == k:
+            return True
+    return False
+
+#Alternate solution
+def unique_digits_alt(n):
+    unique = 0
+    i = 0
+    while i &lt; 10:
+        if has_digit(n, i):
+            unique += 1
+        i += 1
+    return unique
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+
+<p>We have provided two solutions:</p>
+
+<ul>
+  <li>In one solution, we look at the current digit, and check if the rest of the
+  number contains that digit or not. We only say it's unique if the digit
+  doesn't exist in the rest. We do this for every digit.</li>
+  <li>In the other, we loop through the numbers 0-9 and just call <code>has_digit</code> on
+  each one. If it returns true then we know the entire number contains that
+  digit and we can one to our unique count.</li>
+</ul>
+
+</div>
+
+<div class="page-break"></div>
+
+
+<h1 id="environment-diagrams">Environment Diagrams</h1>
+
+
+
+
+<p>An <strong>environment diagram</strong> is a model we use to keep track of all the
+variables that have been defined and the values they are bound to. We will be
+using this tool throughout the course to understand complex programs involving
+several different assignments and function calls.</p>
+
+<p>One key idea in environment diagrams is the <strong>frame</strong>.
+A frame helps us keep track of what variables have been defined in
+the current execution environment, and what values they hold.
+The frame we start off with when executing a program from scratch
+is what we call the <strong>Global frame</strong>.
+Later, we'll get into how new frames are created
+and how they may depend on their parent frame.</p>
+
+<p>Here's a short program and its corresponding diagram:</p>
+
+
+            <iframe
+                width="800"
+                height="380"
+                frameborder="0"
+                src="https://pythontutor.com/iframe-embed.html#code=x+%3D+3%0A%0Adef+square%28x%29%3A%0A++++return+x+%2A%2A+2%0A%0Asquare%282%29%0A&codeDivHeight=380&codeDivWidth=350&cumulative=true&curInstr=1&heapPrimitives=nevernest&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false">
+            </iframe>
+        
+
+<p>Remember that programs are mainly just a set of statements or instructions—
+so drawing diagrams that represent these programs also involves following sets
+of instructions! Let’s dive in...</p>
+
+
+<h2 id="assignment-statements">Assignment Statements</h2>
+
+
+<p>Assignment statements, such as <code>x = 3</code>, define variables in programs. To
+execute one in an environment diagram, record the variable name and the value:</p>
+
+<ol>
+  <li>Evaluate the expression on the right side of the <code>=</code> sign.</li>
+  <li>Write the variable name and the expression’s value in the current frame.</li>
+</ol>
+
+
+<h3 id="q7-assignment-diagram">Q7: Assignment Diagram</h3>
+
+
+<p>Use these rules to draw an environment diagram for the assignment statements
+below:</p>
+
+
+            
+<pre><code>x = 11 % 4
+y = x
+x **= 2</code></pre>
+
+            <b>Your Answer</b>
+            
+<pre><code>x = 11 % 4
+y = x
+x **= 2</code></pre>
+
+        <div class="env-diagram" id=env-diagram-assignment-diagram>
+          
+          <div class="env-diagram-frame">
+                <div>Global frame</div>
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-assignment-diagram-frame0-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-assignment-diagram-frame0-binding0-value"></td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-assignment-diagram-frame0-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-assignment-diagram-frame0-binding1-value"></td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-assignment-diagram-frame0-binding2-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-assignment-diagram-frame0-binding2-value"></td>
+                </tr>
+            
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="storable-status"></div>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+            <iframe
+                width="800"
+                height="320"
+                frameborder="0"
+                src="https://pythontutor.com/iframe-embed.html#code=x+%3D+11+%25+4%0Ay+%3D+x%0Ax+%2A%2A%3D+2%0A&codeDivHeight=320&codeDivWidth=350&cumulative=true&curInstr=1&heapPrimitives=nevernest&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false">
+            </iframe>
+        
+            </div>
+        
+
+<div class="sol-highlight">
+
+<p>We first assign <code>x</code> to the result of evaluating <code>11 % 4</code>. We then bind <code>y</code> to
+the current value of <code>x</code> (which we can figure out by looking it up in our
+current environment diagram). Finally, we'd like to update <code>x</code> to the new
+value that is the result of the current <code>x</code> squared.</p>
+
+<p><a href="https://www.youtube.com/watch?v=m-m8Yp1uwlg">Video walkthrough</a></p>
+
+</div>
+
+
+<h2 id="def-statements">def Statements</h2>
+
+
+<p>A <code>def</code> statement creates ("defines") a function object and binds it to a name.
+To diagram <code>def</code> statements, record the function name and bind the function
+object to the name. It’s also important to write the <strong>parent frame</strong> of the
+function, which is where the function is defined.</p>
+
+<p><strong>A very important note:</strong>
+Assignments for <code>def</code> statements use pointers to functions, which can have
+different behavior than primitive assignments (such as variables bound
+to numbers).</p>
+
+<ol>
+  <li>Draw the function object to the right-hand-side of the frames, denoting
+  the intrinsic name of the function, its parameters, and the parent frame (e.g.
+  <code>func square(x) [parent = Global]</code>.</li>
+  <li>Write the function name in the current frame and draw an arrow from the
+  name to the function object.</li>
+</ol>
+
+<div class="page-break"></div>
+
+
+<h3 id="q8-def-diagram">Q8: def Diagram</h3>
+
+
+<p>Use these rules for defining functions and the rules for assignment
+statements to draw a diagram for the code below.</p>
+
+
+            
+<pre><code>def double(x):
+    return x * 2
+
+def triple(x):
+    return x * 3
+
+hat = double
+double = triple</code></pre>
+
+            <b>Your Answer</b>
+            
+<pre><code>def double(x):
+    return x * 2
+
+def triple(x):
+    return x * 3
+
+hat = double
+double = triple</code></pre>
+
+        <div class="env-diagram" id=env-diagram-def-diagram>
+          <div class="env-diagram-objects">
+            <div>Objects</div>
+            <ul><li>
+            <button class="env-diagram-connector" id="env-diagram-def-diagram-object0-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-def-diagram-object0-value" type="text">
+            </li><li>
+            <button class="env-diagram-connector" id="env-diagram-def-diagram-object1-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-def-diagram-object1-value" type="text">
+            </li><li>
+            <button class="env-diagram-connector" id="env-diagram-def-diagram-object2-connector">▶</button>
+            <input class="env-text-storable" id="env-diagram-def-diagram-object2-value" type="text">
+            </li>
+            <li><button class="env-diagram-trash" title="Click here to remove a binding">🗑️</button></li>
+            </ul>
+        </div>
+          <div class="env-diagram-frame">
+                <div>Global frame</div>
+                <table class="table">
+                    <tbody>
+                    
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-def-diagram-frame0-binding0-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-def-diagram-frame0-binding0-value">
+                <button class="env-diagram-connector" id="env-diagram-def-diagram-frame0-binding0-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-def-diagram-frame0-binding1-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-def-diagram-frame0-binding1-value">
+                <button class="env-diagram-connector" id="env-diagram-def-diagram-frame0-binding1-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                <tr>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-def-diagram-frame0-binding2-name"></td>
+                    <td><input type="text" class="env-text-storable" id="env-diagram-def-diagram-frame0-binding2-value">
+                <button class="env-diagram-connector" id="env-diagram-def-diagram-frame0-binding2-connector">⬤
+                </button>
+            </td>
+                </tr>
+            
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="storable-status"></div>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+            <iframe
+                width="800"
+                height="379"
+                frameborder="0"
+                src="https://pythontutor.com/iframe-embed.html#code=def+double%28x%29%3A%0A++++return+x+%2A+2%0A%0Adef+triple%28x%29%3A%0A++++return+x+%2A+3%0A%0Ahat+%3D+double%0Adouble+%3D+triple%0A&codeDivHeight=379&codeDivWidth=350&cumulative=true&curInstr=1&heapPrimitives=nevernest&origin=composingprograms.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false">
+            </iframe>
+        
+            </div>
+        
+
+<div class="sol-highlight">
+
+<p>We first define the two functions <code>double</code> and <code>triple</code>, each bound to their
+corresponding name. In the next line, we assign the name <code>hat</code> to the function
+object that <code>double</code> refers to. Finally, we assign the name <code>double</code> to the
+function object that <code>triple</code> refers to.</p>
+
+<p><a href="https://youtu.be/EuygSqH8nTk">Video walkthrough</a></p>
+
+</div>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#control-structures">Control structures</a></li>
+  <ul>
+    <li><a href="#conditional-statements">Conditional statements</a></li>
+    <li><a href="#boolean-operators">Boolean Operators</a></li>
+    <ul>
+      <li><a href="#q1-case-conundrum">Q1: Case Conundrum</a></li>
+      <li><a href="#q2-jacket-weather">Q2: Jacket Weather?</a></li>
+    </ul>
+    <li><a href="#while-loops">While loops</a></li>
+    <ul>
+      <li><a href="#q3-square-so-slow">Q3: Square So Slow</a></li>
+      <li><a href="#q4-is-prime">Q4: Is Prime?</a></li>
+      <li><a href="#q5-fizzbuzz">Q5: Fizzbuzz</a></li>
+      <li><a href="#q6-unique-digits">Q6: Unique Digits</a></li>
+    </ul>
+  </ul>
+  <li><a href="#environment-diagrams">Environment Diagrams</a></li>
+  <ul>
+    <li><a href="#assignment-statements">Assignment Statements</a></li>
+    <ul>
+      <li><a href="#q7-assignment-diagram">Q7: Assignment Diagram</a></li>
+    </ul>
+    <li><a href="#def-statements">def Statements</a></li>
+    <ul>
+      <li><a href="#q8-def-diagram">Q8: def Diagram</a></li>
+    </ul>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

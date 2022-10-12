@@ -1,0 +1,936 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/lab.css">
+
+
+    <title>
+Lab 4 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Lab 4 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="lab04.zip" class="label label-outline">lab04.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+
+
+    
+<h1 id="topics">Topics</h1>
+
+
+<p>Consult this section if you need a refresher on the material for this lab. It's
+okay to skip directly to <a href="#required-questions">the questions</a> and refer back
+here should you get stuck.</p>
+
+<br>
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Recursion<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+<h2 id="recursion">Recursion</h2>
+
+<p>A recursive function is a function that calls itself in its body,
+either directly or indirectly.</p>
+
+<p>Let's look at the canonical example, <code>factorial</code>.</p>
+
+<blockquote><p>Factorial, denoted with the <code>!</code> operator, is defined as:</p>
+
+<pre><code>n! = n * (n&#x2d;1) * ... * 1</code></pre>
+
+<p>For example, <code>5! = 5 * 4 * 3 * 2 * 1 = 120</code></p></blockquote>
+
+<p>The recursive implementation for factorial is as follows:</p>
+
+<pre><code>def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n &#x2d; 1)</code></pre>
+
+<p>We know from its definition that 0! is 1. Since <code>n == 0</code> is the smallest number we
+can compute the factorial of, we use it as our base case.
+The recursive step also follows from the definition of factorial, i.e., <code>n! =
+n * (n&#x2d;1)!</code>.</p>
+
+<p>Recursive functions have three important components:</p>
+
+<ol>
+  <li><p><strong>Base case.</strong>
+  You can think of the base case as the case of the simplest function input,
+  or as the stopping condition for the recursion.</p>
+
+  <p>In our example, <code>factorial(0)</code> is our base case for the <code>factorial</code>
+  function.</p></li>
+  <li><p><strong>Recursive call on a smaller problem.</strong>
+  You can think of this step as calling the function on a smaller problem
+  that our current problem depends on. We assume that a recursive call on
+  this smaller problem will give us the expected result; we call this idea
+  the "recursive leap of faith".</p>
+
+  <p>In our example, <code>factorial(n)</code> depends on the smaller problem of
+  <code>factorial(n&#x2d;1)</code>.</p></li>
+  <li><p><strong>Solve the larger problem.</strong>
+  In step 2, we found the result of a smaller problem.
+  We want to now use that result to figure out what the result of our current
+  problem should be, which is what we want to return from our current
+  function call.</p>
+
+  <p>In our example, we can compute <code>factorial(n)</code> by multiplying the result
+  of our smaller problem <code>factorial(n&#x2d;1)</code> (which represents <code>(n&#x2d;1)!</code>)
+  by <code>n</code> (the reasoning being that <code>n! = n * (n&#x2d;1)!</code>).</p></li>
+</ol>
+
+<p>The next few questions in lab will have you writing recursive
+functions.  Here are some general tips:</p>
+
+<ul>
+  <li>Paradoxically, to write a recursive function, you must assume that the function
+  is fully functional before you finish writing it; this is called the
+  <em>recursive leap of faith</em>.</li>
+  <li>Consider how you can solve the current problem using the solution to
+  a simpler version of the problem. The amount of work done in a recursive function
+  can be deceptively little: remember to take the leap of faith and <em>trust the recursion</em>
+  to solve the slightly smaller problem without worrying about how.</li>
+  <li>Think about what the answer would be in the simplest possible
+  case(s). These will be your base cases - the stopping points for your
+  recursive calls. Make sure to consider the possibility that you're
+  missing base cases (this is a common way recursive solutions fail).</li>
+  <li>It may help to write an iterative version first.</li>
+</ul>
+
+<!-- <table class='table table-bordered'>
+
+<pre><code>&lt;tr&gt;
+    &lt;th&gt;Function Type:&lt;/th&gt;
+    &lt;th&gt;Recusive&lt;/th&gt;
+    &lt;th&gt;Iterative&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;Function&lt;/td&gt;
+    &lt;td&gt;&lt;pre&gt; def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n &#x2d; 1)&lt;pre&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;pre&gt; def factorial(n):
+    total = 1
+    while n &gt; 0:
+        total *= n
+        n &#x2d;= 1
+    return total
+    &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;Ends calculations&lt;/td&gt;
+    &lt;td&gt;When it hits the base case&lt;/td&gt;
+    &lt;td&gt;When n !&gt; 0, it will end.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;Means of traversal&lt;/td&gt;
+    &lt;td&gt;&lt;code&gt;factorial(&lt;strong&gt;n &#x2d; 1&lt;/strong&gt;&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;code&gt;&lt;strong&gt;n &#x2d;= 1&lt;/strong&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;/tr&gt;</code></pre>
+
+</table> -->
+</div>
+<br>
+
+<br>
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Tree Recursion<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+
+<h2 id="tree-recursion">Tree Recursion</h2>
+
+<p>A tree recursive function is a recursive function that makes more than one call
+to itself, resulting in a tree-like series of calls.</p>
+
+<p>For example, let's say we want to recursively calculate the
+<code>n</code>th
+<a href="https://en.wikipedia.org/wiki/Fibonacci_number">Virahanka-Fibonacci number</a>,
+defined as:</p>
+
+<pre><code>def virfib(n):
+    if n == 0 or n == 1:
+        return n
+    return virfib(n &#x2d; 1) + virfib(n &#x2d; 2)</code></pre>
+
+<p>Calling <code>virfib(6)</code> results in the following call structure that looks like
+an upside-down tree (where <code>f</code> is <code>virfib</code>):</p>
+
+<p><img class="img-responsive center-block" src="assets/f6-call-tree.png" alt="Virahanka-Fibonacci Tree" title="Virahanka-Fibonacci Tree" width="" height=""></p>
+
+<p>Each <code>f(i)</code> node represents a recursive call to <code>virfib</code>.
+Each recursive call <code>f(i)</code> makes another two recursive calls,
+which are to <code>f(i&#x2d;1)</code> and <code>f(i&#x2d;2)</code>.
+Whenever we reach a <code>f(0)</code> or <code>f(1)</code> node, we can directly return <code>0</code> or <code>1</code>
+rather than making more recursive calls, since these are our base cases.</p>
+
+<p>In other words, base cases have the information needed to return an answer
+directly, without depending upon results from other recursive calls.
+Once we've reached a base case, we can then begin returning back from the
+recursive calls that led us to the base case in the first place.</p>
+
+<p>Generally, tree recursion can be effective for problems where
+there are multiple possibilities or choices at a current state.
+In these types of problems, you make a recursive call for each choice or
+for a group of choices.
+</div>
+<br></p>
+
+<br>
+
+        <button id='toggle-3' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        List Comprehensions<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-3">
+
+<h2 id="list-comprehensions">List Comprehensions</h2>
+
+<p>List comprehensions are a compact and powerful way of creating new lists
+out of sequences.
+The general syntax for a list comprehension is the following:</p>
+
+<pre><code>[&lt;expression&gt; for &lt;element&gt; in &lt;sequence&gt; if &lt;conditional&gt;]</code></pre>
+
+<p>where the <code>if &lt;conditional&gt;</code> section is optional.</p>
+
+<p>The syntax is designed to read like English:
+"Compute the expression for each element in the sequence
+(if the conditional is true for that element)."</p>
+
+<pre><code>&gt;&gt;&gt; [i**2 for i in [1, 2, 3, 4] if i % 2 == 0]
+[4, 16]</code></pre>
+
+<p>This list comprehension will:</p>
+
+<ul>
+  <li>Compute the expression <code>i**2</code></li>
+  <li>For each element <code>i</code> in the sequence <code>[1, 2, 3, 4]</code></li>
+  <li>Where <code>i % 2 == 0</code> (<code>i</code> is an even number),</li>
+</ul>
+
+<p>and then put the resulting values of the expressions into a new list.</p>
+
+<p>In other words, this list comprehension will create a new list that contains
+the square of every even element of the original list <code>[1, 2, 3, 4]</code>.</p>
+
+<p>We can also rewrite a list comprehension as an equivalent <code>for</code> statement,
+such as for the example above:</p>
+
+<pre><code>&gt;&gt;&gt; lst = []
+&gt;&gt;&gt; for i in [1, 2, 3, 4]:
+...     if i % 2 == 0:
+...         lst = lst + [i**2]
+&gt;&gt;&gt; lst
+[4, 16]</code></pre>
+
+</div>
+<br>
+
+
+<h1 id="required-questions">Required Questions</h1>
+
+
+<br>
+
+        <button id='toggle-4' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-4">
+
+<h2 id="getting-started-videos">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZc4wPCWtIy2rSc8ohz356Ip"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZc4wPCWtIy2rSc8ohz356Ip'> YouTube link </a></p>
+</div>
+
+
+<h2 id="recursion-tree-recursion">Recursion/Tree Recursion</h2>
+
+
+
+<h3 id="q1-wwpd-squared-virahanka-fibonacci">Q1: WWPD: Squared Virahanka Fibonacci</h3>
+
+
+<blockquote><p>Use Ok to test your knowledge with the following "What Would Python Display?" questions:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q squared-virfib-wwpd -u<button id="copy-code-python3ok-qsquared-virfib-wwpd-u" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qsquared-virfib-wwpd-u").onclick = () => copyCode('python3 ok -q squared-virfib-wwpd -u', "copy-code-python3ok-qsquared-virfib-wwpd-u");
+        </script>
+        <br/></blockquote>
+
+<!-- comment to break the insert -->
+
+<blockquote><p><strong>Hint:</strong> If you are stuck, make sure to try drawing out the recursive call tree! This is a challenging problem -- doing so will really help with understanding how tree recursion works. We strongly encourage trying to draw things out before asking for help from your TA/AIs.</p>
+
+<p><strong>Background:</strong> In the Squared Virahanka Fibonacci sequence, each number in the sequence is the square of the sum of the previous two numbers in the sequence. The first 0th and 1st number in the sequence are 0 and 1, respectively. The recursive <code>virfib_sq</code> function takes in an argument <code>n</code> and returns the <code>nth</code> number in the Square Virahanka Fibonacci sequence.</p></blockquote>
+
+<pre><code>&gt;&gt;&gt; def virfib_sq(n):
+&gt;&gt;&gt;     print(n)
+&gt;&gt;&gt;     if n &lt;= 1:
+&gt;&gt;&gt;         return n
+&gt;&gt;&gt;     return (virfib_sq(n &#x2d; 1) + virfib_sq(n &#x2d; 2)) ** 2
+&gt;&gt;&gt; r0 = virfib_sq(0)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5f;</div>
+&gt;&gt;&gt; r1 = virfib_sq(1)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x31;</div>
+&gt;&gt;&gt; r2 = virfib_sq(2)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x32;&#xa;&#x31;&#xa;&#x30;</div>
+&gt;&gt;&gt; r3 = virfib_sq(3)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x33;&#xa;&#x32;&#xa;&#x31;&#xa;&#x30;&#xa;&#x31;</div>
+&gt;&gt;&gt; r3
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x34;</div>
+&gt;&gt;&gt; (r1 + r2) ** 2
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x34;</div>
+&gt;&gt;&gt; r4 = virfib_sq(4)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x34;&#xa;&#x33;&#xa;&#x32;&#xa;&#x31;&#xa;&#x30;&#xa;&#x31;&#xa;&#x32;&#xa;&#x31;&#xa;&#x30;</div>
+&gt;&gt;&gt; r4
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x32;&#x35;</div></code></pre>
+        <button id='prompt-1' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+
+
+<h3 id="q2-summation">Q2: Summation</h3>
+
+
+<p>Write a recursive implementation of <code>summation</code>, which takes a positive
+integer <code>n</code> and a function <code>term</code>. It applies <code>term</code> to every number from <code>1</code>
+to <code>n</code> including <code>n</code> and returns the sum.</p>
+
+<p><strong>Important:</strong> Use recursion; the tests will fail if you use any loops (for, while).</p>
+
+<solution>
+
+<pre><code>def summation(n, term):
+    &quot;&quot;&quot;Return the sum of numbers 1 through n (including n) wíth term applied to each number.
+    Implement using recursion!
+
+    &gt;&gt;&gt; summation(5, lambda x: x * x * x) # 1^3 + 2^3 + 3^3 + 4^3 + 5^3
+    225
+    &gt;&gt;&gt; summation(9, lambda x: x + 1) # 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10
+    54
+    &gt;&gt;&gt; summation(5, lambda x: 2**x) # 2^1 + 2^2 + 2^3 + 2^4 + 2^5
+    62
+    &gt;&gt;&gt; # Do not use while/for loops!
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; # ban iteration
+    &gt;&gt;&gt; check(HW_SOURCE_FILE, &#x27;summation&#x27;,
+    ...       [&#x27;While&#x27;, &#x27;For&#x27;])
+    True
+    &quot;&quot;&quot;
+    assert n &gt;= 1
+<div class="sol-highlight">    if n == 1:
+        return term(n)
+    else:
+        return term(n) + summation(n &#x2d; 1, term)
+    # Base case: only one item to sum, so we return that item.
+    # Recursive call: returns the result of summing the numbers from 1 to n&#x2d;1 using
+    # term. All that&#x27;s missing is term applied to the current value n.
+
+    # Extra challenge: how might you implement this using a helper function?</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q summation<button id="copy-code-python3ok-qsummation" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qsummation").onclick = () => copyCode('python3 ok -q summation', "copy-code-python3ok-qsummation");
+        </script>
+        <br/>
+
+
+<h3 id="q3-pascal-s-triangle">Q3: Pascal's Triangle</h3>
+
+
+<p>Pascal's triangle gives the coefficients of a binomial expansion; if you expand the expression <code>(a + b) ** n</code>,
+all coefficients will be found on the <code>n</code>th row of the triangle, and the coefficient of the <code>i</code>th term will be at the <code>i</code>th column.</p>
+
+<p>Here's a part of the Pascal's trangle:</p>
+
+<pre><code>1
+1 1
+1 2 1
+1 3 3 1
+1 4 6 4 1</code></pre>
+
+<p>Every number in Pascal's triangle is defined as the sum of the item
+above it and the item above and to the left of it. Rows and columns are
+zero-indexed; that is, the first row is row 0 instead of 1
+and the first column is column 0 instead of column 1.
+For example, the item at row 2, column 1 in Pascal's triangle is 2.</p>
+
+<p>Now, define the procedure <code>pascal(row, column)</code> which takes a row and a column,
+and finds the value of the item at that position in Pascal's triangle.
+Note that Pascal's triangle is only defined at certain areas;
+use <code>0</code> if the item does not exist. For the purposes of this question,
+you may also assume that <code>row &gt;= 0</code> and <code>column &gt;= 0</code>.</p>
+
+<solution>
+
+<pre><code>def pascal(row, column):
+    &quot;&quot;&quot;Returns the value of the item in Pascal&#x27;s Triangle
+    whose position is specified by row and column.
+    &gt;&gt;&gt; pascal(0, 0)    # The top left (the point of the triangle)
+    1
+    &gt;&gt;&gt; pascal(0, 5)	# Empty entry; outside of Pascal&#x27;s Triangle
+    0
+    &gt;&gt;&gt; pascal(3, 2)	# Row 3 (1 3 3 1), Column 2
+    3
+    &gt;&gt;&gt; pascal(4, 2)     # Row 4 (1 4 6 4 1), Column 2
+    6
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if column == 0:
+        return 1
+    elif row == 0:
+        return 0
+    else:
+        above = pascal(row &#x2d; 1, column)
+        above_left = pascal(row &#x2d; 1, column &#x2d; 1)
+        return above + above_left
+    # First base case: every number in the leftmost column of the triangle is 1.
+    # Second base case: There is only one number in the topmost row, which is already
+    # accounted for by the first base case.</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q pascal<button id="copy-code-python3ok-qpascal" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qpascal").onclick = () => copyCode('python3 ok -q pascal', "copy-code-python3ok-qpascal");
+        </script>
+        <br/>
+
+
+<h3 id="q4-insect-combinatorics">Q4: Insect Combinatorics</h3>
+
+
+<p>Consider an insect in an <em>M</em> by <em>N</em> grid. The insect starts at the
+bottom left corner, <em>(1, 1)</em>, and wants to end up at the top right
+corner, <em>(M, N)</em>. The insect is only capable of moving right or
+up. Write a function <code>paths</code> that takes a grid length and width
+and returns the number of different paths the insect can take from the
+start to the goal. (There is a <a href="https://en.wikipedia.org/wiki/Closed-form_expression">closed-form solution</a> to this problem,
+but try to answer it procedurally using recursion.)</p>
+
+<p><img class="img-responsive center-block" src="assets/grid.jpg" alt="grid" width="" height=""></p>
+
+<p>For example, the 2 by 2 grid has a total of two ways for the insect to
+move from the start to the goal. For the 3 by 3 grid, the insect has 6
+diferent paths (only 3 are shown above).</p>
+
+<blockquote><p><strong>Hint:</strong> What happens if we hit the top or rightmost edge?</p></blockquote>
+
+<solution>
+
+<pre><code>def paths(m, n):
+    &quot;&quot;&quot;Return the number of paths from one corner of an
+    M by N grid to the opposite corner.
+
+    &gt;&gt;&gt; paths(2, 2)
+    2
+    &gt;&gt;&gt; paths(5, 7)
+    210
+    &gt;&gt;&gt; paths(117, 1)
+    1
+    &gt;&gt;&gt; paths(1, 157)
+    1
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if m == 1 or n == 1:
+        return 1
+    return paths(m &#x2d; 1, n) + paths(m, n &#x2d; 1)
+    # Base case: Look at the two visual examples given. Since the insect
+    # can only move to the right or up, once it hits either the very right side
+    # or the top edge, it has already reached a unique path &#x2d;&#x2d; the insect has
+    # no choice but to go straight up or straight right (respectively) at that point.
+    # There is no way for it to backtrack by going left or down.
+
+    # Alternative solution:
+    if m == 1 and n == 1:
+        return 1
+    if m &lt; 1 or n &lt; 1:
+        return 0
+    return paths(m &#x2d; 1, n) + paths(m, n &#x2d; 1)
+    # This solution is similar to the alternate solution for Count Stair Ways from Discussion 4 &#x2d;&#x2d;
+    # if we reach the exact destination, we have found a unique path (first base case), but if
+    # we overshoot, we have not found a valid path (second base case).
+
+    # Notice, however, that this solution is not as short and simple as the first solution
+    # since it doesn&#x27;t make use of the insect&#x27;s restricted movements (only right or up)
+    # to cut the program short. We have to reach the exact destination for the second solution,
+    # while in the first we just have to reach the right or top boundary.</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q paths<button id="copy-code-python3ok-qpaths" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qpaths").onclick = () => copyCode('python3 ok -q paths', "copy-code-python3ok-qpaths");
+        </script>
+        <br/>
+
+
+<h2 id="list-comprehensions-2">List Comprehensions</h2>
+
+
+
+<h3 id="q5-couple">Q5: Couple</h3>
+
+
+<p>Implement the function <code>couple</code>, which takes in two lists and returns a list
+that contains lists with i-th elements of two sequences coupled together. You
+can assume the lengths of two sequences are the same. Try using a list
+comprehension.</p>
+
+<blockquote><p><em>Hint</em>: You may find the built in <a href="https://www.w3schools.com/python/ref_func_range.asp">range</a> function helpful.</p></blockquote>
+
+<solution>
+
+<pre><code>def couple(s, t):
+    &quot;&quot;&quot;Return a list of two&#x2d;element lists in which the i&#x2d;th element is [s[i], t[i]].
+
+    &gt;&gt;&gt; a = [1, 2, 3]
+    &gt;&gt;&gt; b = [4, 5, 6]
+    &gt;&gt;&gt; couple(a, b)
+    [[1, 4], [2, 5], [3, 6]]
+    &gt;&gt;&gt; c = [&#x27;c&#x27;, 6]
+    &gt;&gt;&gt; d = [&#x27;s&#x27;, &#x27;1&#x27;]
+    &gt;&gt;&gt; couple(c, d)
+    [[&#x27;c&#x27;, &#x27;s&#x27;], [6, &#x27;1&#x27;]]
+    &quot;&quot;&quot;
+    assert len(s) == len(t)
+<div class="sol-highlight">    return [[s[i], t[i]] for i in range(0, len(s))]</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q couple<button id="copy-code-python3ok-qcouple" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qcouple").onclick = () => copyCode('python3 ok -q couple', "copy-code-python3ok-qcouple");
+        </script>
+        <br/>
+
+
+<h2 id="submit">Submit</h2>
+
+
+<p>Make sure to submit this assignment by running:</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;submit</code></pre>
+
+
+<h1 id="optional-questions">Optional Questions</h1>
+
+
+
+<h2 id="recursion-2">Recursion</h2>
+
+
+
+<h3 id="q6-double-eights">Q6: Double Eights</h3>
+
+
+<p>Write a recursive function that takes in a number <code>n</code> and determines if the
+digits contain two adjacent <code>8</code>s. You can assume that <code>n</code> is at least a
+two-digit number. You may have already done this problem iteratively as an Extra Practice problem in Lab 1.</p>
+
+<blockquote><p><strong>Hint:</strong> Remember what tools you can use in order to isolate digits of a number. If you have trouble figuring out how to implement the recursion, try first finding an iterative solution, and think about how you might be able to turn any loops in recursion.</p></blockquote>
+
+<solution>
+
+<pre><code>def double_eights(n):
+    &quot;&quot;&quot; Returns whether or not n has two digits in row that
+    are the number 8. Assume n has at least two digits in it.
+
+    &gt;&gt;&gt; double_eights(1288)
+    True
+    &gt;&gt;&gt; double_eights(880)
+    True
+    &gt;&gt;&gt; double_eights(538835)
+    True
+    &gt;&gt;&gt; double_eights(284682)
+    False
+    &gt;&gt;&gt; double_eights(588138)
+    True
+    &gt;&gt;&gt; double_eights(78)
+    False
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; # ban iteration
+    &gt;&gt;&gt; check(HW_SOURCE_FILE, &#x27;double_eights&#x27;, [&#x27;While&#x27;, &#x27;For&#x27;])
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    last, second_last = n % 10, n // 10 % 10
+    if last == 8 and second_last == 8:
+        return True
+    elif n &lt; 100:
+        return False
+    return double_eights(n // 10)
+
+    # Alternate solution
+    last, second_last = n % 10, n // 10 % 10
+    if n &lt; 10:
+        return False
+    return (last == 8 and second_last == 8) or double_eights(n // 10)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q double_eights<button id="copy-code-python3ok-qdouble_eights" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdouble_eights").onclick = () => copyCode('python3 ok -q double_eights', "copy-code-python3ok-qdouble_eights");
+        </script>
+        <br/>
+
+
+<h2 id="list-comprehensions-3">List Comprehensions</h2>
+
+
+
+<h3 id="q7-coordinates">Q7: Coordinates</h3>
+
+
+<p>Implement a function <code>coords</code> that takes a function <code>fn</code>, a sequence <code>seq</code>,
+and a <code>lower</code> and <code>upper</code> bound on the output of the function. <code>coords</code> then
+returns a list of coordinate pairs (lists) such that:</p>
+
+<ul>
+  <li>Each (x, y) pair is represented as <code>[x, fn(x)]</code></li>
+  <li>The x-coordinates are elements in the sequence</li>
+  <li>The result contains only pairs whose y-coordinate is within the upper and
+  lower bounds (inclusive)</li>
+</ul>
+
+<p>See the doctest for examples.</p>
+
+<blockquote><p><em>Note</em>: your answer can only be <em>one line long</em>. You should make use of list
+comprehensions!</p></blockquote>
+
+<solution>
+
+<pre><code>def coords(fn, seq, lower, upper):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; seq = [&#x2d;4, &#x2d;2, 0, 1, 3]
+    &gt;&gt;&gt; fn = lambda x: x**2
+    &gt;&gt;&gt; coords(fn, seq, 1, 9)
+    [[&#x2d;2, 4], [1, 1], [3, 9]]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return [[x, fn(x)] for x in seq if lower &lt;= fn(x) &lt;= upper]</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q coords<button id="copy-code-python3ok-qcoords" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qcoords").onclick = () => copyCode('python3 ok -q coords', "copy-code-python3ok-qcoords");
+        </script>
+        <br/>
+
+<blockquote><p>Reflect: What are the drawbacks to the one-line answer, in terms of using computer resources?</p></blockquote>
+
+
+<h3 id="q8-riffle-shuffle">Q8: Riffle Shuffle</h3>
+
+
+<p>A common way of shuffling cards is known as the
+<a href="https://www.youtube.com/watch?v=JmbVNyIiD54">riffle shuffle</a>.
+The shuffle produces a new configuration of cards in which the top
+card is followed by the middle card, then by the second
+card, then the card after the middle, and so forth.</p>
+
+<p>Write a list comprehension that riffle shuffles a sequence of items.
+You can assume the sequence contains an even number of items.</p>
+
+<p><em>Hint:</em> There are two ways you can write this as a single list comprension:
+1) You may find the expression <code>k%2</code>, which evaluates to 0 on even numbers and 1 on odd numbers, to be alternatively access the beginning and middle of the deck.
+2) You can utilize an if expression in your comprehension for the odd and even numbers respectively.</p>
+
+<solution>
+
+<pre><code>def riffle(deck):
+    &quot;&quot;&quot;Produces a single, perfect riffle shuffle of DECK, consisting of
+    DECK[0], DECK[M], DECK[1], DECK[M+1], ... where M is position of the
+    second half of the deck.  Assume that len(DECK) is even.
+    &gt;&gt;&gt; riffle([3, 4, 5, 6])
+    [3, 5, 4, 6]
+    &gt;&gt;&gt; riffle(range(20))
+    [0, 10, 1, 11, 2, 12, 3, 13, 4, 14, 5, 15, 6, 16, 7, 17, 8, 18, 9, 19]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return [deck[(i % 2) * len(deck) // 2 + i // 2] for i in range(len(deck))]
+
+#ALTERNATE SOLUTION
+def riffle(deck):
+    return [deck[i // 2] if i % 2 == 0 else deck[len(deck) // 2 + i // 2] for i in range(len(deck))]</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q riffle<button id="copy-code-python3ok-qriffle" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qriffle").onclick = () => copyCode('python3 ok -q riffle', "copy-code-python3ok-qriffle");
+        </script>
+        <br/>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#topics">Topics</a></li>
+  <ul>
+    <li><a href="#recursion">Recursion</a></li>
+    <li><a href="#tree-recursion">Tree Recursion</a></li>
+    <li><a href="#list-comprehensions">List Comprehensions</a></li>
+  </ul>
+  <li><a href="#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="#getting-started-videos">Getting Started Videos</a></li>
+    <li><a href="#recursion-tree-recursion">Recursion/Tree Recursion</a></li>
+    <ul>
+      <li><a href="#q1-wwpd-squared-virahanka-fibonacci">Q1: WWPD: Squared Virahanka Fibonacci</a></li>
+      <li><a href="#q2-summation">Q2: Summation</a></li>
+      <li><a href="#q3-pascal-s-triangle">Q3: Pascal's Triangle</a></li>
+      <li><a href="#q4-insect-combinatorics">Q4: Insect Combinatorics</a></li>
+    </ul>
+    <li><a href="#list-comprehensions-2">List Comprehensions</a></li>
+    <ul>
+      <li><a href="#q5-couple">Q5: Couple</a></li>
+    </ul>
+    <li><a href="#submit">Submit</a></li>
+  </ul>
+  <li><a href="#optional-questions">Optional Questions</a></li>
+  <ul>
+    <li><a href="#recursion-2">Recursion</a></li>
+    <ul>
+      <li><a href="#q6-double-eights">Q6: Double Eights</a></li>
+    </ul>
+    <li><a href="#list-comprehensions-3">List Comprehensions</a></li>
+    <ul>
+      <li><a href="#q7-coordinates">Q7: Coordinates</a></li>
+      <li><a href="#q8-riffle-shuffle">Q8: Riffle Shuffle</a></li>
+    </ul>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

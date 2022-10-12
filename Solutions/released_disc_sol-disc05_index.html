@@ -1,0 +1,1147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/disc.css">
+
+
+    <title>
+Discussion 5 | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 5: Sequences, Data Abstraction, Trees
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc05.pdf" class="label label-outline">disc05.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<div class="alert storable-login-status"></div>
+
+This is an online worksheet that you can work on during discussions.
+Your work is not graded and you do not need to submit anything.
+
+
+    
+
+
+
+<h1 id="sequences">Sequences</h1>
+
+
+<p>Sequences are ordered collections of values that support
+element-selection and have length.
+We've worked with lists, but other Python types are also sequences,
+including strings.</p>
+
+<p>Let us go through an example of some actions we can do with strings.</p>
+
+<pre><code>&gt;&gt;&gt; x = &#x27;Hello there Oski!&#x27;
+&gt;&gt;&gt; x
+&#x27;Hello there Oski!&#x27;
+&gt;&gt;&gt; len(x)
+17
+&gt;&gt;&gt; x[6:]
+&#x27;there Oski!&#x27;
+&gt;&gt;&gt; x[::&#x2d;1]
+&#x27;!iksO ereht olleH&#x27;</code></pre>
+
+<p>Since strings are sequences, we can do with strings many of the same things that we can do to lists. We can even loop through a string just like we can with a list:</p>
+
+<pre><code>&gt;&gt;&gt; x = &#x27;I am not Oski.&#x27;
+&gt;&gt;&gt; vowel_count = 0
+&gt;&gt;&gt; for i in range(len(x)):
+...     if x[i] in &#x27;aeiou&#x27;:
+...         vowel_count += 1
+&gt;&gt;&gt; vowel_count
+5</code></pre>
+
+<div class="page-break"></div>
+
+
+<h3 id="q1-map-filter-reduce">Q1: Map, Filter, Reduce</h3>
+
+
+<p>Many languages provide <code>map</code>, <code>filter</code>, <code>reduce</code> functions for sequences.
+Python also provides these functions
+(and we'll formally introduce them later on in the course),
+but to help you better understand how they work,
+you'll be implementing these functions in the following problems.</p>
+
+<blockquote><p>In Python, the <code>map</code> and <code>filter</code> built-ins have slightly different
+behavior than the <code>my_map</code> and <code>my_filter</code> functions we are defining here.</p></blockquote>
+
+<p><code>my_map</code> takes in a one argument function <code>fn</code> and a sequence <code>seq</code> and returns a
+list containing <code>fn</code> applied to each element in <code>seq</code>.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="map-input" style="height:270px;"></div>
+            <a href="javascript:void" id="modal-link-map-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-map-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-map-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def my_map(fn, seq):\n    &quot;&quot;&quot;Applies fn onto each element in seq and returns a list.\n    &gt;&gt;&gt; my_map(lambda x: x*x, [1, 2, 3])\n    [1, 4, 9]\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "map-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def my_map(fn, seq):
+    &quot;&quot;&quot;Applies fn onto each element in seq and returns a list.
+    &gt;&gt;&gt; my_map(lambda x: x*x, [1, 2, 3])
+    [1, 4, 9]
+    &quot;&quot;&quot;
+    result = []
+    for elem in seq:
+        result = result + [fn(elem)]
+    return result
+
+    # One&#x2d;liner solution
+    return [fn(elem) for elem in seq]
+</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+<p><code>my_filter</code> takes in a predicate function <code>pred</code> and a sequence <code>seq</code> and returns a
+list containing all elements in <code>seq</code> for which <code>pred</code> returns <code>True</code>. (A predicate function
+is a function that takes in an argument and returns either <code>True</code> or <code>False</code>.)</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="filter-input" style="height:288px;"></div>
+            <a href="javascript:void" id="modal-link-filter-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-filter-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-filter-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def my_filter(pred, seq):\n    &quot;&quot;&quot;Keeps elements in seq only if they satisfy pred.\n    &gt;&gt;&gt; my_filter(lambda x: x % 2 == 0, [1, 2, 3, 4])  # new list has only even&#x2d;valued elements\n    [2, 4]\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "filter-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def my_filter(pred, seq):
+    &quot;&quot;&quot;Keeps elements in seq only if they satisfy pred.
+    &gt;&gt;&gt; my_filter(lambda x: x % 2 == 0, [1, 2, 3, 4])  # new list has only even&#x2d;valued elements
+    [2, 4]
+    &quot;&quot;&quot;
+    result = []
+    for elem in seq:
+        if pred(elem):
+            result = result + [elem]
+    return result
+
+    # One&#x2d;liner solution
+    return [elem for elem in seq if pred(elem)]
+</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+<p><code>my_reduce</code> takes in a two argument function <code>combiner</code> and a non-empty sequence
+<code>seq</code> and combines the elements in <code>seq</code> into one value using <code>combiner</code>.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="reduce-input" style="height:342px;"></div>
+            <a href="javascript:void" id="modal-link-reduce-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-reduce-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-reduce-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def my_reduce(combiner, seq):\n    &quot;&quot;&quot;Combines elements in seq using combiner.\n    seq will have at least one element.\n    &gt;&gt;&gt; my_reduce(lambda x, y: x + y, [1, 2, 3, 4])  # 1 + 2 + 3 + 4\n    10\n    &gt;&gt;&gt; my_reduce(lambda x, y: x * y, [1, 2, 3, 4])  # 1 * 2 * 3 * 4\n    24\n    &gt;&gt;&gt; my_reduce(lambda x, y: x * y, [4])\n    4\n    &gt;&gt;&gt; my_reduce(lambda x, y: x + 2 * y, [1, 2, 3]) # (1 + 2 * 2) + 2 * 3\n    11\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "reduce-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def my_reduce(combiner, seq):
+    &quot;&quot;&quot;Combines elements in seq using combiner.
+    seq will have at least one element.
+    &gt;&gt;&gt; my_reduce(lambda x, y: x + y, [1, 2, 3, 4])  # 1 + 2 + 3 + 4
+    10
+    &gt;&gt;&gt; my_reduce(lambda x, y: x * y, [1, 2, 3, 4])  # 1 * 2 * 3 * 4
+    24
+    &gt;&gt;&gt; my_reduce(lambda x, y: x * y, [4])
+    4
+    &gt;&gt;&gt; my_reduce(lambda x, y: x + 2 * y, [1, 2, 3]) # (1 + 2 * 2) + 2 * 3
+    11
+    &quot;&quot;&quot;
+    total = seq[0]
+    for elem in seq[1:]:
+        total = combiner(total, elem)
+    return total
+</code></pre>
+
+            </div>
+        
+
+
+<h3 id="q2-count-palindromes">Q2: Count Palindromes</h3>
+
+
+<!-- to be used with map-filter-reduce -->
+
+<p>Write a function that counts the number of palindromes
+(any string that reads the same forwards as it does when read backwards)
+in a sequence of strings using only <code>lambda</code>, string operations, conditional expressions, and the functions we defined above(<code>my_filter</code>, <code>my_map</code>, <code>my_reduce</code>). Specifically, do not use recursion or any kind of loop.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="count_palindromes-input" style="height:216px;"></div>
+            <a href="javascript:void" id="modal-link-count_palindromes-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-count_palindromes-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-count_palindromes-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def count_palindromes(L):\n    &quot;&quot;&quot;The number of palindromic strings in the sequence of strings\n    L (ignoring case).\n    &gt;&gt;&gt; count_palindromes((&quot;Acme&quot;, &quot;Madam&quot;, &quot;Pivot&quot;, &quot;Pip&quot;))\n    2\n    &gt;&gt;&gt; count_palindromes([&quot;101&quot;, &quot;rAcECaR&quot;, &quot;much&quot;, &quot;wow&quot;])\n    3\n    &quot;&quot;&quot;\n    return ______\n\n', "python", "count_palindromes-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def count_palindromes(L):
+    &quot;&quot;&quot;The number of palindromic strings in the sequence of strings
+    L (ignoring case).
+    &gt;&gt;&gt; count_palindromes((&quot;Acme&quot;, &quot;Madam&quot;, &quot;Pivot&quot;, &quot;Pip&quot;))
+    2
+    &gt;&gt;&gt; count_palindromes([&quot;101&quot;, &quot;rAcECaR&quot;, &quot;much&quot;, &quot;wow&quot;])
+    3
+    &quot;&quot;&quot;
+    return len(my_filter(lambda s: s.lower() == s[::&#x2d;1].lower(), L))
+</code></pre>
+
+            </div>
+        
+
+<p><em>Hint</em>: The easiest way to get the reversed version of a string <code>s</code> is
+to use the Python slicing notation trick <code>s[::&#x2d;1]</code>. Also, the function
+<code>lower</code>, when called on strings, converts all of the characters in the
+string to lowercase. For instance, if the variable <code>s</code> contains the
+string "PyThoN", the expression <code>s.lower()</code> evaluates to "python".</p>
+
+
+<h1 id="data-abstraction">Data Abstraction</h1>
+
+
+
+
+<p>Data abstraction is a powerful concept in computer science that
+allows programmers to treat code as objects.
+For example, using code to represent cars, chairs, people, and so on.
+That way, programmers don't have to worry about <em>how</em> code is implemented;
+they just have to know <em>what</em> it does.</p>
+
+<p>Data abstraction mimics how we think about the world.
+If you want to drive a car, you don't need to know how the
+engine was built or what kind of material the tires are made of to do so.
+You just have to know how to use the car for driving itself,
+such as how to turn the wheel or press the gas pedal.</p>
+
+<p>A data abstraction consists of two types of functions:</p>
+
+<ul>
+  <li><strong>Constructors</strong>: functions that build the abstract data type.</li>
+  <li><strong>Selectors</strong>: functions that retrieve information from the data type.</li>
+</ul>
+
+<p>Programmers design data abstractions to abstract away how information is stored and
+calculated such that the end user does <em>not</em> need to know how constructors and
+selectors are implemented. The nature of <em>abstraction</em> allows whoever uses them to
+assume that the functions have been written correctly and
+work as described.</p>
+
+
+<h1 id="trees">Trees</h1>
+
+
+
+
+<p>One example of data abstraction is with <strong>trees</strong>.</p>
+
+<p>In computer science, <strong>trees</strong> are recursive data structures that are widely
+used in various settings and can be implemented in many ways.
+The diagram below is an example of a tree.</p>
+
+<p><img class="img-responsive center-block" src="assets/example_tree_construction.png" alt="Example Tree" width="50%" height=""></p>
+
+<p>Notice that the tree branches downward. In computer science, the
+<strong>root</strong> of a tree starts at the top, and the <strong>leaves</strong> are at the
+bottom.</p>
+
+<div class="page-break"></div>
+
+<p>Some terminology regarding trees:</p>
+
+<ul>
+  <li><strong>Parent Node</strong>: A node that has at least one branch.</li>
+  <li><strong>Child Node</strong>: A node that has a parent.
+  A child node can only have one parent.</li>
+  <li><strong>Root</strong>: The top node of the tree.
+  In our example, this is the <code>1</code> node.</li>
+  <li><strong>Label</strong>: The value at a node.
+  In our example, every node's label is an integer.</li>
+  <li><strong>Leaf</strong>: A node that has no branches.
+  In our example, the <code>4</code>, <code>5</code>, <code>6</code>, <code>2</code> nodes are leaves.</li>
+  <li><strong>Branch</strong>: A subtree of the root.
+  Trees have branches, which are trees themselves:
+  this is why trees are <em>recursive</em> data structures.</li>
+  <li><strong>Depth</strong>: How far away a node is from the root.
+  We define this as the number of edges between the root to the node.
+  As there are no edges between the root and itself, the root has depth 0.
+  In our example, the <code>3</code> node has depth 1 and the <code>4</code> node has depth 2.</li>
+  <li><strong>Height</strong>: The depth of the lowest (furthest from the root) leaf.
+  In our example, the <code>4</code>, <code>5</code>, and <code>6</code> nodes are all the lowest leaves
+  with depth 2.
+  Thus, the entire tree has height 2.</li>
+</ul>
+
+<p>In computer science, there are many different types of trees. Some vary in
+the number of branches each node has; others vary in the structure of the
+tree.</p>
+
+
+<h2 id="working-with-trees">Working with Trees</h2>
+
+
+<p>A tree has both a value for the root node and a sequence of branches,
+which are also trees. In our implementation, we represent the branches as
+a list of trees. Since a tree is a data abstraction, our choice to use
+lists is just an implementation detail.</p>
+
+<ul>
+  <li>The arguments to the constructor <code>tree</code> are the value for the root node and an optional list of branches. <em>If no branches parameter is provided, the default value <code>[]</code> is used.</em></li>
+  <li>The selectors for these are <code>label</code> and <code>branches</code>.</li>
+</ul>
+
+<p>Remember <code>branches</code> returns a list of trees and not a tree directly.
+It's important to distinguish between working with a tree and working with a <strong>list of</strong> trees.</p>
+
+<p>We have also provided a convenience function, <code>is_leaf</code>.</p>
+
+<p>Let's try to create the tree from above:</p>
+
+<pre><code class="python">t = tree(1,
+      [tree(3,
+          [tree(4),
+           tree(5),
+           tree(6)]),
+      tree(2)])</code></pre>
+
+
+
+<div class="page-break"></div>
+
+
+<h2 id="tree-data-abstraction-implementation">Tree Data Abstraction Implementation</h2>
+
+
+<p>For your reference, we have provided our implementation of trees as a data abstraction.</p>
+
+<pre><code>def tree(label, branches=[]):
+    &quot;&quot;&quot;Construct a tree with the given label value and a list of branches.&quot;&quot;&quot;
+    return [label] + list(branches)
+
+def label(tree):
+    &quot;&quot;&quot;Return the label value of a tree.&quot;&quot;&quot;
+    return tree[0]
+
+def branches(tree):
+    &quot;&quot;&quot;Return the list of branches of the given tree.&quot;&quot;&quot;
+    return tree[1:]
+
+def is_leaf(tree):
+    &quot;&quot;&quot;Returns True if the given tree&#x27;s list of branches is empty, and False
+    otherwise.
+    &quot;&quot;&quot;
+    return not branches(tree)</code></pre>
+
+
+
+
+<h3 id="q3-tree-abstraction-barrier">Q3: Tree Abstraction Barrier</h3>
+
+
+<p>Consider a tree <code>t</code> constructed by calling
+<code>tree(1, [tree(2), tree(4)])</code>. For each of the following expressions,
+answer these two questions:</p>
+
+<ul>
+  <li>What does the expression evaluate to?</li>
+  <li>Does the expression violate any abstraction barriers? If so, write
+  an equivalent expression that does not violate abstraction barriers.</li>
+</ul>
+
+<ol>
+  <li><p><code>label(t)</code>
+  
+            <label class="sr-only" for="tree-abstraction-1-input">Your Answer:</label>
+            <input class="form-control storable" id="tree-abstraction-1-input" type="text">
+            <div class="storable-status"></div>
+        
+  <div class="sol-highlight"></p>
+
+  <p>Evaluates to 1, the label of the entire tree. This is simply using a
+  selector to get the label, which is not violating any abstraction
+  barriers.</p>
+
+  </div></li>
+  <li><p><code>t[0]</code>
+  
+            <label class="sr-only" for="tree-abstraction-2-input">Your Answer:</label>
+            <input class="form-control storable" id="tree-abstraction-2-input" type="text">
+            <div class="storable-status"></div>
+        
+  <div class="sol-highlight"></p>
+
+  <p>This expression evaluates to 1, the label of the entire tree.
+  However, it makes use of the fact that trees are implemented using
+  lists, and violates the abstraction barrier. An equivalent
+  expression is <code>label(t)</code>.</p>
+
+  </div></li>
+  <li><p><code>label(branches(t)[0])</code>
+  
+            <label class="sr-only" for="tree-abstraction-3-input">Your Answer:</label>
+            <input class="form-control storable" id="tree-abstraction-3-input" type="text">
+            <div class="storable-status"></div>
+        </p>
+
+  <div class="sol-highlight">
+
+  <p>This expression evaluates to the label of the first branch of <code>t</code>.
+  It is not a violation to index into <code>branches(t)</code> because it is
+  given in the description of the ADT that <code>branches(t)</code> returns a
+  list of branches.</p>
+
+  </div></li>
+  <li><p><code>is_leaf(t[1:][1])</code>
+  
+            <label class="sr-only" for="tree-abstraction-4-input">Your Answer:</label>
+            <input class="form-control storable" id="tree-abstraction-4-input" type="text">
+            <div class="storable-status"></div>
+        </p>
+
+  <div class="sol-highlight">
+
+  <p>This expression accesses the branches of <code>t</code> by slicing <code>t</code>.
+  Although this works because this is technically what <code>branches(t)</code>
+  returns, this is an abstraction violation because we cannot assume
+  the implementation of <code>branches(t)</code>.</p>
+
+  <p>It then accesses the second branch by indexing into the list of
+  branches, which is <em>not</em> an abstraction violation because we are
+  allowed to assume that branches is a list. This expression evaluates
+  to <code>True</code> because the second branch of <code>t</code> is a leaf. An equivalent
+  expression is <code>is_leaf(branches(t)[1])</code>.</p>
+
+  </div></li>
+  <li><p><code>[label(b) for b in branches(t)]</code>
+  
+            <label class="sr-only" for="tree-abstraction-5-input">Your Answer:</label>
+            <input class="form-control storable" id="tree-abstraction-5-input" type="text">
+            <div class="storable-status"></div>
+        </p>
+
+  <div class="sol-highlight">
+
+  <p>This expression uses the <code>branches</code> selector to access the branches
+  of <code>t</code> and then iterates through it to construct a new list
+  containing the labels of the branches. The result list is <code>[2, 4]</code>.
+  It does not violate any abstraction barriers.</p>
+
+  </div></li>
+  <li><p><strong>Challenge:</strong> <code>branches(tree(5, [t, tree(3)]))[0][0]</code>
+  
+            <label class="sr-only" for="tree-abstraction-6-input">Your Answer:</label>
+            <input class="form-control storable" id="tree-abstraction-6-input" type="text">
+            <div class="storable-status"></div>
+        </p>
+
+  <div class="sol-highlight">
+
+  <p>This expression evaluates to the label of the tree <code>t</code>, which is 1.
+  This is because the expression <code>tree(5, [t, tree(3)])</code> evaluates to
+  a tree whose first branch is the tree <code>t</code> that we constructed above!
+  Howvever, this expression violates the abstraction barrier by
+  indexing into <code>t</code> to get its label. An equivalent expression would
+  be <code>label(branches(tree(5, [t, tree(3)]))[0])</code>.</p>
+
+  </div></li>
+</ol>
+
+<div class="page-break"></div>
+
+
+<h3 id="q4-height">Q4: Height</h3>
+
+<p>Write a function that returns the height of a tree.
+Recall that the height of a tree is the length of the longest path from the root to a leaf.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="height-input" style="height:522px;"></div>
+            <a href="javascript:void" id="modal-link-height-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-height-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-height-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def height(t):\n    &quot;&quot;&quot;Return the height of a tree.\n\n    &gt;&gt;&gt; t = tree(3, [tree(5, [tree(1)]), tree(2)])\n    &gt;&gt;&gt; height(t)\n    2\n    &gt;&gt;&gt; t = tree(3, [tree(1), tree(2, [tree(5, [tree(6)]), tree(1)])])\n    &gt;&gt;&gt; height(t)\n    3\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "height-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def height(t):
+    &quot;&quot;&quot;Return the height of a tree.
+
+    &gt;&gt;&gt; t = tree(3, [tree(5, [tree(1)]), tree(2)])
+    &gt;&gt;&gt; height(t)
+    2
+    &gt;&gt;&gt; t = tree(3, [tree(1), tree(2, [tree(5, [tree(6)]), tree(1)])])
+    &gt;&gt;&gt; height(t)
+    3
+    &quot;&quot;&quot;
+    # Non&#x2d;list comprehension solution
+    if is_leaf(t):
+        return 0
+    best_height = 0
+    for b in branches(t):
+        best_height = max(height(b), best_height)
+    return best_height + 1
+
+    # List comprehension solution
+    if is_leaf(t):
+        return 0
+    return 1 + max([height(branch) for branch in branches(t)])
+
+    # Alternate solutions
+    return 1 + max([&#x2d;1] + [height(branch) for branch in branches(t)])
+    return max([1 + height(b) for b in branches(t)], default=0)
+</code></pre>
+
+            </div>
+        
+
+
+<div class="sol-highlight">
+<a href="https://www.youtube.com/watch?v=Am6m8YgAnYY&list=PLx38hZJ5RLZdJgRCgpaTbmRXKAHOUmomO&index=4">See video walkthrough</a>
+
+</div>
+
+
+<h3 id="q5-maximum-path-sum">Q5: Maximum Path Sum</h3>
+
+
+<p>Write a function that takes in a tree and returns the maximum sum of the values along any path in the tree. Recall that a path is from the tree's root to any leaf.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="max-path-sum-input" style="height:414px;"></div>
+            <a href="javascript:void" id="modal-link-max-path-sum-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-max-path-sum-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-max-path-sum-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def max_path_sum(t):\n    &quot;&quot;&quot;Return the maximum path sum of the tree.\n\n    &gt;&gt;&gt; t = tree(1, [tree(5, [tree(1), tree(3)]), tree(10)])\n    &gt;&gt;&gt; max_path_sum(t)\n    11\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "max-path-sum-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def max_path_sum(t):
+    &quot;&quot;&quot;Return the maximum path sum of the tree.
+
+    &gt;&gt;&gt; t = tree(1, [tree(5, [tree(1), tree(3)]), tree(10)])
+    &gt;&gt;&gt; max_path_sum(t)
+    11
+    &quot;&quot;&quot;
+    # Non&#x2d;list comprehension solution
+    if is_leaf(t):
+        return label(t)
+    highest_sum = 0
+    for b in branches(t):
+        highest_sum = max(max_path_sum(b), highest_sum)
+    return label(t) + highest_sum
+
+    # List comprehension solution
+    if is_leaf(t):
+      return label(t)
+    else:
+      return label(t) + max([max_path_sum(b) for b in branches(t)])
+</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+
+<h3 id="q6-find-path">Q6: Find Path</h3>
+
+
+<p>Write a function that takes in a tree and a value <code>x</code> and returns a list containing the nodes along the path required to get from the root of
+the tree to a node containing <code>x</code>.</p>
+
+<p>If <code>x</code> is not present in the tree, return <code>None</code>. Assume that the entries of the tree are unique.</p>
+
+<p>For the following tree, <code>find_path(t, 5)</code> should return <code>[2, 7, 6, 5]</code></p>
+
+<p><img class="img-responsive center-block" src="assets/find_path.png" alt="Example Tree" width="" height=""></p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="find_path-input" style="height:288px;"></div>
+            <a href="javascript:void" id="modal-link-find_path-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-find_path-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-find_path-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def find_path(t, x):\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; t = tree(2, [tree(7, [tree(3), tree(6, [tree(5), tree(11)])] ), tree(15)])\n    &gt;&gt;&gt; find_path(t, 5)\n    [2, 7, 6, 5]\n    &gt;&gt;&gt; find_path(t, 10)  # returns None\n    &quot;&quot;&quot;\n    if _____________________________:\n        return _____________________________\n    _____________________________:\n        path = ______________________\n        if _____________________________:\n            return _____________________________\n\n', "python", "find_path-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def find_path(t, x):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; t = tree(2, [tree(7, [tree(3), tree(6, [tree(5), tree(11)])] ), tree(15)])
+    &gt;&gt;&gt; find_path(t, 5)
+    [2, 7, 6, 5]
+    &gt;&gt;&gt; find_path(t, 10)  # returns None
+    &quot;&quot;&quot;
+    if label(t) == x:
+        return [label(t)]
+    for b in branches(t):
+        path = find_path(b, x)
+        if path:
+            return [label(t)] + path
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+<a href="https://www.youtube.com/watch?v=OnLa_VUrWiA&list=PLx38hZJ5RLZcgrSJp16YmzNwn9hL5JD8q&index=3&t=0m11s">See video walkthrough</a>
+</div>
+
+</p>
+
+
+<h1 id="additional-practice">Additional Practice</h1>
+
+
+
+<h3 id="q7-perfectly-balanced">Q7: Perfectly Balanced</h3>
+
+
+<p><strong>Part A:</strong>
+Implement <code>sum_tree</code>, which returns the sum of all the labels in tree <code>t</code>.</p>
+
+<p><strong>Part B:</strong>
+Implement <code>balanced</code>, which returns whether every branch of <code>t</code> has the
+same total sum and that the branches themselves are also balanced.</p>
+
+<p><strong>Challenge:</strong>
+Solve both of these parts with just 1 line of code each.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="sum_tree-input" style="height:252px;"></div>
+            <a href="javascript:void" id="modal-link-sum_tree-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-sum_tree-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-sum_tree-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def sum_tree(t):\n    &quot;&quot;&quot;\n    Add all elements in a tree.\n    &gt;&gt;&gt; t = tree(4, [tree(2, [tree(3)]), tree(6)])\n    &gt;&gt;&gt; sum_tree(t)\n    15\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "sum_tree-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def sum_tree(t):
+    &quot;&quot;&quot;
+    Add all elements in a tree.
+    &gt;&gt;&gt; t = tree(4, [tree(2, [tree(3)]), tree(6)])
+    &gt;&gt;&gt; sum_tree(t)
+    15
+    &quot;&quot;&quot;
+    total = 0
+    for b in branches(t):
+        total += sum_tree(b)
+    return label(t) + total
+</code></pre>
+
+            </div>
+        
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="balanced-input" style="height:378px;"></div>
+            <a href="javascript:void" id="modal-link-balanced-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-balanced-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-balanced-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def balanced(t):\n    &quot;&quot;&quot;\n    Checks if each branch has same sum of all elements and\n    if each branch is balanced.\n    &gt;&gt;&gt; t = tree(1, [tree(3), tree(1, [tree(2)]), tree(1, [tree(1), tree(1)])])\n    &gt;&gt;&gt; balanced(t)\n    True\n    &gt;&gt;&gt; t = tree(1, [t, tree(1)])\n    &gt;&gt;&gt; balanced(t)\n    False\n    &gt;&gt;&gt; t = tree(1, [tree(4), tree(1, [tree(2), tree(1)]), tree(1, [tree(3)])])\n    &gt;&gt;&gt; balanced(t)\n    False\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "balanced-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def balanced(t):
+    &quot;&quot;&quot;
+    Checks if each branch has same sum of all elements and
+    if each branch is balanced.
+    &gt;&gt;&gt; t = tree(1, [tree(3), tree(1, [tree(2)]), tree(1, [tree(1), tree(1)])])
+    &gt;&gt;&gt; balanced(t)
+    True
+    &gt;&gt;&gt; t = tree(1, [t, tree(1)])
+    &gt;&gt;&gt; balanced(t)
+    False
+    &gt;&gt;&gt; t = tree(1, [tree(4), tree(1, [tree(2), tree(1)]), tree(1, [tree(3)])])
+    &gt;&gt;&gt; balanced(t)
+    False
+    &quot;&quot;&quot;
+    for b in branches(t):
+        if sum_tree(branches(t)[0]) != sum_tree(b) or not balanced(b):
+            return False
+    return True
+</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+
+<h3 id="q8-hailstone-tree">Q8: Hailstone Tree</h3>
+
+
+<p>We can represent the hailstone sequence as a tree in the figure below,
+showing the route different numbers take to reach 1. Remember that a hailstone
+sequence starts with a number <code>n</code>, continuing to <code>n/2</code> if <code>n</code> is even or <code>3n+1</code>
+if <code>n</code> is odd, ending with 1. Write a function <code>hailstone_tree(n, h)</code>
+which generates a tree of height <code>h</code>, containing hailstone numbers that
+will reach <code>n</code>.</p>
+
+<blockquote><p><strong>Hint:</strong> A node of a hailstone tree will always have at least one, and at most two branches (which are also hailstone trees). Under what conditions do you add the second branch?</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="hailstone-tree-input" style="height:594px;"></div>
+            <a href="javascript:void" id="modal-link-hailstone-tree-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-hailstone-tree-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-hailstone-tree-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def hailstone_tree(n, h):\n    &quot;&quot;&quot;Generates a tree of hailstone numbers that will reach N, with height H.\n    &gt;&gt;&gt; print_tree(hailstone_tree(1, 0))\n    1\n    &gt;&gt;&gt; print_tree(hailstone_tree(1, 4))\n    1\n        2\n            4\n                8\n                    16\n    &gt;&gt;&gt; print_tree(hailstone_tree(8, 3))\n    8\n        16\n            32\n                64\n            5\n                10\n    &quot;&quot;&quot;\n    if _________________________________:\n        return _________________________________\n    branches = _________________________________\n    if ___________ and ___________ and ___________:\n        branches += _________________________________\n    return tree(n, branches)\n\ndef print_tree(t):\n    def helper(i, t):\n        print(&quot;    &quot; * i + str(label(t)))\n        for b in branches(t):\n            helper(i + 1, b)\n    helper(0, t)\n', "python", "hailstone-tree-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def hailstone_tree(n, h):
+    &quot;&quot;&quot;Generates a tree of hailstone numbers that will reach N, with height H.
+    &gt;&gt;&gt; print_tree(hailstone_tree(1, 0))
+    1
+    &gt;&gt;&gt; print_tree(hailstone_tree(1, 4))
+    1
+        2
+            4
+                8
+                    16
+    &gt;&gt;&gt; print_tree(hailstone_tree(8, 3))
+    8
+        16
+            32
+                64
+            5
+                10
+    &quot;&quot;&quot;
+    if h == 0:
+        return tree(n)
+    branches = [hailstone_tree(n * 2, h &#x2d; 1)]
+    if (n &#x2d; 1) % 3 == 0 and ((n &#x2d; 1) // 3) % 2 == 1 and (n &#x2d; 1) // 3 &gt; 1:
+        branches += [hailstone_tree((n &#x2d; 1) // 3, h &#x2d; 1)]
+    return tree(n, branches)
+
+def print_tree(t):
+    def helper(i, t):
+        print(&quot;    &quot; * i + str(label(t)))
+        for b in branches(t):
+            helper(i + 1, b)
+    helper(0, t)</code></pre>
+
+            </div>
+        
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#sequences">Sequences</a></li>
+  <ul>
+    <li><a href="#q1-map-filter-reduce">Q1: Map, Filter, Reduce</a></li>
+    <li><a href="#q2-count-palindromes">Q2: Count Palindromes</a></li>
+  </ul>
+  <li><a href="#data-abstraction">Data Abstraction</a></li>
+  <li><a href="#trees">Trees</a></li>
+  <ul>
+    <li><a href="#working-with-trees">Working with Trees</a></li>
+    <li><a href="#tree-data-abstraction-implementation">Tree Data Abstraction Implementation</a></li>
+    <ul>
+      <li><a href="#q3-tree-abstraction-barrier">Q3: Tree Abstraction Barrier</a></li>
+      <li><a href="#q4-height">Q4: Height</a></li>
+      <li><a href="#q5-maximum-path-sum">Q5: Maximum Path Sum</a></li>
+      <li><a href="#q6-find-path">Q6: Find Path</a></li>
+    </ul>
+  </ul>
+  <li><a href="#additional-practice">Additional Practice</a></li>
+  <ul>
+    <li><a href="#q7-perfectly-balanced">Q7: Perfectly Balanced</a></li>
+    <li><a href="#q8-hailstone-tree">Q8: Hailstone Tree</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,866 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/lab.css">
+
+
+    <title>
+Lab 3 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Lab 3 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="lab03.zip" class="label label-outline">lab03.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+
+
+    
+<h2 id="submit">Submit</h2>
+
+
+<p>In order to facilitate studying for the exam, solutions to this lab are released with the lab. We encourage you to try out the problems first on your own before referencing the solutions as a guide.</p>
+
+<p><strong>Note: You do not need to run <code>python ok &#x2d;&#x2d;submit</code> to receive credit for this assignment.</strong></p>
+
+
+<h1 id="all-questions-are-optional">All Questions Are Optional</h1>
+
+
+<p>The questions in this assignment are not graded, but they are highly
+recommended to help you prepare for the upcoming exam. You will receive
+credit for this lab even if you do not complete these questions.</p>
+
+<p>The questions in this assignment are not graded, but they are highly recommended to help you prepare for the upcoming exam. You will receive credit for this lab even if you do not complete these questions.</p>
+
+
+<h1 id="suggested-questions">Suggested Questions</h1>
+
+
+<br>
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Walkthrough Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+<h2 id="walkthrough-videos">Walkthrough Videos</h2>
+
+
+<p>These videos provide detailed walkthroughs of the problems presented in this lab.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZcg87YCI00Tcojjadl3UeCw"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZcg87YCI00Tcojjadl3UeCw'> YouTube link </a></p>
+</div>
+
+
+<h2 id="control">Control</h2>
+
+
+
+<h3 id="q1-ordered-digits">Q1: Ordered Digits</h3>
+
+
+<p>Implement the function <code>ordered_digits</code>, which takes as input a
+positive integer and returns <code>True</code> if its digits, read left to right,
+are in non-decreasing order, and <code>False</code> otherwise.  For example, the
+digits of 5, 11, 127, 1357 are ordered, but not those of 21 or 1375.</p>
+
+<blockquote><p><strong>Note:</strong>
+You can solve this with either iteration or recursion. We recommend
+trying both for practice purposes but you will credit for either one.</p></blockquote>
+
+<code-input ordered_digits lang:python>
+
+<pre><code>def ordered_digits(x):
+    &quot;&quot;&quot;Return True if the (base 10) digits of X&gt;0 are in non&#x2d;decreasing
+    order, and False otherwise.
+
+    &gt;&gt;&gt; ordered_digits(5)
+    True
+    &gt;&gt;&gt; ordered_digits(11)
+    True
+    &gt;&gt;&gt; ordered_digits(127)
+    True
+    &gt;&gt;&gt; ordered_digits(1357)
+    True
+    &gt;&gt;&gt; ordered_digits(21)
+    False
+    &gt;&gt;&gt; result = ordered_digits(1375) # Return, don&#x27;t print
+    &gt;&gt;&gt; result
+    False
+
+<div class="sol-highlight">
+    &gt;&gt;&gt; cases = [(1, True), (9, True), (10, False), (11, True), (32, False),
+    ...          (23, True), (99, True), (111, True), (122, True), (223, True),
+    ...          (232, False), (999, True),
+    ...          (13334566666889, True), (987654321, False)]
+    &gt;&gt;&gt; [ordered_digits(s) == t for s, t in cases].count(False)
+    0
+</div>    &quot;&quot;&quot;
+<div class="sol-highlight">    last = x % 10
+    x = x // 10
+    while x &gt; 0 and last &gt;= x % 10:
+        last = x % 10
+        x = x // 10
+    return x == 0</div></code></pre>
+
+</code-input>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q ordered_digits<button id="copy-code-python3ok-qordered_digits" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qordered_digits").onclick = () => copyCode('python3 ok -q ordered_digits', "copy-code-python3ok-qordered_digits");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>We split off each digit in turn from the right, comparing it to the
+previous digit we split off, which was the one immediately to its
+right. We stop when we run out of digits or we find an out-of-order
+digit.</p>
+
+</div>
+
+
+<h3 id="q2-k-runner">Q2: K Runner</h3>
+
+
+<p>An <em>increasing run</em> of an integer is a sequence of consecutive digits in
+which each digit is larger than the last. For example, the number 123444345
+has four increasing runs: 1234, 4, 4 and 345. Each run can be indexed
+<strong>from the end</strong> of the number, starting with index 0. In the example, the
+0th run is 345, the first run is 4, the second run is 4 and the third run is
+1234.</p>
+
+<p>Implement <code>get_k_run_starter</code>, which takes in integers <code>n</code> and <code>k</code> and returns
+the 0th digit of the <code>k</code>th increasing run within <code>n</code>. The 0th digit is the
+leftmost number in the run. You may assume that there are at least <code>k+1</code>
+increasing runs in <code>n</code>.</p>
+
+<code-input get_k_run_starter lang:python>
+
+<pre><code>def get_k_run_starter(n, k):
+    &quot;&quot;&quot;Returns the 0th digit of the kth increasing run within n.
+    &gt;&gt;&gt; get_k_run_starter(123444345, 0) # example from description
+    3
+    &gt;&gt;&gt; get_k_run_starter(123444345, 1)
+    4
+    &gt;&gt;&gt; get_k_run_starter(123444345, 2)
+    4
+    &gt;&gt;&gt; get_k_run_starter(123444345, 3)
+    1
+    &gt;&gt;&gt; get_k_run_starter(123412341234, 1)
+    1
+    &gt;&gt;&gt; get_k_run_starter(1234234534564567, 0)
+    4
+    &gt;&gt;&gt; get_k_run_starter(1234234534564567, 1)
+    3
+    &gt;&gt;&gt; get_k_run_starter(1234234534564567, 2)
+    2
+    &quot;&quot;&quot;
+    i = 0
+    final = None
+<div class="sol-highlight">    while i &lt;= k:</div><div class="sol-highlight">        while n &gt; 10 and (n % 10 &gt; (n // 10) % 10):</div><div class="sol-highlight">            n = n // 10</div><div class="sol-highlight">        final = n % 10</div><div class="sol-highlight">        i = i + 1</div><div class="sol-highlight">        n = n // 10</div>    return final</code></pre>
+
+</code-input>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q get_k_run_starter<button id="copy-code-python3ok-qget_k_run_starter" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qget_k_run_starter").onclick = () => copyCode('python3 ok -q get_k_run_starter', "copy-code-python3ok-qget_k_run_starter");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>Video walkthrough:</p>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/OYAKtPzq1KQ"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/OYAKtPzq1KQ'> YouTube link </a></p>
+
+</div>
+
+
+<h2 id="higher-order-functions">Higher Order Functions</h2>
+
+
+<p>These are some utility function definitions you may see being used as part of
+the doctests for the following problems.</p>
+
+<pre><code>from operator import add, mul
+
+square = lambda x: x * x
+
+identity = lambda x: x
+
+triple = lambda x: 3 * x
+
+increment = lambda x: x + 1</code></pre>
+
+
+<h3 id="q3-make-repeater">Q3: Make Repeater</h3>
+
+
+<p>Implement the function <code>make_repeater</code> so that <code>make_repeater(func, n)(x)</code>
+returns <code>func(func(...func(x)...))</code>, where <code>func</code> is applied <code>n</code> times. That
+is, <code>make_repeater(func, n)</code> returns another function that can then be applied
+to another argument. For example, <code>make_repeater(square, 3)(42)</code> evaluates to
+<code>square(square(square(42)))</code>.</p>
+
+<code-input make_repeater_disc>
+
+<pre><code>def make_repeater(func, n):
+    &quot;&quot;&quot;Return the function that computes the nth application of func.
+
+    &gt;&gt;&gt; add_three = make_repeater(increment, 3)
+    &gt;&gt;&gt; add_three(5)
+    8
+    &gt;&gt;&gt; make_repeater(triple, 5)(1) # 3 * 3 * 3 * 3 * 3 * 1
+    243
+    &gt;&gt;&gt; make_repeater(square, 2)(5) # square(square(5))
+    625
+    &gt;&gt;&gt; make_repeater(square, 4)(5) # square(square(square(square(5))))
+    152587890625
+    &gt;&gt;&gt; make_repeater(square, 0)(5) # Yes, it makes sense to apply the function zero times!
+    5
+    &quot;&quot;&quot;
+<div class="sol-highlight">    g = identity
+    while n &gt; 0:
+        g = composer(func, g)
+        n = n &#x2d; 1
+    return g
+
+# Alternative solutions
+def make_repeater2(func, n):
+    def inner_func(x):
+        k = 0
+        while k &lt; n:
+            x, k = func(x), k + 1
+        return x
+    return inner_func</div>
+def composer(func1, func2):
+    &quot;&quot;&quot;Return a function f, such that f(x) = func1(func2(x)).&quot;&quot;&quot;
+    def f(x):
+        return func1(func2(x))
+    return f</code></pre>
+
+</code-input>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q make_repeater<button id="copy-code-python3ok-qmake_repeater" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmake_repeater").onclick = () => copyCode('python3 ok -q make_repeater', "copy-code-python3ok-qmake_repeater");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>Solution using <code>composer</code>:</p>
+
+<p>We create a new function in every iteration of the <code>while</code> statement
+by calling <code>composer</code>.</p>
+
+<p>Solution not using <code>composer</code>:</p>
+
+<p>We create a single inner function that contains the <code>while</code> logic
+needed to do calculations directly, as opposed to creating another
+function for every <code>while</code> loop iteration.</p>
+
+</div>
+
+
+<h3 id="q4-apply-twice">Q4: Apply Twice</h3>
+
+
+<p>Using <code>make_repeater</code> define a function <code>apply_twice</code> that takes a function of
+one argument as an argument and returns a function that applies the
+original function twice. For example, if <code>inc</code> is a function that
+returns <code>1</code> more than its argument, then <code>double(inc)</code> should be a
+function that returns two more:</p>
+
+<pre><code>def apply_twice(func):
+    &quot;&quot;&quot; Return a function that applies func twice.
+
+    func &#x2d;&#x2d; a function that takes one argument
+
+    &gt;&gt;&gt; apply_twice(square)(2)
+    16
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return make_repeater(func, 2)</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q apply_twice<button id="copy-code-python3ok-qapply_twice" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qapply_twice").onclick = () => copyCode('python3 ok -q apply_twice', "copy-code-python3ok-qapply_twice");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>Using <code>composer</code> from class, the body of <code>apply_twice</code> can also be
+written as <code>return composer(func, func)</code>.</p>
+
+</div>
+
+
+<h3 id="q5-it-s-always-a-good-prime">Q5: It's Always a Good Prime</h3>
+
+
+<p>Implement <code>div_by_primes_under</code>, which takes in an integer <code>n</code> and returns an
+n-divisibility checker. An <em>n-divisibility-checker</em> is a function that takes
+in an integer k and returns whether <code>k</code> is divisible by any integers between 2
+and <code>n</code>, inclusive. Equivalently, it returns whether <code>k</code> is divisible by any
+primes less than or equal to <code>n</code>.</p>
+
+<p>Review the Disc 01 <code>is_prime</code> problem for a reminder about prime numbers.</p>
+
+<p>You can also choose to do the no lambda version, which is the same problem,
+just with defining functions with def instead of lambda.</p>
+
+<blockquote><p><strong>Hint:</strong> If struggling, here is a partially filled out line for after the
+<code>if</code> statement:</p>
+
+<pre><code>checker = (lambda f, i: lambda x: __________)(checker, i)</code></pre></blockquote>
+
+<code-input div_by_primes_under lang:python>
+
+<pre><code>def div_by_primes_under(n):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; div_by_primes_under(10)(11)
+    False
+    &gt;&gt;&gt; div_by_primes_under(10)(121)
+    False
+    &gt;&gt;&gt; div_by_primes_under(10)(12)
+    True
+    &gt;&gt;&gt; div_by_primes_under(5)(1)
+    False
+    &quot;&quot;&quot;
+    checker = lambda x: False
+<div class="sol-highlight">    i = 2</div><div class="sol-highlight">    while i &lt;= n:</div>        if not checker(i):
+<div class="sol-highlight">            checker = (lambda f, i: lambda x: x % i == 0 or f(x))(checker, i)</div><div class="sol-highlight">        i = i + 1</div><div class="sol-highlight">    return checker</div>
+def div_by_primes_under_no_lambda(n):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; div_by_primes_under_no_lambda(10)(11)
+    False
+    &gt;&gt;&gt; div_by_primes_under_no_lambda(10)(121)
+    False
+    &gt;&gt;&gt; div_by_primes_under_no_lambda(10)(12)
+    True
+    &gt;&gt;&gt; div_by_primes_under_no_lambda(5)(1)
+    False
+    &quot;&quot;&quot;
+    def checker(x):
+        return False
+<div class="sol-highlight">    i = 2</div><div class="sol-highlight">    while i &lt;= n:</div>        if not checker(i):
+<div class="sol-highlight">            def outer(f, i):</div><div class="sol-highlight">                def inner(x):</div><div class="sol-highlight">                    return x % i == 0 or f(x)</div><div class="sol-highlight">                return inner</div><div class="sol-highlight">            checker = outer(checker, i)</div><div class="sol-highlight">        i = i + 1</div><div class="sol-highlight">    return checker</div></code></pre>
+
+</code-input>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q div_by_primes_under
+python3 ok -q div_by_primes_under_no_lambda<button id="copy-code-python3ok-qdiv_by_primes_underpython3ok-qdiv_by_primes_under_no_lambda" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdiv_by_primes_underpython3ok-qdiv_by_primes_under_no_lambda").onclick = () => copyCode('python3 ok -q div_by_primes_under\npython3 ok -q div_by_primes_under_no_lambda', "copy-code-python3ok-qdiv_by_primes_underpython3ok-qdiv_by_primes_under_no_lambda");
+        </script>
+        <br/>
+
+
+<h3 id="q6-church-numerals">Q6: Church numerals</h3>
+
+
+<p>The logician Alonzo Church invented a system of representing non-negative
+integers entirely using functions. The purpose was to show that functions are
+sufficient to describe all of number theory: if we have functions, we do not
+need to assume that numbers exist, but instead we can invent them.</p>
+
+<p>Your goal in this problem is to rediscover this representation known as <em>Church
+numerals</em>. Church numerals are a way to represent non-negative integers via
+repeated function application. Specifically, church numerals (such as <code>zero</code>, <code>one</code>, and
+<code>two</code> below) are <em>functions</em> that take in a function <code>f</code> and return
+a new function which, when called, repeats <code>f</code> a number of times on some argument <code>x</code>.
+Here are the definitions of <code>zero</code>, as well as a <code>successor</code> function, which takes in a church numeral
+<code>n</code> as an argument and returns a function that represents the church numeral one higher than <code>n</code>:</p>
+
+<pre><code>def zero(f):
+    return lambda x: x
+
+def successor(n):
+    return lambda f: lambda x: f(n(f)(x))</code></pre>
+
+<p>First, define functions <code>one</code> and <code>two</code> such that they have the same behavior
+as <code>successor(zero)</code> and <code>successsor(successor(zero))</code> respectively, but <em>do
+not call <code>successor</code> in your implementation</em>.</p>
+
+<p>Next, implement a function <code>church_to_int</code> that converts a church numeral
+argument to a regular Python integer.</p>
+
+<p>Finally, implement functions <code>add_church</code>, <code>mul_church</code>, and <code>pow_church</code> that
+perform addition, multiplication, and exponentiation on church numerals.</p>
+
+<pre><code>def one(f):
+    &quot;&quot;&quot;Church numeral 1: same as successor(zero)&quot;&quot;&quot;
+<div class="sol-highlight">    return lambda x: f(x)</div>
+def two(f):
+    &quot;&quot;&quot;Church numeral 2: same as successor(successor(zero))&quot;&quot;&quot;
+<div class="sol-highlight">    return lambda x: f(f(x))</div>
+three = successor(two)
+
+def church_to_int(n):
+    &quot;&quot;&quot;Convert the Church numeral n to a Python integer.
+
+    &gt;&gt;&gt; church_to_int(zero)
+    0
+    &gt;&gt;&gt; church_to_int(one)
+    1
+    &gt;&gt;&gt; church_to_int(two)
+    2
+    &gt;&gt;&gt; church_to_int(three)
+    3
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return n(lambda x: x + 1)(0)</div>
+def add_church(m, n):
+    &quot;&quot;&quot;Return the Church numeral for m + n, for Church numerals m and n.
+
+    &gt;&gt;&gt; church_to_int(add_church(two, three))
+    5
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return lambda f: lambda x: m(f)(n(f)(x))</div>
+def mul_church(m, n):
+    &quot;&quot;&quot;Return the Church numeral for m * n, for Church numerals m and n.
+
+    &gt;&gt;&gt; four = successor(three)
+    &gt;&gt;&gt; church_to_int(mul_church(two, three))
+    6
+    &gt;&gt;&gt; church_to_int(mul_church(three, four))
+    12
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return lambda f: m(n(f))</div>
+def pow_church(m, n):
+    &quot;&quot;&quot;Return the Church numeral m ** n, for Church numerals m and n.
+
+    &gt;&gt;&gt; church_to_int(pow_church(two, three))
+    8
+    &gt;&gt;&gt; church_to_int(pow_church(three, two))
+    9
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return n(m)</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q church_to_int
+python3 ok -q add_church
+python3 ok -q mul_church
+python3 ok -q pow_church<button id="copy-code-python3ok-qchurch_to_intpython3ok-qadd_churchpython3ok-qmul_churchpython3ok-qpow_church" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qchurch_to_intpython3ok-qadd_churchpython3ok-qmul_churchpython3ok-qpow_church").onclick = () => copyCode('python3 ok -q church_to_int\npython3 ok -q add_church\npython3 ok -q mul_church\npython3 ok -q pow_church', "copy-code-python3ok-qchurch_to_intpython3ok-qadd_churchpython3ok-qmul_churchpython3ok-qpow_church");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>Church numerals are a way to represent non-negative integers via
+repeated function application.  The definitions of <code>zero</code>, <code>one</code>, and
+<code>two</code> show that each numeral is a function that takes a function and
+repeats it a number of times on some argument <code>x</code>.</p>
+
+<p>The <code>church_to_int</code> function reveals how a Church numeral can be mapped
+to our normal notion of non-negative integers using the increment
+function.</p>
+
+<p>Addition of Church numerals is function composition of the functions of
+<code>x</code>, while multiplication is composition of the functions of <code>f</code>.</p>
+
+</div>
+
+
+<h2 id="environment-diagrams">Environment Diagrams</h2>
+
+
+
+<h3 id="q7-doge">Q7: Doge</h3>
+
+
+<p>Draw the environment diagram for the following code.</p>
+
+<pre><code>wow = 6
+
+def much(wow):
+    if much == wow:
+        such = lambda wow: 5
+        def wow():
+            return such
+        return wow
+    such = lambda wow: 4
+    return wow()
+
+wow = much(much(much))(wow)</code></pre>
+
+<p>You can check out what happens when you run the code block using
+<a href="https://goo.gl/rLDpDe">Python Tutor</a>. Please ignore the “ambiguous parent frame” message on step 18. The parent is in fact f1.</p>
+
+<solution>
+<iframe width="800" height="500" frameborder="0" src="https://pythontutor.com/iframe-embed.html#code=wow%20%3D%206%0A%0Adef%20much%28wow%29%3A%0A%20%20%20%20if%20much%20%3D%3D%20wow%3A%0A%20%20%20%20%20%20%20%20such%20%3D%20lambda%20wow%3A%205%0A%20%20%20%20%20%20%20%20def%20wow%28%29%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20such%0A%20%20%20%20%20%20%20%20return%20wow%0A%20%20%20%20such%20%3D%20lambda%20wow%3A%204%0A%20%20%20%20return%20wow%28%29%0A%0Awow%20%3D%20much%28much%28much%29%29%28wow%29&codeDivHeight=400&codeDivWidth=350&cumulative=false&curInstr=0&heapPrimitives=nevernest&origin=opt-frontend.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false"></iframe>
+</solution>
+
+
+<h3 id="q8-environment-diagrams---challenge">Q8: Environment Diagrams - Challenge</h3>
+
+
+<blockquote><p>These questions were originally developed by
+<a href="http://albertwu.org/cs61a/">Albert Wu</a> and are included here for extra
+practice. We recommend checking your work in
+<a href="https://tutor.cs61a.org">PythonTutor</a> after filling in the diagrams for
+the code below.</p></blockquote>
+
+
+<h4 id="challenge-1">Challenge 1</h4>
+
+<p>Draw the environment diagram that results from executing the code below.</p>
+
+<blockquote><p>Guiding Notes:
+Pay special attention to the names of the frames!</p>
+
+<p>Multiple assignments in a single line:
+We will first evaluate the expressions on the right of the
+assignment, and then assign those values to the expressions on the left of
+the assignment. For example, if we had <code>x, y = a, b</code>, the process of
+evaluating this would be to first evaluate <code>a</code> and <code>b</code>, and then assign
+the value of <code>a</code> to <code>x</code>, and the value of <code>b</code> to <code>y</code>.</p></blockquote>
+
+<env-diagram awuexam1-diagram objects:5 frames:5,3,3,3>
+
+<pre><code>def funny(joke):
+    hoax = joke + 1
+    return funny(hoax)
+
+def sad(joke):
+    hoax = joke &#x2d; 1
+    return hoax + hoax
+
+funny, sad = sad, funny
+result = funny(sad(1))</code></pre>
+
+</env-diagram>
+
+<solution>
+<div class="sol-highlight">
+
+<p>In the line <code>funny, sad = sad, funny</code>, we will end up with the result that
+the <em>variable</em> <code>funny</code> now references the function whose <em>intrinsic name</em>
+(the name with which it was defined) is <code>sad</code>, and the <em>variable</em> <code>sad</code> now
+references the function whose <em>intrinsic name</em> is <code>funny</code>.</p>
+
+<p>Thus, when we call <code>funny(sad(1))</code> in the last line, we will evaluate the
+<em>variable</em> <code>funny</code> to be the <em>function</em> called <code>sad</code> (defined from
+<code>def sad(joke): ...</code>). The argument we want to pass into the <em>function call</em>
+is <code>sad(1)</code>, where the <em>variable</em> <code>sad</code> references the <em>function</em> <code>funny</code>
+(defined from <code>def funny(joke): ...</code>).</p>
+
+<p>Thus, our first function frame will be to evaluate <code>funny(1)</code> where this
+<code>funny</code> represents the intrinsic name of the actual function we're calling.</p>
+
+<p>Inside of <code>funny</code>, we have the call <code>funny(hoax)</code>, which will prompt us to
+look up what <code>funny</code> as a variable points to. No local variable in our
+function frame is called <code>funny</code>, so we go to the global frame, where the
+<em>variable</em> <code>funny</code> points to the <em>function</em> <code>sad</code>. As a result we will
+call <code>sad</code> on the value <code>hoax</code>.</p>
+
+<p>The return value of this function call then gets passed into a function call
+to <code>sad</code> (where this <code>sad</code> represents the intrinsic name of the function),
+and finally the return value of this function call to <code>sad</code> will be assigned
+to <code>result</code> in the global frame.</p>
+
+<p>Video walkthrough:</p>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/KeQbYOyrho4"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/KeQbYOyrho4'> YouTube link </a></p>
+
+</div>
+</solution>
+
+
+<h4 id="challenge-2">Challenge 2</h4>
+
+<p>Draw the environment diagram that results from executing the code below.</p>
+
+<env-diagram awuexam2-diagram objects:5 frames:5,3,3,3>
+
+<pre><code>def double(x):
+    return double(x + x)
+
+first = double
+
+def double(y):
+    return y + y
+
+result = first(10)</code></pre>
+
+</env-diagram>
+
+<solution>
+<div class="sol-highlight">
+
+<p>Video walkthrough:</p>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/KeQbYOyrho4"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/KeQbYOyrho4'> YouTube link </a></p>
+
+</div>
+</solution>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#submit">Submit</a></li>
+  <li><a href="#all-questions-are-optional">All Questions Are Optional</a></li>
+  <li><a href="#suggested-questions">Suggested Questions</a></li>
+  <ul>
+    <li><a href="#walkthrough-videos">Walkthrough Videos</a></li>
+    <li><a href="#control">Control</a></li>
+    <ul>
+      <li><a href="#q1-ordered-digits">Q1: Ordered Digits</a></li>
+      <li><a href="#q2-k-runner">Q2: K Runner</a></li>
+    </ul>
+    <li><a href="#higher-order-functions">Higher Order Functions</a></li>
+    <ul>
+      <li><a href="#q3-make-repeater">Q3: Make Repeater</a></li>
+      <li><a href="#q4-apply-twice">Q4: Apply Twice</a></li>
+      <li><a href="#q5-it-s-always-a-good-prime">Q5: It's Always a Good Prime</a></li>
+      <li><a href="#q6-church-numerals">Q6: Church numerals</a></li>
+    </ul>
+    <li><a href="#environment-diagrams">Environment Diagrams</a></li>
+    <ul>
+      <li><a href="#q7-doge">Q7: Doge</a></li>
+      <li><a href="#q8-environment-diagrams---challenge">Q8: Environment Diagrams - Challenge</a></li>
+      <ul>
+        <li><a href="#challenge-1">Challenge 1</a></li>
+        <li><a href="#challenge-2">Challenge 2</a></li>
+      </ul>
+    </ul>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>
