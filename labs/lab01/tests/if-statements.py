@@ -13,12 +13,11 @@ test = {
           ...         print(d)
           ...     print('foo')
           >>> ab(10, 20)
-          32606b4d8bc69544a1579aca287813dc
-          076de7ac11ca62f75f649af9dbe4149a
-          # locked
+          10
+          foo
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
@@ -33,17 +32,15 @@ test = {
           ...        return cake
           ...    return make
           >>> bake(0, 29)
-          f26f9ec9ba426ebfdd8a43b22c8c74a0
-          886cfa066159edb2578269b4d55d2239
-          886cfa066159edb2578269b4d55d2239
-          # locked
+          1
+          29
+          29
           >>> bake(1, "mashed potatoes")
-          18079ca0c56c783746b70728120f3747
-          575e1338b070e905f49b16443a77012f
-          # locked
+          mashed potatoes
+          'mashed potatoes'
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         }
       ],
