@@ -4,3 +4,5 @@ def akane():
 
 def akene_test():
     assert akane()=="akane", "Should be akane."
+
+akane()
