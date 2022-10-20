@@ -1,0 +1,26 @@
+{
+    "name": "Lab 8",
+    "endpoint": "cal/cs61a/fa22/lab08",
+    "src": [
+        "lab08.py"
+    ],
+    "tests": {
+        "lab*.py": "doctest",
+        "tests/*.py": "ok_test"
+    },
+    "default_tests": [
+        "link",
+        "convert_link",
+        "trees-wwpd",
+        "cumulative_mul",
+        "duplicate_link"
+    ],
+    "protocols": [
+        "restore",
+        "file_contents",
+        "unlock",
+        "grading",
+        "analytics",
+        "backup"
+    ]
+}
