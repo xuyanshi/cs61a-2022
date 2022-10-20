@@ -1,0 +1,31 @@
+{
+    "name": "Lab 3",
+    "endpoint": "cal/cs61a/fa22/lab03",
+    "src": [
+        "lab03.py"
+    ],
+    "tests": {
+        "lab*.py": "doctest",
+        "tests/*.py": "ok_test"
+    },
+    "default_tests": [
+        "ordered_digits",
+        "get_k_run_starter",
+        "make_repeater",
+        "apply_twice",
+        "div_by_primes_under",
+        "div_by_primes_under_no_lambda",
+        "church_to_int",
+        "add_church",
+        "mul_church",
+        "pow_church"
+    ],
+    "protocols": [
+        "restore",
+        "file_contents",
+        "analytics",
+        "unlock",
+        "grading",
+        "backup"
+    ]
+}
