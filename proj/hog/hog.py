@@ -44,6 +44,12 @@ def tail_points(opponent_score):
     """
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    def delta(a, b):
+        if a>b:
+            return 1+2*(a-b)
+        else:
+            return 1+2*(b-a)
+    return delta(opponent_score%10,(opponent_score//10)%10)
     # END PROBLEM 2
 
 
