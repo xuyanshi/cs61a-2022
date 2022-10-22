@@ -97,7 +97,9 @@ def composite_identity(f, g):
     False
     """
     "*** YOUR CODE HERE ***"
-
+    def com_iden(n):
+        return composer(f,g)(n)==composer(g,f)(n)
+    return com_iden
 
 def cycle(f1, f2, f3):
     """Returns a function that is itself a higher-order function.
@@ -126,3 +128,17 @@ def cycle(f1, f2, f3):
     19
     """
     "*** YOUR CODE HERE ***"
+    def my_cycle(n):
+        def f(x): 
+            if(n<=0):
+                return x
+            elif(n==1):
+                return f1(x)
+            elif(n==2):
+                return f2(f1(x))
+            elif(n==3):
+                return f3(f2(f1(x)))
+            else:
+                return my_cycle(n-3)(f3(f2(f1(x))))
+        return f
+    return my_cycle
