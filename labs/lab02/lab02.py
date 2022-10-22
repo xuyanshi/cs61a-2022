@@ -13,8 +13,7 @@ def lambda_curry2(func):
     >>> lambda_curry2(mod)(123)(10)
     3
     """
-    "*** YOUR CODE HERE ***"
-    return ______
+    return lambda x: lambda y:func(x,y)
 
 
 def lambda_curry2_syntax_check():
@@ -56,7 +55,14 @@ def count_cond(condition):
     8
     """
     "*** YOUR CODE HERE ***"
-
+    def cond(n):
+        i,cnt=1,0
+        while i<=n:
+            if condition(n,i):
+                cnt+=1
+            i+=1
+        return cnt
+    return cond
 
 def composer(f, g):
     """Return the composition function which given x, computes f(g(x)).
