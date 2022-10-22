@@ -313,8 +313,12 @@ def tail_strategy(score, opponent_score, threshold=12, num_rolls=6):
     points, and returns NUM_ROLLS otherwise. Ignore score and Square Swine.
     """
     # BEGIN PROBLEM 10
-    
-    return num_rolls  # Remove this line once implemented.
+    pig_tail = tail_points(opponent_score)
+    if pig_tail>=threshold:
+        return 0
+    else:
+        return num_rolls
+    #return num_rolls  # Remove this line once implemented.
     # END PROBLEM 10
 
 

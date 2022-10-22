@@ -7,41 +7,37 @@ test = {
         {
           'code': r"""
           >>> tail_strategy(40, 51, threshold=7, num_rolls=2)
-          962aea5f59fc55bd65ccacf4603c8f22
-          # locked
+          0
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
           'code': r"""
           >>> tail_strategy(40, 53, threshold=7, num_rolls=2)
-          46caef5ffd6d72c8757279cbcf01b12f
-          # locked
+          2
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
           'code': r"""
           >>> tail_strategy(40, 51, threshold=12, num_rolls=5)
-          26f5762c932a578994ea1c8fc7fa6c02
-          # locked
+          5
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
           'code': r"""
           >>> tail_strategy(40, 52, threshold=7, num_rolls=2)
-          962aea5f59fc55bd65ccacf4603c8f22
-          # locked
+          0
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
