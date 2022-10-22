@@ -261,11 +261,14 @@ def max_scoring_num_rolls(dice=six_sided, total_samples=1000):
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
     max_num=1
+    cur_num=1
     max_average=make_averaged(roll_dice,total_samples)(1,dice)
-    for i in range(1,11):
-        cur_average=make_averaged(roll_dice,total_samples)(i,dice)
+    while cur_num<10:
+        cur_num += 1
+        cur_average=make_averaged(roll_dice,total_samples)(cur_num,dice)
         if cur_average>max_average:
-            max_num=i
+            max_num=cur_num
+            max_average=cur_average
     return max_num
     # END PROBLEM 9
 
