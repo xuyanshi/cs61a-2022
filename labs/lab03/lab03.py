@@ -91,6 +91,11 @@ def make_repeater(func, n):
     5
     """
     "*** YOUR CODE HERE ***"
+    g=identity
+    while n>0:
+        n -= 1
+        g = composer(func,g)
+    return g
     
 
 def composer(func1, func2):
