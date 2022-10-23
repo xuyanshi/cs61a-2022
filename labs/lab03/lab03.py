@@ -57,16 +57,23 @@ def get_k_run_starter(n, k):
     >>> get_k_run_starter(1234234534564567, 2)
     2
     """
-    i = 0
-    final = None
-    while ____________________________:
-        while ____________________________:
-            ____________________________
-        final = ____________________________
-        i = ____________________________
-        n = ____________________________
+    final = -1
+    while k>=0:
+        min_digit=10
+        while n>0:
+            curr_digit = n%10
+            if curr_digit>=min_digit:
+                k-=1
+                final=min_digit
+                break
+            min_digit=curr_digit
+            n //= 10
+        if n==0:
+            k-=1
+            final=min_digit
     return final
 
+# get_k_run_starter(123444345, 3)
 
 def make_repeater(func, n):
     """Return the function that computes the nth application of func.
