@@ -29,7 +29,14 @@ def ordered_digits(x):
 
     """
     "*** YOUR CODE HERE ***"
-
+    min_digit=x%10
+    while x>0:
+        curr_digit = x%10
+        if curr_digit>min_digit:
+            return False
+        min_digit=curr_digit
+        x //= 10
+    return True
 
 def get_k_run_starter(n, k):
     """Returns the 0th digit of the kth increasing run within n.
