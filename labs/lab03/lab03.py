@@ -114,6 +114,9 @@ def apply_twice(func):
     16
     """
     "*** YOUR CODE HERE ***"
+    def f(x):
+        return make_repeater(func,2)(x)
+    return f
 
 
 def div_by_primes_under(n):
