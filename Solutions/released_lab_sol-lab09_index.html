@@ -1,0 +1,1202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/lab.css">
+
+
+    <title>
+Lab 9 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Lab 9 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="lab09.zip" class="label label-outline">lab09.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+
+
+    
+<h1 id="all-questions-are-optional">All Questions Are Optional</h1>
+
+
+<p>The questions in this assignment are not graded, but they are highly
+recommended to help you prepare for the upcoming exam. You will receive
+credit for this lab even if you do not complete these questions.</p>
+
+
+<h2 id="recursion-and-tree-recursion">Recursion and Tree Recursion</h2>
+
+
+
+<h3 id="q1-subsequences">Q1: Subsequences</h3>
+
+
+<p>A subsequence of a sequence <code>S</code> is a subset of elements from <code>S</code>, in the same
+order they appear in <code>S</code>. Consider the list <code>[1, 2, 3]</code>. Here are a few of it's
+subsequences <code>[]</code>, <code>[1, 3]</code>, <code>[2]</code>, and <code>[1, 2, 3]</code>.</p>
+
+<p>Write a function that takes in a list and returns all possible subsequences of that list.
+The subsequences should be returned as a list of lists, where each nested list is a
+subsequence of the original input.</p>
+
+<p>In order to accomplish this, you might first want to write a function <code>insert_into_all</code>
+that takes an item and a list of lists, adds the item to the beginning of each nested list,
+and returns the resulting list.</p>
+
+<solution>
+
+<pre><code>def insert_into_all(item, nested_list):
+    &quot;&quot;&quot;Return a new list consisting of all the lists in nested_list,
+    but with item added to the front of each. You can assume that
+     nested_list is a list of lists.
+
+    &gt;&gt;&gt; nl = [[], [1, 2], [3]]
+    &gt;&gt;&gt; insert_into_all(0, nl)
+    [[0], [0, 1, 2], [0, 3]]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return [[item] + lst for lst in nested_list]</div>
+def subseqs(s):
+    &quot;&quot;&quot;Return a nested list (a list of lists) of all subsequences of S.
+    The subsequences can appear in any order. You can assume S is a list.
+
+    &gt;&gt;&gt; seqs = subseqs([1, 2, 3])
+    &gt;&gt;&gt; sorted(seqs)
+    [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]
+    &gt;&gt;&gt; subseqs([])
+    [[]]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if not s:</div><div class="sol-highlight">        return [[]]</div>    else:
+<div class="sol-highlight">        subset = subseqs(s[1:])</div><div class="sol-highlight">        return insert_into_all(s[0], subset) + subset</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q subseqs<button id="copy-code-python3ok-qsubseqs" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qsubseqs").onclick = () => copyCode('python3 ok -q subseqs', "copy-code-python3ok-qsubseqs");
+        </script>
+        <br/>
+
+
+<h3 id="q2-non-decreasing-subsequences">Q2: Non-Decreasing Subsequences</h3>
+
+
+<p>Just like the last question, we want to write a function that takes a list and
+returns a list of lists, where each individual list is a subsequence of the
+original input.</p>
+
+<p>This time we have another condition: we only want the subsequences for which
+consecutive elements are <em>nondecreasing</em>.  For example, <code>[1, 3, 2]</code> is a
+subsequence of <code>[1, 3, 2, 4]</code>, but since 2 &lt; 3, this subsequence would <em>not</em>
+be included in our result.</p>
+
+<p>You may assume that the list passed in as <code>s</code> contains only nonnegative elements.</p>
+
+<p><strong>Fill in the blanks</strong> to complete the implementation of the <code>non_decrease_subseqs</code>
+function. You may assume that the input list contains no negative elements.</p>
+
+<p>You may use the provided helper function <code>insert_into_all</code>, which takes in an
+<code>item</code> and a list of lists and inserts the <code>item</code> to the front of each list.</p>
+
+<solution>
+
+<pre><code>def non_decrease_subseqs(s):
+    &quot;&quot;&quot;Assuming that S is a list, return a nested list of all subsequences
+    of S (a list of lists) for which the elements of the subsequence
+    are strictly nondecreasing. The subsequences can appear in any order.
+
+    &gt;&gt;&gt; seqs = non_decrease_subseqs([1, 3, 2])
+    &gt;&gt;&gt; sorted(seqs)
+    [[], [1], [1, 2], [1, 3], [2], [3]]
+    &gt;&gt;&gt; non_decrease_subseqs([])
+    [[]]
+    &gt;&gt;&gt; seqs2 = non_decrease_subseqs([1, 1, 2])
+    &gt;&gt;&gt; sorted(seqs2)
+    [[], [1], [1], [1, 1], [1, 1, 2], [1, 2], [1, 2], [2]]
+    &quot;&quot;&quot;
+    def subseq_helper(s, prev):
+        if not s:
+<div class="sol-highlight">            return [[]]</div>        elif s[0] &lt; prev:
+<div class="sol-highlight">            return subseq_helper(s[1:], prev)</div>        else:
+<div class="sol-highlight">            a = subseq_helper(s[1:], s[0])</div><div class="sol-highlight">            b = subseq_helper(s[1:], prev)</div><div class="sol-highlight">            return insert_into_all(s[0], a) + b</div><div class="sol-highlight">    return subseq_helper(s, 0)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q non_decrease_subseqs<button id="copy-code-python3ok-qnon_decrease_subseqs" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qnon_decrease_subseqs").onclick = () => copyCode('python3 ok -q non_decrease_subseqs', "copy-code-python3ok-qnon_decrease_subseqs");
+        </script>
+        <br/>
+
+
+<h3 id="q3-number-of-trees">Q3: Number of Trees</h3>
+
+
+<p>A <strong>full binary tree</strong> is a tree where each node has either 2 branches or 0 branches, but never 1 branch.</p>
+
+<p>Write a function which returns the number of unique full binary tree structures that have exactly n leaves.
+See the doctests for visualizations of the possible full binary tree sturctures that have 1, 2, and 3 leaves.</p>
+
+<blockquote><p><strong>Hint</strong>: A full binary tree can be constructed by connecting two smaller full binary trees to a root node. 
+If the two smaller full binary trees have <code>a</code> and <code>b</code> leaves, the new full binary tree will have <code>a + b</code> leaves.
+For example, as shown in the first diagram below, a full binary tree with 4 leaves can be constructed by connecting 
+a full binary tree that has three leaves (yellow) with a full binary tree that has one leaf (orange).
+A full binary tree with 4 leaves can also be constructed by connecting two full binary trees with 2 leaves each (second diagram)
+<img class="img-responsive center-block" src="assets/num_trees_ex1.png" alt="4-leaf Full Binary Tree 1" title="4-leaf Full Binary Tree 1" width="" height=""></p>
+
+<p><img class="img-responsive center-block" src="assets/num_trees_ex2.png" alt="4-leaf Full Binary Tree 2" title="4-leaf Full Binary Tree 2" width="" height=""></p></blockquote>
+
+<p>For those interested in combinatorics, this problem does have a <a href="http://en.wikipedia.org/wiki/Catalan_number">closed
+form solution</a>):</p>
+
+<solution>
+
+<pre><code>def num_trees(n):
+    &quot;&quot;&quot;Returns the number of unique full binary trees with exactly n leaves. E.g.,
+
+    1   2        3       3    ...
+    *   *        *       *
+       / \      / \     / \
+      *   *    *   *   *   *
+              / \         / \
+             *   *       *   *
+
+    &gt;&gt;&gt; num_trees(1)
+    1
+    &gt;&gt;&gt; num_trees(2)
+    1
+    &gt;&gt;&gt; num_trees(3)
+    2
+    &gt;&gt;&gt; num_trees(8)
+    429
+
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if n == 1:
+        return 1
+    return sum(num_trees(k) * num_trees(n&#x2d;k) for k in range(1, n))</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q num_trees<button id="copy-code-python3ok-qnum_trees" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qnum_trees").onclick = () => copyCode('python3 ok -q num_trees', "copy-code-python3ok-qnum_trees");
+        </script>
+        <br/>
+
+
+<h2 id="generators">Generators</h2>
+
+
+
+<h3 id="q4-partition-generator">Q4: Partition Generator</h3>
+
+
+<p>Construct the generator function <code>partition_gen</code>, which takes in a number <code>n</code> and returns an <em>n-partition iterator</em>. An <em>n-partition iterator</em> yields partitions of <code>n</code>, where a partition of <code>n</code> is a list of integers whose sum is <code>n</code>. The iterator should only return unique partitions; the order of numbers within a partition and the order in which partitions are returned does not matter.</p>
+
+<p><strong>Important:</strong> The skeleton code is only a suggestion; feel free to add or remove lines as you see fit.</p>
+
+<solution>
+
+<pre><code>def partition_gen(n):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; for partition in partition_gen(4): # note: order doesn&#x27;t matter
+    ...     print(partition)
+    [4]
+    [3, 1]
+    [2, 2]
+    [2, 1, 1]
+    [1, 1, 1, 1]
+    &quot;&quot;&quot;
+    def yield_helper(j, k):
+        if j == 0:
+<div class="sol-highlight">            yield []</div><div class="sol-highlight">        elif k &gt; 0 and j &gt; 0:</div><div class="sol-highlight">            for small_part in yield_helper(j&#x2d;k, k):</div><div class="sol-highlight">                yield [k] + small_part</div><div class="sol-highlight">            yield from yield_helper(j, k &#x2d; 1)</div>    yield from yield_helper(n, n)</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q partition_gen<button id="copy-code-python3ok-qpartition_gen" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qpartition_gen").onclick = () => copyCode('python3 ok -q partition_gen', "copy-code-python3ok-qpartition_gen");
+        </script>
+        <br/>
+
+
+<h2 id="objects">Objects</h2>
+
+
+
+<h3 id="q5-vending-machine">Q5: Vending Machine</h3>
+
+
+<p>In this question you'll create a <a href="https://en.wikipedia.org/wiki/Vending_machine">vending machine</a> that only outputs a single product and provides change when needed.</p>
+
+<p>Create a class called <code>VendingMachine</code> that represents a vending
+machine for some product. A <code>VendingMachine</code> object returns strings
+describing its interactions. Remember to match <em>exactly</em> the strings in the doctests -- including punctuation and spacing!</p>
+
+<p>Fill in the <code>VendingMachine</code> class, <em>adding attributes and methods as appropriate</em>, such that its behavior matches the following doctests:</p>
+
+<solution>
+
+<pre><code>class VendingMachine:
+    &quot;&quot;&quot;A vending machine that vends some product for some price.
+
+    &gt;&gt;&gt; v = VendingMachine(&#x27;candy&#x27;, 10)
+    &gt;&gt;&gt; v.vend()
+    &#x27;Nothing left to vend. Please restock.&#x27;
+    &gt;&gt;&gt; v.add_funds(15)
+    &#x27;Nothing left to vend. Please restock. Here is your $15.&#x27;
+    &gt;&gt;&gt; v.restock(2)
+    &#x27;Current candy stock: 2&#x27;
+    &gt;&gt;&gt; v.vend()
+    &#x27;Please update your balance with $10 more funds.&#x27;
+    &gt;&gt;&gt; v.add_funds(7)
+    &#x27;Current balance: $7&#x27;
+    &gt;&gt;&gt; v.vend()
+    &#x27;Please update your balance with $3 more funds.&#x27;
+    &gt;&gt;&gt; v.add_funds(5)
+    &#x27;Current balance: $12&#x27;
+    &gt;&gt;&gt; v.vend()
+    &#x27;Here is your candy and $2 change.&#x27;
+    &gt;&gt;&gt; v.add_funds(10)
+    &#x27;Current balance: $10&#x27;
+    &gt;&gt;&gt; v.vend()
+    &#x27;Here is your candy.&#x27;
+    &gt;&gt;&gt; v.add_funds(15)
+    &#x27;Nothing left to vend. Please restock. Here is your $15.&#x27;
+
+    &gt;&gt;&gt; w = VendingMachine(&#x27;soda&#x27;, 2)
+    &gt;&gt;&gt; w.restock(3)
+    &#x27;Current soda stock: 3&#x27;
+    &gt;&gt;&gt; w.restock(3)
+    &#x27;Current soda stock: 6&#x27;
+    &gt;&gt;&gt; w.add_funds(2)
+    &#x27;Current balance: $2&#x27;
+    &gt;&gt;&gt; w.vend()
+    &#x27;Here is your soda.&#x27;
+    &quot;&quot;&quot;
+<div class="sol-highlight">    def __init__(self, product, price):
+        self.product = product
+        self.price = price
+        self.stock = 0
+        self.balance = 0
+
+    def restock(self, n):
+        self.stock += n
+        return f&#x27;Current {self.product} stock: {self.stock}&#x27;
+
+    def add_funds(self, n):
+        if self.stock == 0:
+            return f&#x27;Nothing left to vend. Please restock. Here is your ${n}.&#x27;
+            # Alternatively, we could have:
+            # return self.vend() + f&#x27; Here is your ${n}.&#x27;
+        self.balance += n
+        return f&#x27;Current balance: ${self.balance}&#x27;
+
+    def vend(self):
+        if self.stock == 0:
+            return &#x27;Nothing left to vend. Please restock.&#x27;
+        difference = self.price &#x2d; self.balance
+        if difference &gt; 0:
+            return f&#x27;Please update your balance with ${difference} more funds.&#x27;
+        message = f&#x27;Here is your {self.product}&#x27;
+        if difference != 0:
+            message += f&#x27; and ${&#x2d;difference} change&#x27;
+        self.balance = 0
+        self.stock &#x2d;= 1
+        return message + &#x27;.&#x27;</div></code></pre>
+
+</solution>
+
+<blockquote><p>You may find Python's formatted string literals, or <a href="https://docs.python.org/3/tutorial/inputoutput.html#fancier-output-formatting">f-strings</a> useful.
+A quick example:</p>
+
+<pre><code>&gt;&gt;&gt; feeling = &#x27;love&#x27;
+&gt;&gt;&gt; course = &#x27;61A!&#x27;
+&gt;&gt;&gt; f&#x27;I {feeling} {course}&#x27;
+&#x27;I love 61A!&#x27;</code></pre></blockquote>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q VendingMachine<button id="copy-code-python3ok-qVendingMachine" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qVendingMachine").onclick = () => copyCode('python3 ok -q VendingMachine', "copy-code-python3ok-qVendingMachine");
+        </script>
+        <br/>
+
+<blockquote><p>If you're curious about alternate methods of string formatting, you can also check out an older method of <a href="https://docs.python.org/2/library/stdtypes.html#str.format">Python string formatting</a>.
+A quick example:</p>
+
+<pre><code>&gt;&gt;&gt; ten, twenty, thirty = 10, &#x27;twenty&#x27;, [30]
+&gt;&gt;&gt; &#x27;{0} plus {1} is {2}&#x27;.format(ten, twenty, thirty)
+&#x27;10 plus twenty is [30]&#x27;</code></pre></blockquote>
+
+<div class="sol-highlight">
+
+<p>Reading through the doctests, it should be clear which functions we should add
+to ensure that the vending machine class behaves correctly.</p>
+
+<p><code>__init__</code></p>
+
+<ul>
+  <li>This can be difficult to fill out at first. Both <code>product</code> and <code>price</code> seem
+  pretty obvious to keep around, but <code>stock</code> and <code>balance</code> are quantities that
+  are needed only after attempting other functions.</li>
+</ul>
+
+<p><code>restock</code></p>
+
+<ul>
+  <li>Even though <code>v.restock(2)</code> takes only one argument in the doctest, remember
+  that <code>self</code> is bound to the object the <code>restock</code> method is invoked on.
+  Therefore, this function has two parameters.</li>
+  <li>While implementing this function, you will probably realize that you would
+  like to keep track of the stock somewhere. While it might be possible to set
+  the stock in this function as an instance attribute, it would lose whatever
+  the old stock was.
+  Therefore, the natural solution is to initialize stock in the constructor, and
+  then update it in <code>restock</code>.</li>
+</ul>
+
+<p><code>add_funds</code></p>
+
+<ul>
+  <li>This behaves very similarly to <code>restock</code>. See comments above.</li>
+  <li>Also yes, this is quite the expensive vending machine.</li>
+</ul>
+
+<p><code>vend</code></p>
+
+<ul>
+  <li><p>The trickiest thing here is to make sure we handle all the cases. You may find
+  it helpful when implementing a problem like this to keep track of all the
+  errors we run into in the doctest.</p>
+
+  <ol>
+    <li>No stock</li>
+    <li>Not enough balance</li>
+    <li>Leftover balance after purchase (return change to customer)</li>
+    <li>No leftover balance after purchase</li>
+  </ol></li>
+  <li><p>We use some string concatenation at the end when handling case 3 and 4 to try
+  and reduce the amount of code. This isn't necessary for correctness -- it's ok
+  to have something like:</p>
+
+<pre><code>if difference != 0:
+    return ...
+else:
+    return ...</code></pre>
+
+  <p>Of course, that would require decrementing the balance and stock beforehand.</p></li>
+</ul>
+
+</div>
+
+
+<h2 id="mutable-lists">Mutable Lists</h2>
+
+
+
+<h3 id="q6-trade">Q6: Trade</h3>
+
+
+<p>In the integer market, each participant has a list of positive integers to
+trade. When two participants meet, they trade the smallest non-empty prefix of
+their list of integers. A prefix is a slice that starts at index
+0.</p>
+
+<p>Write a function <code>trade</code> that exchanges the first <code>m</code> elements of list <code>first</code>
+with the first <code>n</code> elements of list <code>second</code>, such that the sums of those
+elements are equal, and the sum is as small as possible. If no such prefix
+exists, return the string <code>&#x27;No deal!&#x27;</code> and do not change either list. Otherwise
+change both lists and return <code>&#x27;Deal!&#x27;</code>. A partial implementation is provided.</p>
+
+<blockquote><p><strong>Hint:</strong> You can mutate a slice of a list using <em>slice assignment</em>. To do so, specify
+a slice of the list <code>[i:j]</code> on the left-hand side of an assignment statement
+and another list on the right-hand side of the assignment statement. The
+operation will replace the entire given slice of the list from <code>i</code> inclusive
+to <code>j</code> exclusive with the elements from the given list. The slice and the
+given list need not be the same length.</p>
+
+<pre><code>&gt;&gt;&gt; a = [1, 2, 3, 4, 5, 6]
+&gt;&gt;&gt; b = a
+&gt;&gt;&gt; a[2:5] = [10, 11, 12, 13]
+&gt;&gt;&gt; a
+[1, 2, 10, 11, 12, 13, 6]
+&gt;&gt;&gt; b
+[1, 2, 10, 11, 12, 13, 6]</code></pre>
+
+<p>Additionally, recall that the starting and ending indices for a slice can be left out
+and Python will use a default value. <code>lst[i:]</code> is the same as <code>lst[i:len(lst)]</code>, and
+<code>lst[:j]</code> is the same as <code>lst[0:j]</code>.</p></blockquote>
+
+<solution>
+
+<pre><code>def trade(first, second):
+    &quot;&quot;&quot;Exchange the smallest prefixes of first and second that have equal sum.
+
+    &gt;&gt;&gt; a = [1, 1, 3, 2, 1, 1, 4]
+    &gt;&gt;&gt; b = [4, 3, 2, 7]
+    &gt;&gt;&gt; trade(a, b) # Trades 1+1+3+2=7 for 4+3=7
+    &#x27;Deal!&#x27;
+    &gt;&gt;&gt; a
+    [4, 3, 1, 1, 4]
+    &gt;&gt;&gt; b
+    [1, 1, 3, 2, 2, 7]
+    &gt;&gt;&gt; c = [3, 3, 2, 4, 1]
+    &gt;&gt;&gt; trade(b, c)
+    &#x27;No deal!&#x27;
+    &gt;&gt;&gt; b
+    [1, 1, 3, 2, 2, 7]
+    &gt;&gt;&gt; c
+    [3, 3, 2, 4, 1]
+    &gt;&gt;&gt; trade(a, c)
+    &#x27;Deal!&#x27;
+    &gt;&gt;&gt; a
+    [3, 3, 2, 1, 4]
+    &gt;&gt;&gt; b
+    [1, 1, 3, 2, 2, 7]
+    &gt;&gt;&gt; c
+    [4, 3, 1, 4, 1]
+    &gt;&gt;&gt; d = [1, 1]
+    &gt;&gt;&gt; e = [2]
+    &gt;&gt;&gt; trade(d, e)
+    &#x27;Deal!&#x27;
+    &gt;&gt;&gt; d
+    [2]
+    &gt;&gt;&gt; e
+    [1, 1]
+    &quot;&quot;&quot;
+    m, n = 1, 1
+
+<div class="sol-highlight">    equal_prefix = lambda: sum(first[:m]) == sum(second[:n])</div><div class="sol-highlight">    while m &lt;= len(first) and n &lt;= len(second) and not equal_prefix():</div><div class="sol-highlight">        if sum(first[:m]) &lt; sum(second[:n]):</div>            m += 1
+        else:
+            n += 1
+
+    if equal_prefix():
+        first[:m], second[:n] = second[:n], first[:m]
+        return &#x27;Deal!&#x27;
+    else:
+        return &#x27;No deal!&#x27;</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q trade<button id="copy-code-python3ok-qtrade" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qtrade").onclick = () => copyCode('python3 ok -q trade', "copy-code-python3ok-qtrade");
+        </script>
+        <br/>
+
+
+<h3 id="q7-shuffle">Q7: Shuffle</h3>
+
+
+<p>Define a function <code>shuffle</code> that takes a sequence with an even number of
+elements (cards) and creates a new list that interleaves the elements
+of the first half with the elements of the second half.</p>
+
+<p>To interleave two sequences <code>s0</code> and <code>s1</code> is to create a new sequence such that the new sequence contains (in this order) the first element of <code>s0</code>,  the first element of <code>s1</code>, the second element of <code>s0</code>, the second element of <code>s1</code>, and so on.</p>
+
+<blockquote><p><strong>Note:</strong>
+If you're running into an issue where the special
+heart / diamond / spades / clubs symbols are erroring in the doctests,
+feel free to copy paste the below doctests into your file
+as these don't use the special characters and should not give
+an "illegal multibyte sequence" error.</p></blockquote>
+
+<solution>
+
+<pre><code>def card(n):
+    &quot;&quot;&quot;Return the playing card numeral as a string for a positive n &lt;= 13.&quot;&quot;&quot;
+    assert type(n) == int and n &gt; 0 and n &lt;= 13, &quot;Bad card n&quot;
+    specials = {1: &#x27;A&#x27;, 11: &#x27;J&#x27;, 12: &#x27;Q&#x27;, 13: &#x27;K&#x27;}
+    return specials.get(n, str(n))
+
+def shuffle(cards):
+    &quot;&quot;&quot;Return a shuffled list that interleaves the two halves of cards.
+
+    &gt;&gt;&gt; shuffle(range(6))
+    [0, 3, 1, 4, 2, 5]
+    &gt;&gt;&gt; suits = [&#x27;H&#x27;, &#x27;D&#x27;, &#x27;S&#x27;, &#x27;C&#x27;]
+    &gt;&gt;&gt; cards = [card(n) + suit for n in range(1,14) for suit in suits]
+    &gt;&gt;&gt; cards[:12]
+    [&#x27;AH&#x27;, &#x27;AD&#x27;, &#x27;AS&#x27;, &#x27;AC&#x27;, &#x27;2H&#x27;, &#x27;2D&#x27;, &#x27;2S&#x27;, &#x27;2C&#x27;, &#x27;3H&#x27;, &#x27;3D&#x27;, &#x27;3S&#x27;, &#x27;3C&#x27;]
+    &gt;&gt;&gt; cards[26:30]
+    [&#x27;7S&#x27;, &#x27;7C&#x27;, &#x27;8H&#x27;, &#x27;8D&#x27;]
+    &gt;&gt;&gt; shuffle(cards)[:12]
+    [&#x27;AH&#x27;, &#x27;7S&#x27;, &#x27;AD&#x27;, &#x27;7C&#x27;, &#x27;AS&#x27;, &#x27;8H&#x27;, &#x27;AC&#x27;, &#x27;8D&#x27;, &#x27;2H&#x27;, &#x27;8S&#x27;, &#x27;2D&#x27;, &#x27;8C&#x27;]
+    &gt;&gt;&gt; shuffle(shuffle(cards))[:12]
+    [&#x27;AH&#x27;, &#x27;4D&#x27;, &#x27;7S&#x27;, &#x27;10C&#x27;, &#x27;AD&#x27;, &#x27;4S&#x27;, &#x27;7C&#x27;, &#x27;JH&#x27;, &#x27;AS&#x27;, &#x27;4C&#x27;, &#x27;8H&#x27;, &#x27;JD&#x27;]
+    &gt;&gt;&gt; cards[:12]  # Should not be changed
+    [&#x27;AH&#x27;, &#x27;AD&#x27;, &#x27;AS&#x27;, &#x27;AC&#x27;, &#x27;2H&#x27;, &#x27;2D&#x27;, &#x27;2S&#x27;, &#x27;2C&#x27;, &#x27;3H&#x27;, &#x27;3D&#x27;, &#x27;3S&#x27;, &#x27;3C&#x27;]
+    &quot;&quot;&quot;
+    assert len(cards) % 2 == 0, &#x27;len(cards) must be even&#x27;
+<div class="sol-highlight">    half = len(cards) // 2</div>    shuffled = []
+<div class="sol-highlight">    for i in range(half):</div><div class="sol-highlight">        shuffled.append(cards[i])</div><div class="sol-highlight">        shuffled.append(cards[half+i])</div>    return shuffled</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q shuffle<button id="copy-code-python3ok-qshuffle" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qshuffle").onclick = () => copyCode('python3 ok -q shuffle', "copy-code-python3ok-qshuffle");
+        </script>
+        <br/>
+
+
+<h2 id="linked-lists">Linked Lists</h2>
+
+
+
+<h3 id="q8-insert">Q8: Insert</h3>
+
+
+<p>Implement a function <code>insert</code> that takes a <code>Link</code>, a <code>value</code>, and an
+<code>index</code>, and inserts the <code>value</code> into the <code>Link</code> at the given <code>index</code>.
+You can assume the linked list already has at least one element. Do not
+return anything -- <code>insert</code> should mutate the linked list.</p>
+
+<blockquote><p><strong>Note</strong>: If the index is out of bounds, you should raise an <code>IndexError</code> with:</p>
+
+<pre><code>raise IndexError(&#x27;Out of bounds!&#x27;)</code></pre></blockquote>
+
+<solution>
+
+<pre><code>def insert(link, value, index):
+    &quot;&quot;&quot;Insert a value into a Link at the given index.
+
+    &gt;&gt;&gt; link = Link(1, Link(2, Link(3)))
+    &gt;&gt;&gt; print(link)
+    &lt;1 2 3&gt;
+    &gt;&gt;&gt; other_link = link
+    &gt;&gt;&gt; insert(link, 9001, 0)
+    &gt;&gt;&gt; print(link)
+    &lt;9001 1 2 3&gt;
+    &gt;&gt;&gt; link is other_link # Make sure you are using mutation! Don&#x27;t create a new linked list.
+    True
+    &gt;&gt;&gt; insert(link, 100, 2)
+    &gt;&gt;&gt; print(link)
+    &lt;9001 1 100 2 3&gt;
+    &gt;&gt;&gt; insert(link, 4, 5)
+    Traceback (most recent call last):
+        ...
+    IndexError: Out of bounds!
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if index == 0:
+        link.rest = Link(link.first, link.rest)
+        link.first = value
+    elif link.rest is Link.empty:
+        raise IndexError(&quot;Out of bounds!&quot;)
+    else:
+        insert(link.rest, value, index &#x2d; 1)</div>
+<div class="sol-highlight"># iterative solution
+def insert_iter(link, value, index):
+    while index &gt; 0 and link.rest is not Link.empty:
+        link = link.rest
+        index &#x2d;= 1
+    if index == 0:
+        link.rest = Link(link.first, link.rest)
+        link.first = value
+    else:
+        raise IndexError</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q insert<button id="copy-code-python3ok-qinsert" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qinsert").onclick = () => copyCode('python3 ok -q insert', "copy-code-python3ok-qinsert");
+        </script>
+        <br/>
+
+
+<h3 id="q9-deep-linked-list-length">Q9: Deep Linked List Length</h3>
+
+
+<p>A linked list that contains one or more linked lists as elements is called a
+<em>deep</em> linked list. Write a function <code>deep_len</code> that takes in a (possibly deep)
+linked list and returns the <em>deep length</em> of that linked list. The deep length of
+a linked list is the total number of non-link elements in the list, as well as the
+total number of elements contained in all contained lists. See the function's doctests
+for examples of the deep length of linked lists.</p>
+
+<blockquote><p><strong>Hint:</strong> Use <code>isinstance</code> to check if something is an instance of an object.</p></blockquote>
+
+<solution>
+
+<pre><code>def deep_len(lnk):
+    &quot;&quot;&quot; Returns the deep length of a possibly deep linked list.
+
+    &gt;&gt;&gt; deep_len(Link(1, Link(2, Link(3))))
+    3
+    &gt;&gt;&gt; deep_len(Link(Link(1, Link(2)), Link(3, Link(4))))
+    4
+    &gt;&gt;&gt; levels = Link(Link(Link(1, Link(2)), \
+            Link(3)), Link(Link(4), Link(5)))
+    &gt;&gt;&gt; print(levels)
+    &lt;&lt;&lt;1 2&gt; 3&gt; &lt;4&gt; 5&gt;
+    &gt;&gt;&gt; deep_len(levels)
+    5
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if lnk is Link.empty:</div>        return 0
+<div class="sol-highlight">    elif not isinstance(lnk, Link):</div>        return 1
+    else:
+<div class="sol-highlight">        return deep_len(lnk.first) + deep_len(lnk.rest)</div></code></pre>
+
+</solution>
+
+<div class="sol-highlight">
+	Video Walkthrough: <p><a href='https://youtu.be/pbMeCRUU7yw?t=2m28s'> YouTube link </a></p>
+</div>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q deep_len<button id="copy-code-python3ok-qdeep_len" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdeep_len").onclick = () => copyCode('python3 ok -q deep_len', "copy-code-python3ok-qdeep_len");
+        </script>
+        <br/>
+
+
+<h3 id="q10-linked-lists-as-strings">Q10: Linked Lists as Strings</h3>
+
+
+<p>Kevin and Jerry like different ways of displaying the linked list
+structure in Python. While Kevin likes box and pointer diagrams,
+Jerry prefers a more futuristic way. Write a function
+<code>make_to_string</code> that returns a function that converts the
+linked list to a string in their preferred style.</p>
+
+<p><em>Hint</em>:  You can convert numbers to strings using the <code>str</code> function,
+and you can combine strings together using <code>+</code>.</p>
+
+<pre><code>&gt;&gt;&gt; str(4)
+&#x27;4&#x27;
+&gt;&gt;&gt; &#x27;cs &#x27; + str(61) + &#x27;a&#x27;
+&#x27;cs 61a&#x27;</code></pre>
+
+<solution>
+
+<pre><code>def make_to_string(front, mid, back, empty_repr):
+    &quot;&quot;&quot; Returns a function that turns linked lists to strings.
+
+    &gt;&gt;&gt; kevins_to_string = make_to_string(&quot;[&quot;, &quot;|&#x2d;]&#x2d;&#x2d;&gt;&quot;, &quot;&quot;, &quot;[]&quot;)
+    &gt;&gt;&gt; jerrys_to_string = make_to_string(&quot;(&quot;, &quot; . &quot;, &quot;)&quot;, &quot;()&quot;)
+    &gt;&gt;&gt; lst = Link(1, Link(2, Link(3, Link(4))))
+    &gt;&gt;&gt; kevins_to_string(lst)
+    &#x27;[1|&#x2d;]&#x2d;&#x2d;&gt;[2|&#x2d;]&#x2d;&#x2d;&gt;[3|&#x2d;]&#x2d;&#x2d;&gt;[4|&#x2d;]&#x2d;&#x2d;&gt;[]&#x27;
+    &gt;&gt;&gt; kevins_to_string(Link.empty)
+    &#x27;[]&#x27;
+    &gt;&gt;&gt; jerrys_to_string(lst)
+    &#x27;(1 . (2 . (3 . (4 . ()))))&#x27;
+    &gt;&gt;&gt; jerrys_to_string(Link.empty)
+    &#x27;()&#x27;
+    &quot;&quot;&quot;
+    def printer(lnk):
+<div class="sol-highlight">        if lnk is Link.empty:</div><div class="sol-highlight">            return empty_repr</div>        else:
+<div class="sol-highlight">            return front + str(lnk.first) + mid + printer(lnk.rest) + back</div>    return printer</code></pre>
+
+</solution>
+
+<div class="sol-highlight">
+	Video Walkthrough: <p><a href='https://youtu.be/pbMeCRUU7yw?t=14m22s'> YouTube link </a></p>
+</div>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q make_to_string<button id="copy-code-python3ok-qmake_to_string" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmake_to_string").onclick = () => copyCode('python3 ok -q make_to_string', "copy-code-python3ok-qmake_to_string");
+        </script>
+        <br/>
+
+
+<h2 id="trees">Trees</h2>
+
+
+
+<h3 id="q11-long-paths">Q11: Long Paths</h3>
+
+
+<p>Implement <code>long_paths</code>, which returns a list of all <em>paths</em> in a tree with
+length at least <code>n</code>. A path in a tree is a list of node labels that starts with
+the root and ends at a leaf. Each subsequent element must be from a label of a
+branch of the previous value's node. The <em>length</em> of a path is the number of
+edges in the path (i.e. one less than the number of nodes in the path).  Paths
+are ordered in the output list from left to right in the tree. See the doctests
+for some examples.</p>
+
+<solution>
+
+<pre><code class="python">def long_paths(t, n):
+    &quot;&quot;&quot;Return a list of all paths in t with length at least n.
+
+    &gt;&gt;&gt; long_paths(Tree(1), 0)
+    [[1]]
+    &gt;&gt;&gt; long_paths(Tree(1), 1)
+    []
+    &gt;&gt;&gt; t = Tree(3, [Tree(4), Tree(4), Tree(5)])
+    &gt;&gt;&gt; left = Tree(1, [Tree(2), t])
+    &gt;&gt;&gt; mid = Tree(6, [Tree(7, [Tree(8)]), Tree(9)])
+    &gt;&gt;&gt; right = Tree(11, [Tree(12, [Tree(13, [Tree(14)])])])
+    &gt;&gt;&gt; whole = Tree(0, [left, Tree(13), mid, right])
+    &gt;&gt;&gt; print(whole)
+    0
+      1
+        2
+        3
+          4
+          4
+          5
+      13
+      6
+        7
+          8
+        9
+      11
+        12
+          13
+            14
+    &gt;&gt;&gt; for path in long_paths(whole, 2):
+    ...     print(path)
+    ...
+    [0, 1, 2]
+    [0, 1, 3, 4]
+    [0, 1, 3, 4]
+    [0, 1, 3, 5]
+    [0, 6, 7, 8]
+    [0, 6, 9]
+    [0, 11, 12, 13, 14]
+    &gt;&gt;&gt; for path in long_paths(whole, 3):
+    ...     print(path)
+    ...
+    [0, 1, 3, 4]
+    [0, 1, 3, 4]
+    [0, 1, 3, 5]
+    [0, 6, 7, 8]
+    [0, 11, 12, 13, 14]
+    &gt;&gt;&gt; long_paths(whole, 4)
+    [[0, 11, 12, 13, 14]]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if n &lt;= 0 and t.is_leaf():
+      return [[t.label]]
+    paths = []
+    for b in t.branches:
+      for path in long_paths(b, n &#x2d; 1):
+          paths.append([t.label] + path)
+    return paths</div></code></pre>
+
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q long_paths<button id="copy-code-python3ok-qlong_paths" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qlong_paths").onclick = () => copyCode('python3 ok -q long_paths', "copy-code-python3ok-qlong_paths");
+        </script>
+        <br/>
+
+
+<h3 id="q12-reverse-other">Q12: Reverse Other</h3>
+
+
+<p>Write a function <code>reverse_other</code> that mutates the tree such that <strong>labels</strong> on
+<em>every other</em> (odd-depth) level are reversed. For example,
+<code>Tree(1,[Tree(2, [Tree(4)]), Tree(3)])</code> becomes <code>Tree(1,[Tree(3, [Tree(4)]), Tree(2)])</code>.
+Notice that the nodes themselves are <em>not</em> reversed; only the labels are.</p>
+
+<solution>
+
+<pre><code>def reverse_other(t):
+    &quot;&quot;&quot;Mutates the tree such that nodes on every other (odd&#x2d;depth)
+    level have the labels of their branches all reversed.
+
+    &gt;&gt;&gt; t = Tree(1, [Tree(2), Tree(3), Tree(4)])
+    &gt;&gt;&gt; reverse_other(t)
+    &gt;&gt;&gt; t
+    Tree(1, [Tree(4), Tree(3), Tree(2)])
+    &gt;&gt;&gt; t = Tree(1, [Tree(2, [Tree(3, [Tree(4), Tree(5)]), Tree(6, [Tree(7)])]), Tree(8)])
+    &gt;&gt;&gt; reverse_other(t)
+    &gt;&gt;&gt; t
+    Tree(1, [Tree(8, [Tree(3, [Tree(5), Tree(4)]), Tree(6, [Tree(7)])]), Tree(2)])
+    &quot;&quot;&quot;
+<div class="sol-highlight">    def reverse_helper(t, need_reverse):
+        if t.is_leaf():
+            return
+        new_labs = [child.label for child in t.branches][::&#x2d;1]
+        for i in range(len(t.branches)):
+            child = t.branches[i]
+            reverse_helper(child, not need_reverse)
+            if need_reverse:
+                child.label = new_labs[i]
+    reverse_helper(t, True)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q reverse_other<button id="copy-code-python3ok-qreverse_other" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qreverse_other").onclick = () => copyCode('python3 ok -q reverse_other', "copy-code-python3ok-qreverse_other");
+        </script>
+        <br/>
+
+
+<h2 id="efficiency">Efficiency</h2>
+
+
+
+<h3 id="q13-efficiency-practice">Q13: Efficiency Practice</h3>
+
+
+<p>Choose the term that fills in the blank for the functions defined below:
+<code>&lt;function&gt;</code> runs in <code>____</code> time in the length of its input.</p>
+
+<ul>
+  <li>Constant</li>
+  <li>Logarithmic</li>
+  <li>Linear</li>
+  <li>Quadratic</li>
+  <li>Exponential</li>
+  <li>None of these</li>
+</ul>
+
+<p>Assume that <code>len</code> runs in constant time
+and <code>all</code> runs in linear time in the length of its input.
+Selecting an element of a list by its index requires constant time.
+Constructing a range requires constant time.</p>
+
+<pre><code>def count_partitions(n, m):
+    &quot;&quot;&quot;Counts the number of partitions of a positive integer n, 
+    using parts up to size m.&quot;&quot;&quot;
+    if n == 0:
+        return 1
+    elif n &lt; 0:
+        return 0
+    elif m == 0:
+        return 0
+    else:
+        with_m = count_partitions(n&#x2d;m, m)
+        without_m = count_partitions(n, m&#x2d;1)
+        return with_m + without_m
+
+def is_palindrome(s):
+    &quot;&quot;&quot;Return whether a list of numbers s is a palindrome.&quot;&quot;&quot;
+    return all([s[i] == s[len(s) &#x2d; i &#x2d; 1] for i in range(len(s))])
+
+def binary_search(lst, n):
+    &quot;&quot;&quot;Takes in a sorted list lst and returns the index where integer n
+    is contained in lst. Returns &#x2d;1 if n does not exist in lst.&quot;&quot;&quot;
+    low = 0
+    high = len(lst)
+    while low &lt;= high:
+        middle = (low + high) // 2
+        if lst[middle] == n:
+            return middle
+        elif n &lt; lst[middle]:
+            high = middle &#x2d; 1
+        else:
+            low = middle + 1
+    return &#x2d;1</code></pre>
+
+
+
+<blockquote><p>The <code>is_palindrome</code> question was reformatted from question 6(d) on fall 2019's
+<a href="https://cs61a.org/exam/fa19/final/61a-fa19-final.pdf#page=7">final</a>.</p></blockquote>
+
+<p>Use Ok to test your understanding:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q efficiency_practice -u<button id="copy-code-python3ok-qefficiency_practice-u" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qefficiency_practice-u").onclick = () => copyCode('python3 ok -q efficiency_practice -u', "copy-code-python3ok-qefficiency_practice-u");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<blockquote><p><strong>count_partitions: exponential.</strong></p></blockquote>
+
+<p><code>count_partitions</code> takes two inputs <code>n</code> and <code>m</code> so the runtime depends on both inputs. However, when determining what the order of growth is, we're mostly concerned with what happens to the runtime for larger values of <code>n</code> and <code>m</code>.</p>
+
+<p>The conditional statements such as <code>if n == 0</code> are logical comparisons that take constant time. Therefore, what affects our runtime the most are the number of recursive calls we to <code>count_partitions</code>. For every function call to <code>count_partitions</code> we make two more recursive calls; one that uses <code>m</code> as a partition, and one that does not.</p>
+
+<p>Visualizing the tree of recursive calls for this function, we'll see that the number of function calls at each level doubles. Thus, the runtime for <code>count_partitions</code> is exponential.</p>
+
+<blockquote><p><strong>is_palindrome: linear.</strong></p></blockquote>
+
+<p>We're interested in seeing how the function runs in relation to
+the length of its input, which is <code>len(s)</code>.</p>
+
+<p>In <code>is_palindrome</code>, it takes constant time to calculate <code>len(s)</code>
+and then to construct a range from 0 to <code>len(s)</code> (exclusive).</p>
+
+<p>For each element in this range, we will select two elements from <code>s</code>
+(<code>s[i]</code> and <code>s[len(s)&#x2d;i&#x2d;1]</code>) and compare them, which takes some
+constant time for each element.
+Once we've done this for all the elements,
+we will have built up the input list to <code>all</code> in linear time in relation
+to the length of <code>is_palindrome</code>'s input.</p>
+
+<p>We assume that <code>all</code> runs in linear time in the length of <em>its</em> input,
+which is the length of the list we've just built and the same as
+the length of <code>is_palindrome</code>'s input.</p>
+
+<p>Overall, <code>is_palindrome</code> will therefore take linear time
+in relation to the length of its input.</p>
+
+<blockquote><p><strong>binary_search: logarithmic.</strong></p></blockquote>
+
+<p>The <code>binary_search</code> algorithm's runtime is dependent on the length of <code>lst</code> because we are searching through it to find some integer <code>n</code>.</p>
+
+<p>Again, assuming <code>len(lst)</code> and logical comparisons take constant time to calculate, we look at how many iterations of the while loop we might go through before completing the function call. First we check the element at the middle of our sorted list. If <code>lst[middle]</code> is not equal to <code>n</code>, the function determines whether <code>lst[middle]</code> is less than or greater than <code>n</code> and narrows our search down to either the lower half or upper half of <code>lst</code>, respectively.</p>
+
+<p>For every iteration of the while loop, <code>binary_search</code> cuts down the number of elements in the input <code>lst</code> we are searching through by half. Thus, the maximum number of iterations for the while loop before returning an index or <code>&#x2d;1</code>  is log(len(lst)) in base 2. <code>binary_search</code> takes logarithmic time in relation to the length of its input <code>lst</code>.</p>
+
+</div>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#all-questions-are-optional">All Questions Are Optional</a></li>
+  <ul>
+    <li><a href="#recursion-and-tree-recursion">Recursion and Tree Recursion</a></li>
+    <ul>
+      <li><a href="#q1-subsequences">Q1: Subsequences</a></li>
+      <li><a href="#q2-non-decreasing-subsequences">Q2: Non-Decreasing Subsequences</a></li>
+      <li><a href="#q3-number-of-trees">Q3: Number of Trees</a></li>
+    </ul>
+    <li><a href="#generators">Generators</a></li>
+    <ul>
+      <li><a href="#q4-partition-generator">Q4: Partition Generator</a></li>
+    </ul>
+    <li><a href="#objects">Objects</a></li>
+    <ul>
+      <li><a href="#q5-vending-machine">Q5: Vending Machine</a></li>
+    </ul>
+    <li><a href="#mutable-lists">Mutable Lists</a></li>
+    <ul>
+      <li><a href="#q6-trade">Q6: Trade</a></li>
+      <li><a href="#q7-shuffle">Q7: Shuffle</a></li>
+    </ul>
+    <li><a href="#linked-lists">Linked Lists</a></li>
+    <ul>
+      <li><a href="#q8-insert">Q8: Insert</a></li>
+      <li><a href="#q9-deep-linked-list-length">Q9: Deep Linked List Length</a></li>
+      <li><a href="#q10-linked-lists-as-strings">Q10: Linked Lists as Strings</a></li>
+    </ul>
+    <li><a href="#trees">Trees</a></li>
+    <ul>
+      <li><a href="#q11-long-paths">Q11: Long Paths</a></li>
+      <li><a href="#q12-reverse-other">Q12: Reverse Other</a></li>
+    </ul>
+    <li><a href="#efficiency">Efficiency</a></li>
+    <ul>
+      <li><a href="#q13-efficiency-practice">Q13: Efficiency Practice</a></li>
+    </ul>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

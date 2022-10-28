@@ -1,0 +1,729 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/hw.css">
+
+
+    <title>
+Homework 6 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Homework 6 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="hw06.zip" class="label label-outline">hw06.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+<p>You can find the solutions in <a href="hw06.py">hw06.py</a>.</p>
+
+    
+<h1 id="required-questions">Required Questions</h1>
+
+
+<br />
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+<h2 id="getting-started-videos">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZcXR_uUyMxCCTc1WU1SafV4"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZcXR_uUyMxCCTc1WU1SafV4'> YouTube link </a></p>
+</div>
+
+
+<h2 id="oop">OOP</h2>
+
+
+<h3 id="q1-mint">Q1: Mint</h3>
+
+
+<p>A mint is a place where coins are made. In this question, you'll implement a <code>Mint</code> class that can output a <code>Coin</code> with the correct year and worth.</p>
+
+<ul>
+  <li>Each <code>Mint</code> <em>instance</em> has a <code>year</code> stamp. The <code>update</code> method sets the
+  <code>year</code> stamp of the instance to the <code>present_year</code> <em>class attribute</em> of the <code>Mint</code> <em>class</em>.</li>
+  <li>The <code>create</code> method takes a subclass of <code>Coin</code> (<em>not</em> an instance!), then 
+  creates and returns an <em>instance</em> of that class stamped with the <code>mint</code>'s year (which may be different from
+  <code>Mint.present_year</code> if it has not been updated.)</li>
+  <li>A <code>Coin</code>'s <code>worth</code> method returns the <code>cents</code> value of the coin plus one
+  extra cent for each year of age <em>beyond 50</em>. A coin's age can be determined
+  by subtracting the coin's year from the <code>present_year</code> class attribute of
+  the <code>Mint</code> class.</li>
+</ul>
+
+<solution>
+
+<pre><code>class Mint:
+    &quot;&quot;&quot;A mint creates coins by stamping on years.
+
+    The update method sets the mint&#x27;s stamp to Mint.present_year.
+
+    &gt;&gt;&gt; mint = Mint()
+    &gt;&gt;&gt; mint.year
+    2022
+    &gt;&gt;&gt; dime = mint.create(Dime)
+    &gt;&gt;&gt; dime.year
+    2022
+    &gt;&gt;&gt; Mint.present_year = 2102  # Time passes
+    &gt;&gt;&gt; nickel = mint.create(Nickel)
+    &gt;&gt;&gt; nickel.year     # The mint has not updated its stamp yet
+    2022
+    &gt;&gt;&gt; nickel.worth()  # 5 cents + (80 &#x2d; 50 years)
+    35
+    &gt;&gt;&gt; mint.update()   # The mint&#x27;s year is updated to 2102
+    &gt;&gt;&gt; Mint.present_year = 2177     # More time passes
+    &gt;&gt;&gt; mint.create(Dime).worth()    # 10 cents + (75 &#x2d; 50 years)
+    35
+    &gt;&gt;&gt; Mint().create(Dime).worth()  # A new mint has the current year
+    10
+    &gt;&gt;&gt; dime.worth()     # 10 cents + (155 &#x2d; 50 years)
+    115
+    &gt;&gt;&gt; Dime.cents = 20  # Upgrade all dimes!
+    &gt;&gt;&gt; dime.worth()     # 20 cents + (155 &#x2d; 50 years)
+    125
+    &quot;&quot;&quot;
+    present_year = 2022
+
+    def __init__(self):
+        self.update()
+
+    def create(self, coin):
+<div class="sol-highlight">        return coin(self.year)</div>
+    def update(self):
+<div class="sol-highlight">        self.year = Mint.present_year</div>
+class Coin:
+    cents = None # will be provided by subclasses, but not by Coin itself
+
+    def __init__(self, year):
+        self.year = year
+
+    def worth(self):
+<div class="sol-highlight">        return self.cents + max(0, Mint.present_year &#x2d; self.year &#x2d; 50)</div>
+class Nickel(Coin):
+    cents = 5
+
+class Dime(Coin):
+    cents = 10</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q Mint<button id="copy-code-python3ok-qMint" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qMint").onclick = () => copyCode('python3 ok -q Mint', "copy-code-python3ok-qMint");
+        </script>
+        <br/>
+
+
+<h2 id="linked-lists">Linked Lists</h2>
+
+
+<h3 id="q2-store-digits">Q2: Store Digits</h3>
+
+
+<p>Write a function <code>store_digits</code> that takes in an integer <code>n</code> and returns
+a linked list where each element of the list is a digit of <code>n</code>.</p>
+
+<blockquote><p><strong>Important</strong>: Do not use any string manipulation functions like <code>str</code> and <code>reversed</code>.</p></blockquote>
+
+<solution>
+
+<pre><code>def store_digits(n):
+    &quot;&quot;&quot;Stores the digits of a positive number n in a linked list.
+
+    &gt;&gt;&gt; s = store_digits(1)
+    &gt;&gt;&gt; s
+    Link(1)
+    &gt;&gt;&gt; store_digits(2345)
+    Link(2, Link(3, Link(4, Link(5))))
+    &gt;&gt;&gt; store_digits(876)
+    Link(8, Link(7, Link(6)))
+    &gt;&gt;&gt; # a check for restricted functions
+    &gt;&gt;&gt; import inspect, re
+    &gt;&gt;&gt; cleaned = re.sub(r&quot;#.*\\n&quot;, &#x27;&#x27;, re.sub(r&#x27;&quot;{3}[\s\S]*?&quot;{3}&#x27;, &#x27;&#x27;, inspect.getsource(store_digits)))
+    &gt;&gt;&gt; print(&quot;Do not use str or reversed!&quot;) if any([r in cleaned for r in [&quot;str&quot;, &quot;reversed&quot;]]) else None
+    &gt;&gt;&gt; link1 = Link(3, Link(Link(4), Link(5, Link(6))))
+    &quot;&quot;&quot;
+<div class="sol-highlight">    result = Link.empty
+    while n &gt; 0:
+        result = Link(n % 10, result)
+        n //= 10
+    return result</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q store_digits<button id="copy-code-python3ok-qstore_digits" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qstore_digits").onclick = () => copyCode('python3 ok -q store_digits', "copy-code-python3ok-qstore_digits");
+        </script>
+        <br/>
+
+
+<h3 id="q3-mutable-mapping">Q3: Mutable Mapping</h3>
+
+
+<p>Implement <code>deep_map_mut(func, link)</code>, which applies a function <code>func</code> onto
+all elements in the given linked list <code>lnk</code>. If an element is itself a
+linked list, apply <code>func</code> to each of its elements, and so on.</p>
+
+<p>Your implementation should mutate the original linked list. Do not
+create any new linked lists.</p>
+
+<blockquote><p><strong>Hint</strong>: The built-in <code>isinstance</code> function may be useful.</p>
+
+<pre><code>&gt;&gt;&gt; s = Link(1, Link(2, Link(3, Link(4))))
+&gt;&gt;&gt; isinstance(s, Link)
+True
+&gt;&gt;&gt; isinstance(s, int)
+False</code></pre></blockquote>
+
+<!-- separator for the indent blocks -->
+
+<blockquote><p><strong>Construct Check</strong>: The last doctest of this question ensures that you
+do not create new linked lists. If you are failing this doctest, ensure
+that you are not creating link lists by calling the constructor, i.e.</p>
+
+<pre><code>s = Link(1)</code></pre></blockquote>
+
+<solution>
+
+<pre><code>def deep_map_mut(func, lnk):
+    &quot;&quot;&quot;Mutates a deep link lnk by replacing each item found with the
+    result of calling func on the item.  Does NOT create new Links (so
+    no use of Link&#x27;s constructor).
+
+    Does not return the modified Link object.
+
+    &gt;&gt;&gt; link1 = Link(3, Link(Link(4), Link(5, Link(6))))
+    &gt;&gt;&gt; # Disallow the use of making new Links before calling deep_map_mut
+    &gt;&gt;&gt; Link.__init__, hold = lambda *args: print(&quot;Do not create any new Links.&quot;), Link.__init__
+    &gt;&gt;&gt; try:
+    ...     deep_map_mut(lambda x: x * x, link1)
+    ... finally:
+    ...     Link.__init__ = hold
+    &gt;&gt;&gt; print(link1)
+    &lt;9 &lt;16&gt; 25 36&gt;
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if lnk is Link.empty:
+        return
+    elif isinstance(lnk.first, Link):
+        deep_map_mut(func, lnk.first)
+    else:
+        lnk.first = func(lnk.first)
+    deep_map_mut(func, lnk.rest)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q deep_map_mut<button id="copy-code-python3ok-qdeep_map_mut" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdeep_map_mut").onclick = () => copyCode('python3 ok -q deep_map_mut', "copy-code-python3ok-qdeep_map_mut");
+        </script>
+        <br/>
+
+
+<h3 id="q4-two-list">Q4: Two List</h3>
+
+
+<p>Implement a function <code>two_list</code> that takes in two lists and returns a linked list. The first list contains the
+values that we want to put in the linked list, and the second list contains the number of each corresponding value.
+Assume both lists are the same size and have a length of 1 or greater. Assume all elements in the second list
+are greater than 0.</p>
+
+<solution>
+
+<pre><code>def two_list(vals, counts):
+    &quot;&quot;&quot;
+    Returns a linked list according to the two lists that were passed in. Assume
+    vals and counts are the same size. Elements in vals represent the value, and the
+    corresponding element in counts represents the number of this value desired in the
+    final linked list. Assume all elements in counts are greater than 0. Assume both
+    lists have at least one element.
+
+    &gt;&gt;&gt; a = [1, 3, 2]
+    &gt;&gt;&gt; b = [1, 1, 1]
+    &gt;&gt;&gt; c = two_list(a, b)
+    &gt;&gt;&gt; c
+    Link(1, Link(3, Link(2)))
+    &gt;&gt;&gt; a = [1, 3, 2]
+    &gt;&gt;&gt; b = [2, 2, 1]
+    &gt;&gt;&gt; c = two_list(a, b)
+    &gt;&gt;&gt; c
+    Link(1, Link(1, Link(3, Link(3, Link(2)))))
+    &quot;&quot;&quot;
+<div class="sol-highlight">    def helper(count, index):
+        if count == 0:
+            if index + 1 == len(vals):
+                return Link.empty
+            return Link(vals[index + 1], helper(counts[index + 1] &#x2d; 1, index + 1))
+        return Link(vals[index], helper(count &#x2d; 1, index))
+    return helper(counts[0], 0)
+
+#Iterative solution
+def two_list_iterative(vals, counts):
+    result = Link(None) 
+    p = result
+    for index in range(len(vals)):
+        item = vals[index]
+        for _ in range(counts[index]):
+            p.rest = Link(item)
+            p = p.rest
+    return result.rest</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q two_list<button id="copy-code-python3ok-qtwo_list" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qtwo_list").onclick = () => copyCode('python3 ok -q two_list', "copy-code-python3ok-qtwo_list");
+        </script>
+        <br/>
+
+
+<h2 id="submit">Submit</h2>
+
+
+<p>Make sure to submit this assignment by running:</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;submit</code></pre>
+
+
+<h1 id="optional-questions">Optional Questions</h1>
+
+
+
+<h3 id="q5-next-virahanka-fibonacci-object">Q5: Next Virahanka Fibonacci Object</h3>
+
+
+<p>Implement the <code>next</code> method of the <code>VirFib</code> class. For this class, the <code>value</code>
+attribute is a Fibonacci number. The <code>next</code> method returns a <code>VirFib</code> instance
+whose <code>value</code> is the next Fibonacci number. The <code>next</code> method should take only
+constant time.</p>
+
+<p>Note that in the doctests, nothing is being printed out. Rather, each call to
+<code>.next()</code> returns a <code>VirFib</code> instance. The way each <code>VirFib</code> instance is displayed is
+determined by the return value of its <code>__repr__</code> method.</p>
+
+<blockquote><p><em>Hint</em>: Keep track of the previous number by setting a new instance attribute
+inside <code>next</code>. You can create new instance attributes for objects at any point,
+even outside the <code>__init__</code> method.</p></blockquote>
+
+<solution>
+
+<pre><code>class VirFib():
+    &quot;&quot;&quot;A Virahanka Fibonacci number.
+
+    &gt;&gt;&gt; start = VirFib()
+    &gt;&gt;&gt; start
+    VirFib object, value 0
+    &gt;&gt;&gt; start.next()
+    VirFib object, value 1
+    &gt;&gt;&gt; start.next().next()
+    VirFib object, value 1
+    &gt;&gt;&gt; start.next().next().next()
+    VirFib object, value 2
+    &gt;&gt;&gt; start.next().next().next().next()
+    VirFib object, value 3
+    &gt;&gt;&gt; start.next().next().next().next().next()
+    VirFib object, value 5
+    &gt;&gt;&gt; start.next().next().next().next().next().next()
+    VirFib object, value 8
+    &gt;&gt;&gt; start.next().next().next().next().next().next() # Ensure start isn&#x27;t changed
+    VirFib object, value 8
+    &quot;&quot;&quot;
+
+    def __init__(self, value=0):
+        self.value = value
+
+    def next(self):
+<div class="sol-highlight">        if self.value == 0:
+            result = VirFib(1)
+        else:
+            result = VirFib(self.value + self.previous)
+        result.previous = self.value
+        return result</div>
+    def __repr__(self):
+        return &quot;VirFib object, value &quot; + str(self.value)</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q VirFib<button id="copy-code-python3ok-qVirFib" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qVirFib").onclick = () => copyCode('python3 ok -q VirFib', "copy-code-python3ok-qVirFib");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>Remember that <code>next</code> must return a <code>VirFib</code> object! With this in mind, our
+first goal is to calculate the next <code>VirFib</code> object and return it. One
+approach is to figure out the base case (<code>self.value == 0</code>) and then decide what
+information is needed for the following call to <code>next</code>.</p>
+
+<p>You might also note that storing the current value makes the solution look very
+similar to the iterative version of the <code>virfib</code> problem.</p>
+
+</div>
+
+
+<h3 id="q6-is-bst">Q6: Is BST</h3>
+
+
+<p>Write a function <code>is_bst</code>, which takes a Tree <code>t</code> and returns <code>True</code> if, and
+only if, <code>t</code> is a valid binary search tree, which means that:</p>
+
+<ul>
+  <li>Each node has at most two children (a leaf is automatically a valid binary
+  search tree)</li>
+  <li>The children are valid binary search trees</li>
+  <li>For every node, the entries in that node's left child are less than or equal
+  to the label of the node</li>
+  <li>For every node, the entries in that node's right child are greater than the
+  label of the node</li>
+</ul>
+
+<p>An example of a BST is:</p>
+
+<p><img class="img-responsive center-block" src="https://miro.medium.com/max/1424/1*F8MmBnUQyOA8-Rajg69nSQ.png" alt="bst" width="" height=""></p>
+
+<p>Note that, if a node has only one child, that child could be considered either
+the left or right child. You should take this into consideration.</p>
+
+<p><em>Hint:</em> It may be helpful to write helper functions <code>bst_min</code> and <code>bst_max</code> that
+return the minimum and maximum, respectively, of a Tree if it is a valid binary
+search tree.</p>
+
+<solution>
+
+<pre><code>def is_bst(t):
+    &quot;&quot;&quot;Returns True if the Tree t has the structure of a valid BST.
+
+    &gt;&gt;&gt; t1 = Tree(6, [Tree(2, [Tree(1), Tree(4)]), Tree(7, [Tree(7), Tree(8)])])
+    &gt;&gt;&gt; is_bst(t1)
+    True
+    &gt;&gt;&gt; t2 = Tree(8, [Tree(2, [Tree(9), Tree(1)]), Tree(3, [Tree(6)]), Tree(5)])
+    &gt;&gt;&gt; is_bst(t2)
+    False
+    &gt;&gt;&gt; t3 = Tree(6, [Tree(2, [Tree(4), Tree(1)]), Tree(7, [Tree(7), Tree(8)])])
+    &gt;&gt;&gt; is_bst(t3)
+    False
+    &gt;&gt;&gt; t4 = Tree(1, [Tree(2, [Tree(3, [Tree(4)])])])
+    &gt;&gt;&gt; is_bst(t4)
+    True
+    &gt;&gt;&gt; t5 = Tree(1, [Tree(0, [Tree(&#x2d;1, [Tree(&#x2d;2)])])])
+    &gt;&gt;&gt; is_bst(t5)
+    True
+    &gt;&gt;&gt; t6 = Tree(1, [Tree(4, [Tree(2, [Tree(3)])])])
+    &gt;&gt;&gt; is_bst(t6)
+    True
+    &gt;&gt;&gt; t7 = Tree(2, [Tree(1, [Tree(5)]), Tree(4)])
+    &gt;&gt;&gt; is_bst(t7)
+    False
+    &quot;&quot;&quot;
+<div class="sol-highlight">    def bst_min(t):
+        &quot;&quot;&quot;Returns the min of t, if t has the structure of a valid BST.&quot;&quot;&quot;
+        if t.is_leaf():
+            return t.label
+        return min(t.label, bst_min(t.branches[0]))
+
+    def bst_max(t):
+        &quot;&quot;&quot;Returns the max of t, if t has the structure of a valid BST.&quot;&quot;&quot;
+        if t.is_leaf():
+            return t.label
+        return max(t.label, bst_max(t.branches[&#x2d;1]))
+
+    if t.is_leaf():
+        return True
+    if len(t.branches) == 1:
+        c = t.branches[0]
+        return is_bst(c) and (bst_max(c) &lt;= t.label or bst_min(c) &gt; t.label)
+    elif len(t.branches) == 2:
+        c1, c2 = t.branches
+        valid_branches = is_bst(c1) and is_bst(c2)
+        return valid_branches and bst_max(c1) &lt;= t.label and bst_min(c2) &gt; t.label
+    else:
+        return False</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q is_bst<button id="copy-code-python3ok-qis_bst" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qis_bst").onclick = () => copyCode('python3 ok -q is_bst', "copy-code-python3ok-qis_bst");
+        </script>
+        <br/>
+
+
+<h1 id="exam-practice">Exam Practice</h1>
+
+
+<p>Homework assignments will also contain prior exam questions for you to try.
+These questions have no submission component; feel free to attempt them if you'd like some practice!</p>
+
+<p>Object-Oriented Programming</p>
+
+<ol>
+  <li>Spring 2022 MT2 Q8: <a href="https://cs61a.org/exam/sp22/mt2/61a-sp22-mt2.pdf#page=17">CS61A Presents The Game of Hoop.</a></li>
+  <li>Fall 2020 MT2 Q3: <a href="https://cs61a.org/exam/fa20/mt2/61a-fa20-mt2.pdf#page=9">Sparse Lists</a></li>
+  <li>Fall 2019 MT2 Q7: <a href="https://cs61a.org/exam/fa19/mt2/61a-fa19-mt2.pdf#page=8">Version 2.0</a></li>
+</ol>
+
+<p>Linked Lists</p>
+
+<ol>
+  <li>Fall 2020 Final Q3: <a href="https://cs61a.org/exam/fa20/final/61a-fa20-final.pdf#page=9">College Party</a></li>
+  <li>Fall 2018 MT2 Q6: <a href="https://cs61a.org/exam/fa18/mt2/61a-fa18-mt2.pdf#page=6">Dr. Frankenlink</a></li>
+  <li>Spring 2017 MT1 Q5: <a href="https://cs61a.org/exam/sp17/mt1/61a-sp17-mt1.pdf#page=7">Insert</a></li>
+</ol>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="#getting-started-videos">Getting Started Videos</a></li>
+    <li><a href="#oop">OOP</a></li>
+    <ul>
+      <li><a href="#q1-mint">Q1: Mint</a></li>
+    </ul>
+    <li><a href="#linked-lists">Linked Lists</a></li>
+    <ul>
+      <li><a href="#q2-store-digits">Q2: Store Digits</a></li>
+      <li><a href="#q3-mutable-mapping">Q3: Mutable Mapping</a></li>
+      <li><a href="#q4-two-list">Q4: Two List</a></li>
+    </ul>
+    <li><a href="#submit">Submit</a></li>
+  </ul>
+  <li><a href="#optional-questions">Optional Questions</a></li>
+  <ul>
+    <li><a href="#q5-next-virahanka-fibonacci-object">Q5: Next Virahanka Fibonacci Object</a></li>
+    <li><a href="#q6-is-bst">Q6: Is BST</a></li>
+  </ul>
+  <li><a href="#exam-practice">Exam Practice</a></li>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

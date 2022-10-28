@@ -1,0 +1,1621 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/disc.css">
+
+
+    <title>
+Discussion 8 | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 8: Linked Lists, Mutable Trees, Efficiency
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc08.pdf" class="label label-outline">disc08.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<div class="alert storable-login-status"></div>
+
+This is an online worksheet that you can work on during discussions.
+Your work is not graded and you do not need to submit anything.
+
+
+    
+
+
+
+<h1 id="representation-repr-str">Representation: Repr, Str</h1>
+
+
+
+<h3 id="q1-wwpd-repr-esentation">Q1: WWPD: Repr-esentation</h3>
+
+
+<blockquote><p>Note:
+This is not the typical way <code>repr</code> is used,
+nor is this way of writing <code>repr</code> recommended,
+this problem is mainly just to make sure you understand
+how <code>repr</code> and <code>str</code> work.</p></blockquote>
+
+
+
+<pre><code>class A:
+    def __init__(self, x):
+        self.x = x
+
+    def __repr__(self):
+         return self.x
+
+    def __str__(self):
+         return self.x * 2
+
+class B:
+    def __init__(self):
+         print(&#x27;boo!&#x27;)
+         self.a = []
+
+    def add_a(self, a):
+         self.a.append(a)
+
+    def __repr__(self):
+         print(len(self.a))
+         ret = &#x27;&#x27;
+         for a in self.a:
+             ret += str(a)
+         return ret</code></pre>
+
+
+
+<p>Given the above class definitions,
+what will the following lines output?</p>
+
+<pre><code>&gt;&gt;&gt; A(&#x27;one&#x27;)</code></pre>
+
+
+
+            <label class="sr-only" for="repr-wwpd-1-input">Your Answer:</label>
+            <input class="form-control storable" id="repr-wwpd-1-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+one
+</div>
+
+<pre><code>&gt;&gt;&gt; print(A(&#x27;one&#x27;))</code></pre>
+
+
+
+            <label class="sr-only" for="repr-wwpd 2-input">Your Answer:</label>
+            <input class="form-control storable" id="repr-wwpd 2-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+oneone
+</div>
+
+<pre><code>&gt;&gt;&gt; repr(A(&#x27;two&#x27;))</code></pre>
+
+
+
+            <label class="sr-only" for="repr-wwpd 3-input">Your Answer:</label>
+            <input class="form-control storable" id="repr-wwpd 3-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+'two'
+</div>
+
+<pre><code>&gt;&gt;&gt; b = B()</code></pre>
+
+
+
+            <label class="sr-only" for="repr-wwpd 4-input">Your Answer:</label>
+            <input class="form-control storable" id="repr-wwpd 4-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+boo!
+</div>
+
+<pre><code>&gt;&gt;&gt; b.add_a(A(&#x27;a&#x27;))
+&gt;&gt;&gt; b.add_a(A(&#x27;b&#x27;))
+&gt;&gt;&gt; b</code></pre>
+
+
+
+            <label class="sr-only" for="repr-wwpd 5-input">Your Answer:</label>
+            <input class="form-control storable" id="repr-wwpd 5-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+2
+</div>
+
+            <label class="sr-only" for="repr-wwpd 6-input">Your Answer:</label>
+            <input class="form-control storable" id="repr-wwpd 6-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+aabb
+</div>
+
+<div class="page-break"></div>
+
+
+<h1 id="linked-lists">Linked Lists</h1>
+
+
+<p>There are many different implementations of sequences in Python. Today, we'll
+explore the linked list implementation.</p>
+
+<p>A linked list is either an empty linked list, or a Link object containing a
+<code>first</code> value and the <code>rest</code> of the linked list.</p>
+
+<p>To check if a linked list is an empty linked list, compare it against the class
+attribute <code>Link.empty</code>:</p>
+
+<pre><code>if link is Link.empty:
+    print(&#x27;This linked list is empty!&#x27;)
+else:
+    print(&#x27;This linked list is not empty!&#x27;)</code></pre>
+
+
+
+<p>You can find an implementation of the <code>Link</code> class below:</p>
+
+<pre><code>class Link:
+    &quot;&quot;&quot;A linked list.&quot;&quot;&quot;
+    empty = ()
+
+    def __init__(self, first, rest=empty):
+        assert rest is Link.empty or isinstance(rest, Link)
+        self.first = first
+        self.rest = rest
+
+    def __repr__(self):
+        if self.rest:
+            rest_repr = &#x27;, &#x27; + repr(self.rest)
+        else:
+            rest_repr = &#x27;&#x27;
+        return &#x27;Link(&#x27; + repr(self.first) + rest_repr + &#x27;)&#x27;
+
+    def __str__(self):
+        string = &#x27;&lt;&#x27;
+        while self.rest is not Link.empty:
+            string += str(self.first) + &#x27; &#x27;
+            self = self.rest
+        return string + str(self.first) + &#x27;&gt;&#x27;</code></pre>
+
+
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q2-the-hy-rules-of-linked-lists">Q2: The Hy-rules of Linked Lists</h3>
+
+
+<p>In this question, we are given the following Linked List:</p>
+
+<pre><code class="python">ganondorf = Link(&#x27;zelda&#x27;, Link(&#x27;link&#x27;, Link(&#x27;sheik&#x27;, Link.empty)))</code></pre>
+
+
+
+<p>What expression would give us the value <code>&#x27;sheik&#x27;</code> from this Linked List?</p>
+
+
+            <label class="sr-only" for="hyrule-1-input">Your Answer:</label>
+            <input class="form-control storable" id="hyrule-1-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+<code>ganondorf.rest.rest.first</code>
+</div>
+
+<p>What is the value of <code>ganondorf.rest.first</code>?</p>
+
+
+            <label class="sr-only" for="hyrule-2-input">Your Answer:</label>
+            <input class="form-control storable" id="hyrule-2-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+<code>&#x27;link&#x27;</code>
+</div>
+
+<p>What would be the value of <code>str(ganondorf)</code>?</p>
+
+
+            <label class="sr-only" for="hyrule-3-input">Your Answer:</label>
+            <input class="form-control storable" id="hyrule-3-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+<code>&#x27;&lt;zelda link sheik&gt;&#x27;</code>
+</div>
+
+<p>What expression would mutate this linked list to <code>&lt;zelda ganondorf sheik&gt;</code>?</p>
+
+
+            <label class="sr-only" for="hyrule-4-input">Your Answer:</label>
+            <input class="form-control storable" id="hyrule-4-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+<code>ganondorf.rest.first = &#x27;ganondorf&#x27;</code>
+</div>
+
+
+<h3 id="q3-sum-nums">Q3: Sum Nums</h3>
+
+
+<p>Write a function that takes in a linked list and returns the sum of all
+its elements. You may assume all elements in <code>s</code> are integers. Try to implement this recursively!</p>
+
+<!-- <div class="sol-highlight">
+
+<pre><code>def sum_nums(s):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; a = Link(1, Link(6, Link(7)))
+    &gt;&gt;&gt; sum_nums(a)
+    14
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if s == Link.empty:
+        return 0
+    return s.first + sum_nums(s.rest)</div></code></pre>
+
+</div> -->
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="sum-nums-input" style="height:216px;"></div>
+            <a href="javascript:void" id="modal-link-sum-nums-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-sum-nums-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-sum-nums-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def sum_nums(s):\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; a = Link(1, Link(6, Link(7)))\n    &gt;&gt;&gt; sum_nums(a)\n    14\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "sum-nums-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def sum_nums(s):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; a = Link(1, Link(6, Link(7)))
+    &gt;&gt;&gt; sum_nums(a)
+    14
+    &quot;&quot;&quot;
+    if s == Link.empty:
+        return 0
+    return s.first + sum_nums(s.rest)
+</code></pre>
+
+            </div>
+        
+
+<!-- <p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q sum_nums<button id="copy-code-python3ok-qsum_nums" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qsum_nums").onclick = () => copyCode('python3 ok -q sum_nums', "copy-code-python3ok-qsum_nums");
+        </script>
+        <br/>
+
+<attach-py>
+def sum<em>nums(s):
+
+<pre><code>&quot;&quot;&quot;
+&gt;&gt;&gt; a = Link(1, Link(6, Link(7)))
+&gt;&gt;&gt; sum_nums(a)
+14
+&quot;&quot;&quot;
+<div class="sol-highlight">if s == Link.empty:
+    return 0
+return s.first + sum_nums(s.rest)</div></code></pre>
+
+</attach-py>
+
+<attach-py location=epilogue>
+class Link:
+
+<pre><code>&quot;&quot;&quot;A linked list.
+
+&gt;&gt;&gt; s = Link(1)
+&gt;&gt;&gt; s.first
+1
+&gt;&gt;&gt; s.rest is Link.empty
+True
+&gt;&gt;&gt; s = Link(2, Link(3, Link(4)))
+&gt;&gt;&gt; s.first = 5
+&gt;&gt;&gt; s.rest.first = 6
+&gt;&gt;&gt; s.rest.rest = Link.empty
+&gt;&gt;&gt; s                                    # Displays the contents of repr(s)
+Link(5, Link(6))
+&gt;&gt;&gt; s.rest = Link(7, Link(Link(8, Link(9))))
+&gt;&gt;&gt; s
+Link(5, Link(7, Link(Link(8, Link(9)))))
+&gt;&gt;&gt; print(s)                             # Prints str(s)
+&lt;5 7 &lt;8 9&gt;&gt;
+&quot;&quot;&quot;
+empty = ()
+
+def __init__(self, first, rest=empty):
+    assert rest is Link.empty or isinstance(rest, Link)
+    self.first = first
+    self.rest = rest
+
+def __repr__(self):
+    if self.rest is not Link.empty:
+        rest_repr = &#x27;, &#x27; + repr(self.rest)
+    else:
+        rest_repr = &#x27;&#x27;
+    return &#x27;Link(&#x27; + repr(self.first) + rest_repr + &#x27;)&#x27;
+
+def __str__(self):
+    string = &#x27;&lt;&#x27;
+    while self.rest is not Link.empty:
+        string += str(self.first) + &#x27; &#x27;
+        self = self.rest
+    return string + str(self.first) + &#x27;&gt;&#x27;</code></pre>
+
+</attach-py> -->
+<div class="page-break"></div>
+
+<h3 id="q4-multiply-links">Q4: Multiply Links</h3>
+
+
+<p>Write a function that takes in a Python list of linked lists and
+multiplies them element-wise. It should return a new linked list.</p>
+
+<p>If not all of the <code>Link</code> objects are of equal length, return a
+linked list whose length is that of the shortest linked list given. You
+may assume the <code>Link</code> objects are shallow linked lists, and that
+<code>lst_of_lnks</code> contains at least one linked list.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="multiply-lnks-input" style="height:432px;"></div>
+            <a href="javascript:void" id="modal-link-multiply-lnks-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-multiply-lnks-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-multiply-lnks-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def multiply_lnks(lst_of_lnks):\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; a = Link(2, Link(3, Link(5)))\n    &gt;&gt;&gt; b = Link(6, Link(4, Link(2)))\n    &gt;&gt;&gt; c = Link(4, Link(1, Link(0, Link(2))))\n    &gt;&gt;&gt; p = multiply_lnks([a, b, c])\n    &gt;&gt;&gt; p.first\n    48\n    &gt;&gt;&gt; p.rest.first\n    12\n    &gt;&gt;&gt; p.rest.rest.rest is Link.empty\n    True\n    &quot;&quot;&quot;\n    # Implementation Note: you might not need all lines in this skeleton code\n    ___________________ = ___________\n    for _______________________________________:\n        if __________________________________________:\n            _________________________________\n        ___________________\n\t________________________________________________________\n    ________________________________________________________\n\n', "python", "multiply-lnks-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def multiply_lnks(lst_of_lnks):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; a = Link(2, Link(3, Link(5)))
+    &gt;&gt;&gt; b = Link(6, Link(4, Link(2)))
+    &gt;&gt;&gt; c = Link(4, Link(1, Link(0, Link(2))))
+    &gt;&gt;&gt; p = multiply_lnks([a, b, c])
+    &gt;&gt;&gt; p.first
+    48
+    &gt;&gt;&gt; p.rest.first
+    12
+    &gt;&gt;&gt; p.rest.rest.rest is Link.empty
+    True
+    &quot;&quot;&quot;
+    # Implementation Note: you might not need all lines in this skeleton code
+    product = 1
+    for lnk in lst_of_lnks:
+        if lnk is Link.empty:
+            return Link.empty
+        product *= lnk.first
+    lst_of_lnks_rests = [lnk.rest for lnk in lst_of_lnks]
+    return Link(product, multiply_lnks(lst_of_lnks_rests))
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+For our base case, if we detect that any of the lists in the list of
+<code>Link</code>s is empty, we can return the empty linked list as we're not going
+to multiply anything.
+
+<p>Otherwise, we compute the product of all the firsts in our list of
+<code>Link</code>s. Then, the subproblem we use here is the rest of all the linked
+lists in our list of Links. Remember that the result of calling
+<code>multiply_lnks</code> will be a linked list! We'll use the product we've
+built so far as the first item in the returned <code>Link</code>, and then the
+result of the recursive call as the rest of that <code>Link</code>.</p>
+
+<p>Next, we have the iterative solution:</p>
+
+<solution>
+
+<pre><code>def multiply_lnks(lst_of_lnks):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; a = Link(2, Link(3, Link(5)))
+    &gt;&gt;&gt; b = Link(6, Link(4, Link(2)))
+    &gt;&gt;&gt; c = Link(4, Link(1, Link(0, Link(2))))
+    &gt;&gt;&gt; p = multiply_lnks([a, b, c])
+    &gt;&gt;&gt; p.first
+    48
+    &gt;&gt;&gt; p.rest.first
+    12
+    &gt;&gt;&gt; p.rest.rest.rest is Link.empty
+    True
+    &quot;&quot;&quot;
+    # Alternate iterative approach
+    import operator
+    from functools import reduce
+    def prod(factors):
+         return reduce(operator.mul, factors, 1)
+
+    head = Link.empty
+    tail = head
+    while Link.empty not in lst_of_lnks:
+        all_prod = prod([l.first for l in lst_of_lnks])
+        if head is Link.empty:
+            head = Link(all_prod)
+            tail = head
+        else:
+            tail.rest = Link(all_prod)
+            tail = tail.rest
+        lst_of_lnks = [l.rest for l in lst_of_lnks]
+    return head</code></pre>
+
+
+<solution>
+
+<p>The iterative solution is a bit more involved than the recursive solution.
+Instead of building the list **backwards** as in the recursive solution (because of the order that the recursive calls result in, the last item in our list will be finished first), we'll build the resulting linked list as we go along.</p>
+
+<p>We use<code>head</code> and <code>tail</code> to track the front and end of the new
+linked list we're creating. Our stopping condition for the loop is if any of the
+<code>Link</code>s in our list of <code>Link</code>s runs out of items.</p>
+
+<p>Finally, there's some special handling for the first item. We need to update
+both head and tail in that case. Otherwise, we just append to the end of our
+list using tail, and update tail.</p>
+
+</div>
+<div class="page-break"></div>
+
+<h3 id="q5-flip-two">Q5: Flip Two</h3>
+
+<p>Write a recursive function <code>flip_two</code> that takes as input a
+linked list <code>s</code> and mutates <code>s</code> so that every pair
+is flipped.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="flip-two-input" style="height:486px;"></div>
+            <a href="javascript:void" id="modal-link-flip-two-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-flip-two-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-flip-two-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def flip_two(s):\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; one_lnk = Link(1)\n    &gt;&gt;&gt; flip_two(one_lnk)\n    &gt;&gt;&gt; one_lnk\n    Link(1)\n    &gt;&gt;&gt; lnk = Link(1, Link(2, Link(3, Link(4, Link(5)))))\n    &gt;&gt;&gt; flip_two(lnk)\n    &gt;&gt;&gt; lnk\n    Link(2, Link(1, Link(4, Link(3, Link(5)))))\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n    # For an extra challenge, try writing out an iterative approach as well below!\n    "*** YOUR CODE HERE ***"\n\n', "python", "flip-two-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def flip_two(s):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; one_lnk = Link(1)
+    &gt;&gt;&gt; flip_two(one_lnk)
+    &gt;&gt;&gt; one_lnk
+    Link(1)
+    &gt;&gt;&gt; lnk = Link(1, Link(2, Link(3, Link(4, Link(5)))))
+    &gt;&gt;&gt; flip_two(lnk)
+    &gt;&gt;&gt; lnk
+    Link(2, Link(1, Link(4, Link(3, Link(5)))))
+    &quot;&quot;&quot;
+    # Recursive solution:
+    if s is Link.empty or s.rest is Link.empty:
+        return
+    s.first, s.rest.first = s.rest.first, s.first
+    flip_two(s.rest.rest)
+
+    # For an extra challenge, try writing out an iterative approach as well below!
+    return # separating recursive and iterative implementations
+
+    # Iterative approach
+    while s is not Link.empty and s.rest is not Link.empty:
+        s.first, s.rest.first = s.rest.first, s.first
+        s = s.rest.rest
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+If there's only a single item (or no item) to flip, then we're done.
+
+<p>Otherwise, we swap the contents of the first and second items in the list. Since
+we've handled the first two items, we then need to recurse on <code>s.rest.rest</code>.</p>
+
+<p>Although the question explicitly asks for a recursive solution, there is also a
+fairly similar iterative solution (see python solution).</p>
+
+<p>We will advance <code>s</code> until we see there are no more items or there is
+only one more Link object to process. Processing each <code>Link</code> involves
+swapping the contents of the first and second items in the list (same as the
+recursive solution).
+</div></p>
+
+<div class="page-break"></div>
+
+
+<h1 id="trees">Trees</h1>
+
+
+<p>We define a tree to be a recursive data abstraction that has a label (the value stored in the root of the tree) and branches (a list of trees directly underneath the root).
+Previously, we implemented the tree abstraction using Python lists.
+Let's look at another implementation using objects instead:</p>
+
+<pre><code>class Tree:
+    def __init__(self, label, branches=[]):
+        for b in branches:
+            assert isinstance(b, Tree)
+        self.label = label
+        self.branches = branches
+
+    def is_leaf(self):
+        return not self.branches</code></pre>
+
+
+
+<p>With this implementation, we can mutate a tree using attribute
+assignment, which wasn't possible in the previous implementation using lists. That's why we sometimes call these objects "mutable trees."</p>
+
+<pre><code>&gt;&gt;&gt; t = Tree(3, [Tree(4), Tree(5)])
+&gt;&gt;&gt; t.label = 5
+&gt;&gt;&gt; t.label
+5</code></pre>
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q6-make-even">Q6: Make Even</h3>
+
+<p>Define a function <code>make_even</code> which takes in a tree
+<code>t</code> whose values are integers, and mutates the tree such that all the
+odd integers are increased by 1 and all the even integers remain the same.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="make-even-input" style="height:414px;"></div>
+            <a href="javascript:void" id="modal-link-make-even-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-make-even-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-make-even-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def make_even(t):\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; t = Tree(1, [Tree(2, [Tree(3)]), Tree(4), Tree(5)])\n    &gt;&gt;&gt; make_even(t)\n    &gt;&gt;&gt; t.label\n    2\n    &gt;&gt;&gt; t.branches[0].branches[0].label\n    4\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "make-even-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def make_even(t):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; t = Tree(1, [Tree(2, [Tree(3)]), Tree(4), Tree(5)])
+    &gt;&gt;&gt; make_even(t)
+    &gt;&gt;&gt; t.label
+    2
+    &gt;&gt;&gt; t.branches[0].branches[0].label
+    4
+    &quot;&quot;&quot;
+    if t.label % 2 != 0:
+        t.label += 1
+    for branch in t.branches:
+        make_even(branch)
+    return
+    # Alternate Solution
+
+    t.label += t.label % 2
+    for branch in t.branches:
+        make_even(branch)
+    return
+</code></pre>
+
+            </div>
+        
+<div class="page-break"></div>
+
+<h3 id="q7-add-leaves">Q7: Add Leaves</h3>
+
+
+<p>Implement <code>add_d_leaves</code>, a function that takes in a <code>Tree</code> instance <code>t</code> and a number <code>v</code>.</p>
+
+<p>We define the depth of a node in <code>t</code> to be the number of edges from the root to that node. The depth of root is therefore 0.</p>
+
+<p>For each node in the tree, you should add <code>d</code> leaves to it, where <code>d</code> is the depth of the node. Every added leaf should have a label of <code>v</code>. If the node at this depth has existing branches, you should add these leaves to the end of that list of branches.</p>
+
+<p>For example, you should be adding 1 leaf with label <code>v</code> to each node at depth 1, 2 leaves to each node at depth 2, and so on.</p>
+
+<p>Here is an example of a tree <code>t</code>(shown on the left) and the result after <code>add_d_leaves</code> is applied with <code>v</code> as 5.
+<img class="img-responsive center-block" src="assets/add_leaves.png" alt="add" width="" height=""></p>
+
+<blockquote><p>Try drawing out the second doctest to visualize how the function is mutating <code>t3</code>.</p></blockquote>
+
+<!-- hack for separate blockquotes -->
+
+<blockquote><p><strong>Hint:</strong> Use a helper function to keep track of the depth!</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="add_d_leaves-input" style="height:1188px;"></div>
+            <a href="javascript:void" id="modal-link-add_d_leaves-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-add_d_leaves-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-add_d_leaves-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def add_d_leaves(t, v):\n    &quot;&quot;&quot;Add d leaves containing v to each node at every depth d.\n\n    &gt;&gt;&gt; t_one_to_four = Tree(1, [Tree(2), Tree(3, [Tree(4)])])\n    &gt;&gt;&gt; print(t_one_to_four)\n    1\n      2\n      3\n        4\n    &gt;&gt;&gt; add_d_leaves(t_one_to_four, 5)\n    &gt;&gt;&gt; print(t_one_to_four)\n    1\n      2\n        5\n      3\n        4\n          5\n          5\n        5\n\n    &gt;&gt;&gt; t1 = Tree(1, [Tree(3)])\n    &gt;&gt;&gt; add_d_leaves(t1, 4)\n    &gt;&gt;&gt; t1\n    Tree(1, [Tree(3, [Tree(4)])])\n    &gt;&gt;&gt; t2 = Tree(2, [Tree(5), Tree(6)])\n    &gt;&gt;&gt; t3 = Tree(3, [t1, Tree(0), t2])\n    &gt;&gt;&gt; print(t3)\n    3\n      1\n        3\n          4\n      0\n      2\n        5\n        6\n    &gt;&gt;&gt; add_d_leaves(t3, 10)\n    &gt;&gt;&gt; print(t3)\n    3\n      1\n        3\n          4\n            10\n            10\n            10\n          10\n          10\n        10\n      0\n        10\n      2\n        5\n          10\n          10\n        6\n          10\n          10\n        10\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "add_d_leaves-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def add_d_leaves(t, v):
+    &quot;&quot;&quot;Add d leaves containing v to each node at every depth d.
+
+    &gt;&gt;&gt; t_one_to_four = Tree(1, [Tree(2), Tree(3, [Tree(4)])])
+    &gt;&gt;&gt; print(t_one_to_four)
+    1
+      2
+      3
+        4
+    &gt;&gt;&gt; add_d_leaves(t_one_to_four, 5)
+    &gt;&gt;&gt; print(t_one_to_four)
+    1
+      2
+        5
+      3
+        4
+          5
+          5
+        5
+
+    &gt;&gt;&gt; t1 = Tree(1, [Tree(3)])
+    &gt;&gt;&gt; add_d_leaves(t1, 4)
+    &gt;&gt;&gt; t1
+    Tree(1, [Tree(3, [Tree(4)])])
+    &gt;&gt;&gt; t2 = Tree(2, [Tree(5), Tree(6)])
+    &gt;&gt;&gt; t3 = Tree(3, [t1, Tree(0), t2])
+    &gt;&gt;&gt; print(t3)
+    3
+      1
+        3
+          4
+      0
+      2
+        5
+        6
+    &gt;&gt;&gt; add_d_leaves(t3, 10)
+    &gt;&gt;&gt; print(t3)
+    3
+      1
+        3
+          4
+            10
+            10
+            10
+          10
+          10
+        10
+      0
+        10
+      2
+        5
+          10
+          10
+        6
+          10
+          10
+        10
+    &quot;&quot;&quot;
+    def add_leaves(t, d):
+        for b in t.branches:
+            add_leaves(b, d + 1)
+        t.branches.extend([Tree(v) for _ in range(d)])
+    add_leaves(t, 0)
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+A first thought is to recursively call <code>add_d_leaves</code> on each branch to add the
+leaves to the branches. However, notice that each recursive call would need to
+know what the current depth is in order to add that many leaves. We could try
+initializing a variable within the body of the function, but by now we know
+that in order to keep track of changing values across recursive calls we should
+use a helper function!
+
+<p>The helper function should take in a tree and a depth value, and we will define
+it as a function that adds <code>d</code> leaves to the branches of the root node, <code>d + 1</code>
+leaves to the branches of each of the root node's branches, and so on:</p>
+
+<pre><code>def add_leaves(t, d):
+    &quot;&quot;&quot;Adds a number of leaves to each node in t equivalent to the depth of
+    the node, assuming that the root node is at depth d, the children of
+    the root node are at depth d + 1, and so on.&quot;&quot;&quot;
+    ...</code></pre>
+
+<p>We don't need a parameter for <code>v</code> since that value won't change and we can
+access it from the parent frame. With this function defined as such, we can
+call <code>add_leaves</code> with arguments <code>t</code> and 0 to add leaves starting at depth 0.</p>
+
+<pre><code>def add_d_leaves(t, v):
+    def add_leaves(t, d):
+        &quot;&quot;&quot;Adds a number of leaves to each node in t equivalent to the depth of
+        the node, assuming that the root node is at depth d, the children of
+        the root node are at depth d + 1, and so on.&quot;&quot;&quot;
+        ...
+    add_leaves(t, 0)</code></pre>
+
+<p>Inside the helper function, we can now call it recursively on each branch.
+Each node's branch is one depth level greater than the node itself, so we
+should update <code>d</code> to <code>d + 1</code>:</p>
+
+<pre><code>def add_leaves(t, d):
+    for b in t.branches:
+        add_leaves(b, d + 1)
+    ...</code></pre>
+
+<p>Now that we've made these recursive calls, let's take a step back and look
+at our progress. Taking the leap of faith, we know that each recursive call
+should've successfully added the correct number of leaves at each node in
+each branch. That means that the only step left is to add the correct number
+of leaves to the current node!</p>
+
+<p>The parameter <code>d</code> tells us how many leaves to add at this node. Since we are
+mutating <code>t</code> to add these leaves, we need to mutate the list of <code>t</code>'s branches.
+We know a few different ways to mutatively add elements to a list:<code>insert</code>,
+<code>append</code>, and <code>extend</code>. Which one makes most sense to use here? Well, we know that
+we have to add <code>d</code> elements to the end of <code>t.branches</code>. Index doesn't matter
+so we can rule out <code>insert</code>. <code>append</code> is good for adding a single element, while
+<code>extend</code> is useful for adding multiple elements contained in a list, so let's
+use <code>extend</code>!</p>
+
+<p>The input to <code>extend</code> should be a list, so how do we create a list with the
+leaves that we need? The most concise way is with a list comprehension. To
+create each leaf, we call <code>Tree(v)</code>:</p>
+
+<pre><code>[Tree(v) for _ in range(d)]</code></pre>
+
+<p>Now, we just have to extend <code>t.branches</code> by this list:</p>
+
+<pre><code>def add_leaves(t, d):
+    for b in t.branches:
+        add_leaves(b, d + 1)
+    t.branches.extend([Tree(v) for _ in range(d)])</code></pre>
+
+<p>Do we need an explicitly base case? Let's take a look at what happens when <code>t</code>
+is a leaf. In that case, <code>t.branches</code> would be an empty list, so we would not
+enter the <code>for</code> loop. Then, the function will extend <code>t.branches</code>, which is an
+empty list, by a list containing the new leaves. This is exactly the desired
+result, so no base case is needed!
+</div></p>
+
+<!-- <attach-py>
+def add</em>d_leaves(t, v):
+
+<pre><code>&quot;&quot;&quot;Add d leaves containing v to each node at every depth d.
+
+&gt;&gt;&gt; t_one_to_four = Tree(1, [Tree(2), Tree(3, [Tree(4)])])
+&gt;&gt;&gt; print(t_one_to_four)
+1
+  2
+  3
+    4
+&gt;&gt;&gt; add_d_leaves(t_one_to_four, 5)
+&gt;&gt;&gt; print(t_one_to_four)
+1
+  2
+    5
+  3
+    4
+      5
+      5
+    5
+
+&gt;&gt;&gt; t1 = Tree(1, [Tree(3)])
+&gt;&gt;&gt; add_d_leaves(t1, 4)
+&gt;&gt;&gt; t1
+Tree(1, [Tree(3, [Tree(4)])])
+&gt;&gt;&gt; t2 = Tree(2, [Tree(5), Tree(6)])
+&gt;&gt;&gt; t3 = Tree(3, [t1, Tree(0), t2])
+&gt;&gt;&gt; print(t3)
+3
+  1
+    3
+      4
+  0
+  2
+    5
+    6
+&gt;&gt;&gt; add_d_leaves(t3, 10)
+&gt;&gt;&gt; print(t3)
+3
+  1
+    3
+      4
+        10
+        10
+        10
+      10
+      10
+    10
+  0
+    10
+  2
+    5
+      10
+      10
+    6
+      10
+      10
+    10
+&quot;&quot;&quot;
+<div class="sol-highlight">def add_leaves(t, d):
+    for b in t.branches:
+        add_leaves(b, d + 1)
+    t.branches.extend([Tree(v) for _ in range(d)])
+add_leaves(t, 0)</div></code></pre>
+
+</attach-py> -->
+
+<!-- <attach-py location=epilogue>
+class Tree:
+
+<pre><code>&quot;&quot;&quot;
+&gt;&gt;&gt; t = Tree(3, [Tree(2, [Tree(5)]), Tree(4)])
+&gt;&gt;&gt; t.label
+3
+&gt;&gt;&gt; t.branches[0].label
+2
+&gt;&gt;&gt; t.branches[1].is_leaf()
+True
+&quot;&quot;&quot;
+def __init__(self, label, branches=[]):
+    for b in branches:
+        assert isinstance(b, Tree)
+    self.label = label
+    self.branches = list(branches)
+
+def is_leaf(self):
+    return not self.branches
+
+def __repr__(self):
+    if self.branches:
+        branch_str = &#x27;, &#x27; + repr(self.branches)
+    else:
+        branch_str = &#x27;&#x27;
+    return &#x27;Tree({0}{1})&#x27;.format(self.label, branch_str)
+
+def __str__(self):
+    def print_tree(t, indent=0):
+        tree_str = &#x27;  &#x27; * indent + str(t.label) + &quot;\n&quot;
+        for b in t.branches:
+            tree_str += print_tree(b, indent + 1)
+        return tree_str
+    return print_tree(self).rstrip()</code></pre>
+
+</attach-py> -->
+<div class="page-break"></div>
+
+
+<h1 id="efficiency-orders-of-growth">Efficiency (Orders of Growth)</h1>
+
+
+
+<p>When we talk about the efficiency of a function, we are often interested in the
+following: as the size of the input grows, how does the runtime of the function
+change? And what do we mean by <em>runtime</em>?</p>
+
+<p><strong>Example 1:</strong> <code>square(1)</code> requires one primitive operation: multiplication.
+<code>square(100)</code> also requires one. No matter what input <code>n</code> we pass into <code>square</code>, it always takes a <em>constant</em> number of operations (1). In other words, this function has a runtime complexity of Θ(1).</p>
+
+<p>As an illustration, check out the table below:</p>
+
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th>input</th>
+    <th>function call</th>
+    <th>return value</th>
+    <th>operations</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td><code>square(1)</code></td>
+    <td>1*1</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td><code>square(2)</code></td>
+    <td>2*2</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>100</td>
+    <td><code>square(100)</code></td>
+    <td>100*100</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>n</td>
+    <td><code>square(n)</code></td>
+    <td>n*n</td>
+    <td>1</td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+<p><strong>Example 2:</strong> <code>factorial(1)</code> requires one multiplication, but <code>factorial(100)</code> requires 100 multiplications. As we increase the input size of n, the runtime (number of operations) increases <strong>linearly</strong> proportional to the input. In other words, this function has a runtime complexity of Θ(<code>n</code>).</p>
+
+<p>As an illustration, check out the table below:</p>
+
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th>input</th>
+    <th>function call</th>
+    <th>return value</th>
+    <th>operations</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td><code>factorial(1)</code></td>
+    <td>1*1</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td><code>factorial(2)</code></td>
+    <td>2*1*1</td>
+    <td>2</td>
+  </tr>
+  <tr>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>100</td>
+    <td><code>factorial(100)</code></td>
+    <td>100*99*...*1*1</td>
+    <td>100</td>
+  </tr>
+  <tr>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>n</td>
+    <td><code>factorial(n)</code></td>
+    <td>n*(n-1)*...*1*1</td>
+    <td>n</td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+<p><strong>Example 3:</strong> Consider the following function:</p>
+
+<pre><code>def bar(n):
+    for a in range(n):
+        for b in range(n):
+            print(a,b)</code></pre>
+
+<p><code>bar(1)</code> requires 1 print statements, while <code>bar(100)</code> requires <code>100*100 = 10000</code> print statements (each time <code>a</code> increments, we have 100 print statements due to the inner for loop). Thus, the runtime increases <strong>quadratically</strong> proportional to the input. In other words, this function has a runtime complexity of Θ(<code>n^2</code>).</p>
+
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th>input</th>
+    <th>function call</th>
+    <th>operations (prints)</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td><code>bar(1)</code></td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td><code>bar(2)</code></td>
+    <td>4</td>
+  </tr>
+  <tr>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>100</td>
+    <td><code>bar(100)</code></td>
+    <td>10000</td>
+  </tr>
+  <tr>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>n</td>
+    <td><code>bar(n)</code></td>
+    <td>n^2</td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+<p><strong>Example 4:</strong> Consder the following function:</p>
+
+<pre><code>def rec(n):
+    if n == 0:
+        return 1
+    else:
+        return rec(n &#x2d; 1) + rec(n &#x2d; 1)</code></pre>
+
+<p><code>rec(1)</code> requires one addition, as it returns <code>rec(0) + rec(0)</code>, and <code>rec(0)</code> hits the base case and requires no further additions. but <code>rec(4)</code> requires <code>2^4 &#x2d; 1</code> = 15 additions. To further understand the intuition, we can take a look at the recurisve tree below. To get <code>rec(4)</code>, we need one addition. We have two calls to <code>rec(3)</code>, which each require one addition, so this level needs two additions. Then we have four calls to <code>rec(2)</code>, so this level requires four additions, and so on down the tree. In total, this adds up to 1 + 2 + 4 + 8 = 15 additions.</p>
+
+<p><img class="img-responsive center-block" src="assets/rec.png" alt="Recursive Call Tree" title="Rec Tree" width="" height=""></p>
+
+<p>As we increase the input size of n, the runtime (number of operations) increases <strong>exponentially</strong> proportional to the input. In other words, this function has a runtime complexity of Θ(<code>2^n</code>).</p>
+
+<p>As an illustration, check out the table below:</p>
+
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th>input</th>
+    <th>function call</th>
+    <th>return value</th>
+    <th>operations</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td><code>rec(1)</code></td>
+    <td>2</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td><code>rec(2)</code></td>
+    <td>4</td>
+    <td>3</td>
+  </tr>
+  <tr>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td><code>rec(10)</code></td>
+    <td>1024</td>
+    <td>1023</td>
+  </tr>
+  <tr>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>n</td>
+    <td><code>rec(n)</code></td>
+    <td><code>2^n</code></td>
+    <td><code>2^n</code></td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+<p>Here are some general guidelines for finding the order of growth for the
+runtime of a function:</p>
+
+<ul>
+  <li><p>If the function is recursive or iterative, you can subdivide the problem
+  as seen above:</p>
+
+  <ul>
+    <li>Count the number of recursive calls/iterations that will be made in terms of input size <code>n</code>.</li>
+    <li>Find how much work is done per recursive call or iteration in terms of input size <code>n</code>.</li>
+    <li>The answer is usually the product of the above two, but be sure to pay
+    attention to control flow!</li>
+  </ul></li>
+  <li>If the function calls helper functions that are not constant-time, you need to take the runtime of the helper functions into consideration.</li>
+  <li>We can ignore constant factors. For example <code>1000000n</code> and <code>n</code> steps are both linear.</li>
+  <li>We can also ignore smaller factors. For example if <code>h</code> calls <code>f</code> and <code>g</code>, and <code>f</code> is Quadratic while <code>g</code> is linear, then <code>h</code> is Quadratic.</li>
+  <li><p>For the purposes of this class, we take a fairly coarse view of efficiency. All the problems we cover in this course can be grouped as one of the following:</p>
+
+  <ul>
+    <li>Constant: the amount of time does not change based on the input size. Rule: <code>n &#x2d;&#x2d;&gt; 2n</code> means <code>t &#x2d;&#x2d;&gt; t</code>.</li>
+    <li>Logarithmic: the amount of time changes based on the logarithm of the input size. Rule: <code>n &#x2d;&#x2d;&gt; 2n</code> means <code>t &#x2d;&#x2d;&gt; t + k</code>.</li>
+    <li>Linear: the amount of time changes with direct proportion to the size of the input. Rule: <code>n &#x2d;&#x2d;&gt; 2n</code> means <code>t &#x2d;&#x2d;&gt; 2t</code>.</li>
+    <li>Quadratic: the amount of time changes based on the square of the input size. Rule: <code>n &#x2d;&#x2d;&gt; 2n</code> means <code>t &#x2d;&#x2d;&gt; 4t</code>.</li>
+    <li>Exponential: the amount of time changes with a power of the input size. Rule: <code>n &#x2d;&#x2d;&gt; n + 1</code> means <code>t &#x2d;&#x2d;&gt; 2t</code>.</li>
+  </ul></li>
+</ul>
+
+
+<h3 id="q8-wwpd-orders-of-growth">Q8: WWPD: Orders of Growth</h3>
+
+
+<p>What is the <em>worst case</em> (i.e. when <code>n</code> is prime) order of growth of <code>is_prime</code> in terms of <code>n</code>?</p>
+
+<pre><code>def is_prime(n):
+    for i in range(2, n):
+        if n % i == 0:
+            return False
+    return True</code></pre>
+
+<p>Choose one of:</p>
+
+<ul>
+  <li>Constant</li>
+  <li>Logarithmic</li>
+  <li>Linear</li>
+  <li>Quadratic</li>
+  <li>Exponential</li>
+  <li>None of these</li>
+</ul>
+
+
+            <label class="sr-only" for="is_prime-input">Your Answer:</label>
+            <input class="form-control storable" id="is_prime-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p>Linear (Θ(<em>n</em>)).</p>
+
+<p><em>Explanation</em>: In the worst case, <em>n</em> is prime, and we have to execute the
+loop <em>n</em> - 2 times. Each iteration takes constant time (one conditional check
+and one return statement). Therefore, the total time is (<em>n</em> - 2) x constant,
+or simply linear.</p>
+
+</div>
+
+<div class="page-break"></div>
+
+<p>What is the order of growth of <code>bar</code> in terms of <code>n</code>?</p>
+
+<pre><code>def bar(n):
+    i, sum = 1, 0
+    while i &lt;= n:
+        sum += biz(n)
+        i += 1
+    return sum
+
+def biz(n):
+    i, sum = 1, 0
+    while i &lt;= n:
+        sum += i**3
+        i += 1
+    return sum</code></pre>
+
+<p>Choose one of:</p>
+
+<ul>
+  <li>Constant</li>
+  <li>Logarithmic</li>
+  <li>Linear</li>
+  <li>Quadratic</li>
+  <li>Exponential</li>
+  <li>None of these</li>
+</ul>
+
+
+            <label class="sr-only" for="bar-input">Your Answer:</label>
+            <input class="form-control storable" id="bar-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+
+<p>Quadratic Θ(<em>n<sup>2</sup></em>).</p>
+
+<p><em>Explanation</em>:
+The body of the while loop in <code>bar</code> is executed <em>n</em> times.
+Each iteration, one call to <code>biz(n)</code> is made. Note that <em>n</em> never changes,
+so this call takes the same time to run each iteration.
+Taking a look at <code>biz</code>, we see that there is another while loop. Be careful
+to note that although the term being added to <code>sum</code> is cubed (<code>i**3</code>),
+<code>i</code> itself is only incremented by 1 in each iteration.
+This tells us that this while loop also executes <em>n</em> times, with each iteration
+taking constant time, so the total time of <code>biz(n)</code> is <em>n</em> x constant, or linear.
+Knowing that each call to <code>biz(n)</code> takes linear time,
+we can conclude that each iteration of the while loop in <code>bar</code> is linear.
+Therefore, the total runtime of <code>bar(n)</code> is quadratic.</p>
+
+</div>
+
+<p>What is the order of growth of <code>foo</code> in terms of <code>n</code>, where <code>n</code> is the length
+of <code>lst</code>? Assume that slicing a list and calling <code>len</code> on a list can both be
+done in constant time. Write your answer in Θ notation.</p>
+
+<pre><code>def foo(lst, i):
+    mid = len(lst) // 2
+    if mid == 0:
+        return lst
+    elif i &gt; 0:
+        return foo(lst[mid:], &#x2d;1)
+    else:
+        return foo(lst[:mid], 1)</code></pre>
+
+
+            <label class="sr-only" for="foo-input">Your Answer:</label>
+            <input class="form-control storable" id="foo-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+Logarithmic Θ(log(<em>n</em>)).
+
+<p><em>Explanation</em>: A single recursive call is made in the body of <code>foo</code> on half the
+input list (either the first half or the second half depending on the input
+flag <code>i</code>). The base case is executed when the list either is empty or has only
+one element. We start with an <em>n</em> element list and halve the list until there
+is at most 1 element, which means there will be log(<em>n</em>) total calls. Each
+call, constant work is done if we ignore the recursive call. The total runtime
+is then log(<em>n</em>) * &theta;(1).</p>
+
+<p><em>Note</em>: We simplified this problem by assuming that slicing a list takes
+constant time. In reality, this operation is a bit more nuanced and may take
+linear time. As an additional exercise, try determining the order of growth
+of this function if we assuming slicing takes linear time.
+</div></p>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#representation-repr-str">Representation: Repr, Str</a></li>
+  <ul>
+    <li><a href="#q1-wwpd-repr-esentation">Q1: WWPD: Repr-esentation</a></li>
+  </ul>
+  <li><a href="#linked-lists">Linked Lists</a></li>
+  <ul>
+    <li><a href="#q2-the-hy-rules-of-linked-lists">Q2: The Hy-rules of Linked Lists</a></li>
+    <li><a href="#q3-sum-nums">Q3: Sum Nums</a></li>
+    <li><a href="#q4-multiply-links">Q4: Multiply Links</a></li>
+    <li><a href="#q5-flip-two">Q5: Flip Two</a></li>
+  </ul>
+  <li><a href="#trees">Trees</a></li>
+  <ul>
+    <li><a href="#q6-make-even">Q6: Make Even</a></li>
+    <li><a href="#q7-add-leaves">Q7: Add Leaves</a></li>
+  </ul>
+  <li><a href="#efficiency-orders-of-growth">Efficiency (Orders of Growth)</a></li>
+  <ul>
+    <li><a href="#q8-wwpd-orders-of-growth">Q8: WWPD: Orders of Growth</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,1301 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/lab.css">
+
+
+    <title>
+Lab 7 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Lab 7 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="lab07.zip" class="label label-outline">lab07.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+
+
+    
+<h1 id="topics">Topics</h1>
+
+
+<p>Consult this section if you need a refresher on the material for this lab. It's
+okay to skip directly to <a href="#required-questions">the questions</a> and refer back
+here should you get stuck.</p>
+
+<br>
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Object-Oriented Programming<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+
+<h2 id="object-oriented-programming">Object-Oriented Programming</h2>
+
+
+<p><strong>Object-oriented programming</strong> (OOP) is a style of programming that
+allows you to think of code in terms of "objects." Here's an example of
+a <code>Car</code> class:</p>
+
+<pre><code>class Car:
+    num_wheels = 4
+
+    def __init__(self, color):
+        self.wheels = Car.num_wheels
+        self.color = color
+
+    def drive(self):
+        if self.wheels &lt;= Car.num_wheels:
+            return self.color + &#x27; car cannot drive!&#x27;
+        return self.color + &#x27; car goes vroom!&#x27;
+
+    def pop_tire(self):
+        if self.wheels &gt; 0:
+            self.wheels &#x2d;= 1</code></pre>
+
+<p>Here's some terminology:</p>
+
+<ul>
+  <li><strong>class</strong>: a blueprint for how to build a certain type of object.
+  The <code>Car</code> class (shown above) describes the behavior and data that
+  all <code>Car</code> objects have.</li>
+  <li><p><strong>instance</strong>: a particular occurrence of a class. In Python, we
+  create instances of a class like this:</p>
+
+<pre><code>&gt;&gt;&gt; my_car = Car(&#x27;red&#x27;)</code></pre>
+
+  <p><code>my_car</code> is an instance of the <code>Car</code> class.</p></li>
+  <li><p><strong>data attributes</strong>: a variable that belongs to the instance
+  (also called instance variables).
+  Think of a data attribute as a quality of the object: cars have <em>wheels</em>
+  and <em>color</em>, so we have given our <code>Car</code> instance <code>self.wheels</code> and
+  <code>self.color</code> attributes. We can access attributes using <strong>dot
+  notation</strong>:</p>
+
+<pre><code>&gt;&gt;&gt; my_car.color
+&#x27;red&#x27;
+&gt;&gt;&gt; my_car.wheels
+4</code></pre></li>
+  <li><p><strong>method</strong>: Methods are just like normal functions, except that they
+  are bound to an instance. Think of a method as a "verb" of
+  the class: cars can <em>drive</em> and also <em>pop their tires</em>, so we have
+  given our <code>Car</code> instance the methods <code>drive</code> and <code>pop_tire</code>. We call
+  methods using <strong>dot notation</strong>:</p>
+
+<pre><code>&gt;&gt;&gt; my_car = Car(&#x27;red&#x27;)
+&gt;&gt;&gt; my_car.drive()
+&#x27;red car goes vroom!&#x27;</code></pre></li>
+  <li><p><strong>constructor</strong>: Constructors
+  build an instance of the class. The constructor for car objects
+  is <code>Car(color)</code>. When Python calls that constructor,
+  it immediately calls the <code>__init__</code> method. That's where we initialize
+  the data attributes:</p>
+
+<pre><code>def __init__(self, color):
+    self.wheels = Car.num_wheels
+    self.color = color</code></pre>
+
+  <p>The constructor takes in one argument, <code>color</code>. As you can see, this
+  constructor also creates the <code>self.wheels</code> and <code>self.color</code> attributes.</p></li>
+  <li><p><code>self</code>: in Python, <code>self</code> is the first parameter for many methods
+  (in this class, we will only use methods whose first parameter is
+  <code>self</code>). When a method is called, <code>self</code> is bound to an instance of
+  the class. For example:</p>
+
+<pre><code>&gt;&gt;&gt; my_car = Car(&#x27;red&#x27;)
+&gt;&gt;&gt; car.drive()</code></pre>
+
+  <p>Notice that the <code>drive</code> method takes in <code>self</code> as an argument, but it
+  looks like we didn't pass one in! This is because the dot notation
+  <em>implicitly</em> passes in <code>car</code> as <code>self</code> for us.</p></li>
+</ul>
+
+<!-- This is the short version of inheritance introduction.
+A longer version can be found in inheritance-introduction.md -->
+
+<p>To avoid redefining attributes and methods for similar classes,
+we can write a single <strong>base class</strong> from which the similar classes <strong>inherit</strong>.
+For example, we can write a class called <strong>Pet</strong>
+and define <strong>Dog</strong> as a <strong>subclass</strong> of <strong>Pet</strong>:</p>
+
+<pre><code>class Pet:
+
+    def __init__(self, name, owner):
+        self.is_alive = True    # It&#x27;s alive!!!
+        self.name = name
+        self.owner = owner
+
+    def eat(self, thing):
+        print(self.name + &quot; ate a &quot; + str(thing) + &quot;!&quot;)
+
+    def talk(self):
+        print(self.name)
+
+class Dog(Pet):
+
+    def talk(self):
+        super().talk()
+        print(&#x27;This Dog says woof!&#x27;)</code></pre>
+
+
+
+<p>Inheritance represents a hierarchical relationship between two or more
+classes where one class <strong>is a</strong> more specific version of the other:
+a dog <strong>is a</strong> pet
+(We use <strong>is a</strong> to describe this sort of relationship in OOP languages,
+and not to refer to the Python <code>is</code> operator).</p>
+
+<p>Since <code>Dog</code> inherits from <code>Pet</code>, the <code>Dog</code> class will also inherit the
+<code>Pet</code> class's methods, so we don't have to redefine <code>__init__</code> or <code>eat</code>.
+We do want each <code>Dog</code> to <code>talk</code> in a <code>Dog</code>-specific way,
+so we can <strong>override</strong> the <code>talk</code> method.</p>
+
+<p>We can use <code>super()</code> to refer to the superclass of <code>self</code>,
+and access any superclass methods as if we were an instance of the superclass.
+For example, <code>super().talk()</code> in the <code>Dog</code> class will call the <code>talk()</code>
+method from the <code>Pet</code> class, but passing the <code>Dog</code> instance as the <code>self</code>.</p>
+
+<p>This is a little bit of a simplification,
+and if you're interested you can read more
+in the
+<a href="https://docs.python.org/3/library/functions.html#super">Python documentation</a>
+on <code>super</code>.</p>
+
+</div>
+
+<br>
+
+
+<h1 id="required-questions">Required Questions</h1>
+
+
+<br>
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+
+<h2 id="getting-started-videos">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZcnEaE2S67cm1zYVzD5FsJO"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZcnEaE2S67cm1zYVzD5FsJO'> YouTube link </a></p>
+</div>
+
+
+<h2 id="what-would-python-display">What Would Python Display?</h2>
+
+
+<p>These questions use inheritance.
+For an overview of inheritance,
+see the <a href="http://composingprograms.com/pages/25-object-oriented-programming.html#inheritance">inheritance portion</a> of Composing Programs.</p>
+
+
+<h3 id="q1-wwpd-classy-cars">Q1: WWPD: Classy Cars</h3>
+
+
+<p>Below is the definition of a <code>Car</code> class that we will be using in the following WWPD questions.</p>
+
+<blockquote><p><strong>Note:</strong> The <code>Car</code> class definition can also be found in <code>car.py</code>.</p></blockquote>
+
+<pre><code>class Car:
+    num_wheels = 4
+    gas = 30
+    headlights = 2
+    size = &#x27;Tiny&#x27;
+
+    def __init__(self, make, model):
+        self.make = make
+        self.model = model
+        self.color = &#x27;No color yet. You need to paint me.&#x27;
+        self.wheels = Car.num_wheels
+        self.gas = Car.gas
+
+    def paint(self, color):
+        self.color = color
+        return self.make + &#x27; &#x27; + self.model + &#x27; is now &#x27; + color
+
+    def drive(self):
+        if self.wheels &lt; Car.num_wheels or self.gas &lt;= 0:
+            return &#x27;Cannot drive!&#x27;
+        self.gas &#x2d;= 10
+        return self.make + &#x27; &#x27; + self.model + &#x27; goes vroom!&#x27;
+
+    def pop_tire(self):
+        if self.wheels &gt; 0:
+            self.wheels &#x2d;= 1
+
+    def fill_gas(self):
+        self.gas += 20
+        return &#x27;Gas level: &#x27; + str(self.gas)</code></pre>
+
+<p>For the later unlocking questions, we will be referencing the <code>MonsterTruck</code>
+class below.</p>
+
+<blockquote><p><strong>Note</strong>: The <code>MonsterTruck</code> class definition can also be found in <code>car.py</code>.</p></blockquote>
+
+<pre><code> class MonsterTruck(Car):
+     size = &#x27;Monster&#x27;
+
+     def rev(self):
+         print(&#x27;Vroom! This Monster Truck is huge!&#x27;)
+
+     def drive(self):
+         self.rev()
+         return super().drive()</code></pre>
+
+<p>You can find the unlocking questions below.</p>
+
+<blockquote><p>Use Ok to test your knowledge with the following "What Would Python Display?" questions:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q wwpd-car -u<button id="copy-code-python3ok-qwwpd-car-u" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qwwpd-car-u").onclick = () => copyCode('python3 ok -q wwpd-car -u', "copy-code-python3ok-qwwpd-car-u");
+        </script>
+        <br/>
+
+<p><strong>Important:</strong>
+For all WWPD questions, type <code>Function</code> if you believe the answer is
+<code>&lt;function...&gt;</code>, <code>Error</code> if it errors, and <code>Nothing</code> if nothing is displayed.</p></blockquote>
+
+<!--
+
+<blockquote><pre><code>python3 ok &#x2d;q food_truck &#x2d;u</code></pre>
+
+<p>--></p></blockquote>
+
+<!-- <pre><code>&gt;&gt;&gt; garcias_car = Car(&#x27;Tesla&#x27;, &#x27;Model S&#x27;)
+&gt;&gt;&gt; garcias_car.color
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x27;&#x4e;&#x6f;&#x20;&#x63;&#x6f;&#x6c;&#x6f;&#x72;&#x20;&#x79;&#x65;&#x74;&#x2e;&#x20;&#x59;&#x6f;&#x75;&#x20;&#x6e;&#x65;&#x65;&#x64;&#x20;&#x74;&#x6f;&#x20;&#x70;&#x61;&#x69;&#x6e;&#x74;&#x20;&#x6d;&#x65;&#x2e;&#x27;</div>
+&gt;&gt;&gt; garcias_car.paint(&#x27;black&#x27;)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x27;&#x54;&#x65;&#x73;&#x6c;&#x61;&#x20;&#x4d;&#x6f;&#x64;&#x65;&#x6c;&#x20;&#x53;&#x20;&#x69;&#x73;&#x20;&#x6e;&#x6f;&#x77;&#x20;&#x62;&#x6c;&#x61;&#x63;&#x6b;&#x27;</div>
+&gt;&gt;&gt; garcias_car.color
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x27;&#x62;&#x6c;&#x61;&#x63;&#x6b;&#x27;</div></code></pre>
+        <button id='prompt-1' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+         -->
+<!--
+<pre><code>&gt;&gt;&gt; garcias_car = Car(&#x27;Tesla&#x27;, &#x27;Model S&#x27;)
+&gt;&gt;&gt; garcias_truck = MonsterTruck(&#x27;Monster Truck&#x27;, &#x27;XXL&#x27;)
+&gt;&gt;&gt; garcias_car.size
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x27;&#x54;&#x69;&#x6e;&#x79;&#x27;</div>
+&gt;&gt;&gt; garcias_truck.size
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x27;&#x4d;&#x6f;&#x6e;&#x73;&#x74;&#x65;&#x72;&#x27;</div></code></pre>
+        <button id='prompt-2' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+-->
+<pre><code>&gt;&gt;&gt; deneros_car = Car(&#x27;Tesla&#x27;, &#x27;Model S&#x27;)
+&gt;&gt;&gt; deneros_car.model
+<div class="alt prompt-3">______</div><div class="solution prompt-3">&#x27;&#x4d;&#x6f;&#x64;&#x65;&#x6c;&#x20;&#x53;&#x27;</div>
+&gt;&gt;&gt; deneros_car.gas = 10
+&gt;&gt;&gt; deneros_car.drive()
+<div class="alt prompt-3">______</div><div class="solution prompt-3">&#x27;&#x54;&#x65;&#x73;&#x6c;&#x61;&#x20;&#x4d;&#x6f;&#x64;&#x65;&#x6c;&#x20;&#x53;&#x20;&#x67;&#x6f;&#x65;&#x73;&#x20;&#x76;&#x72;&#x6f;&#x6f;&#x6d;&#x21;&#x27;</div>
+&gt;&gt;&gt; deneros_car.drive()
+<div class="alt prompt-3">______</div><div class="solution prompt-3">&#x27;&#x43;&#x61;&#x6e;&#x6e;&#x6f;&#x74;&#x20;&#x64;&#x72;&#x69;&#x76;&#x65;&#x21;&#x27;</div>
+&gt;&gt;&gt; deneros_car.fill_gas()
+<div class="alt prompt-3">______</div><div class="solution prompt-3">&#x27;&#x47;&#x61;&#x73;&#x20;&#x6c;&#x65;&#x76;&#x65;&#x6c;&#x3a;&#x20;&#x32;&#x30;&#x27;</div>
+&gt;&gt;&gt; deneros_car.gas
+<div class="alt prompt-3">______</div><div class="solution prompt-3">&#x32;&#x30;</div>
+&gt;&gt;&gt; Car.gas
+<div class="alt prompt-3">______</div><div class="solution prompt-3">&#x33;&#x30;</div></code></pre>
+        <button id='prompt-3' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+
+<!-- <pre><code>&gt;&gt;&gt; Car.headlights
+<div class="alt prompt-4">______</div><div class="solution prompt-4">&#x32;</div>
+&gt;&gt;&gt; garcias_car.headlights
+<div class="alt prompt-4">______</div><div class="solution prompt-4">&#x32;</div>
+&gt;&gt;&gt; Car.headlights = 3
+&gt;&gt;&gt; garcias_car.headlights
+<div class="alt prompt-4">______</div><div class="solution prompt-4">&#x33;</div>
+&gt;&gt;&gt; garcias_car.headlights = 2
+&gt;&gt;&gt; Car.headlights
+<div class="alt prompt-4">______</div><div class="solution prompt-4">&#x33;</div></code></pre>
+        <button id='prompt-4' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+         -->
+
+<pre><code>&gt;&gt;&gt; deneros_car = Car(&#x27;Tesla&#x27;, &#x27;Model S&#x27;)
+&gt;&gt;&gt; deneros_car.wheels = 2
+&gt;&gt;&gt; deneros_car.wheels
+<div class="alt prompt-5">______</div><div class="solution prompt-5">&#x32;</div>
+&gt;&gt;&gt; Car.num_wheels
+<div class="alt prompt-5">______</div><div class="solution prompt-5">&#x34;</div>
+&gt;&gt;&gt; deneros_car.drive()
+<div class="alt prompt-5">______</div><div class="solution prompt-5">&#x27;&#x43;&#x61;&#x6e;&#x6e;&#x6f;&#x74;&#x20;&#x64;&#x72;&#x69;&#x76;&#x65;&#x21;&#x27;</div>
+&gt;&gt;&gt; Car.drive()
+<div class="alt prompt-5">______</div><div class="solution prompt-5">&#x45;&#x72;&#x72;&#x6f;&#x72;&#x20;&#x28;&#x54;&#x79;&#x70;&#x65;&#x45;&#x72;&#x72;&#x6f;&#x72;&#x29;</div>
+&gt;&gt;&gt; Car.drive(deneros_car)
+<div class="alt prompt-5">______</div><div class="solution prompt-5">&#x27;&#x43;&#x61;&#x6e;&#x6e;&#x6f;&#x74;&#x20;&#x64;&#x72;&#x69;&#x76;&#x65;&#x21;&#x27;</div></code></pre>
+        <button id='prompt-5' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+<!--
+
+<pre><code>&gt;&gt;&gt; MonsterTruck.drive(garcias_car)
+Error (AttributeError)</code></pre>
+
+-->
+<pre><code>&gt;&gt;&gt; deneros_car = MonsterTruck(&#x27;Monster&#x27;, &#x27;Batmobile&#x27;)
+&gt;&gt;&gt; deneros_car.drive()
+<div class="alt prompt-6">______</div><div class="solution prompt-6">&#x56;&#x72;&#x6f;&#x6f;&#x6d;&#x21;&#x20;&#x54;&#x68;&#x69;&#x73;&#x20;&#x4d;&#x6f;&#x6e;&#x73;&#x74;&#x65;&#x72;&#x20;&#x54;&#x72;&#x75;&#x63;&#x6b;&#x20;&#x69;&#x73;&#x20;&#x68;&#x75;&#x67;&#x65;&#x21;&#xa;&#x27;&#x4d;&#x6f;&#x6e;&#x73;&#x74;&#x65;&#x72;&#x20;&#x42;&#x61;&#x74;&#x6d;&#x6f;&#x62;&#x69;&#x6c;&#x65;&#x20;&#x67;&#x6f;&#x65;&#x73;&#x20;&#x76;&#x72;&#x6f;&#x6f;&#x6d;&#x21;&#x27;</div>
+&gt;&gt;&gt; Car.drive(deneros_car)
+<div class="alt prompt-6">______</div><div class="solution prompt-6">&#x27;&#x4d;&#x6f;&#x6e;&#x73;&#x74;&#x65;&#x72;&#x20;&#x42;&#x61;&#x74;&#x6d;&#x6f;&#x62;&#x69;&#x6c;&#x65;&#x20;&#x67;&#x6f;&#x65;&#x73;&#x20;&#x76;&#x72;&#x6f;&#x6f;&#x6d;&#x21;&#x27;</div>
+&gt;&gt;&gt; MonsterTruck.drive(deneros_car)
+<div class="alt prompt-6">______</div><div class="solution prompt-6">&#x56;&#x72;&#x6f;&#x6f;&#x6d;&#x21;&#x20;&#x54;&#x68;&#x69;&#x73;&#x20;&#x4d;&#x6f;&#x6e;&#x73;&#x74;&#x65;&#x72;&#x20;&#x54;&#x72;&#x75;&#x63;&#x6b;&#x20;&#x69;&#x73;&#x20;&#x68;&#x75;&#x67;&#x65;&#x21;&#xa;&#x27;&#x4d;&#x6f;&#x6e;&#x73;&#x74;&#x65;&#x72;&#x20;&#x42;&#x61;&#x74;&#x6d;&#x6f;&#x62;&#x69;&#x6c;&#x65;&#x20;&#x67;&#x6f;&#x65;&#x73;&#x20;&#x76;&#x72;&#x6f;&#x6f;&#x6d;&#x21;&#x27;</div>
+&gt;&gt;&gt; Car.rev(deneros_car)
+<div class="alt prompt-6">______</div><div class="solution prompt-6">&#x45;&#x72;&#x72;&#x6f;&#x72;&#x20;&#x28;&#x41;&#x74;&#x74;&#x72;&#x69;&#x62;&#x75;&#x74;&#x65;&#x45;&#x72;&#x72;&#x6f;&#x72;&#x29;</div></code></pre>
+        <button id='prompt-6' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+<!--
+<pre><code>&gt;&gt;&gt; class FoodTruck(MonsterTruck):
+...    delicious = &#x27;meh&#x27;
+...    def serve(self):
+...        if FoodTruck.size == &#x27;delicious&#x27;:
+...            print(&#x27;Yum!&#x27;)
+...        if self.food != &#x27;Tacos&#x27;:
+...            return &#x27;But no tacos...&#x27;
+...        else:
+...            return &#x27;Mmm!&#x27;
+&gt;&gt;&gt; taco_truck = FoodTruck(&#x27;Tacos&#x27;, &#x27;Truck&#x27;)
+&gt;&gt;&gt; taco_truck.food = &#x27;Guacamole&#x27;
+&gt;&gt;&gt; taco_truck.serve()
+<div class="alt prompt-7">______</div><div class="solution prompt-7">&#x27;&#x42;&#x75;&#x74;&#x20;&#x6e;&#x6f;&#x20;&#x74;&#x61;&#x63;&#x6f;&#x73;&#x2e;&#x2e;&#x2e;&#x27;</div>
+&gt;&gt;&gt; taco_truck.food = taco_truck.make
+&gt;&gt;&gt; FoodTruck.size = taco_truck.delicious
+&gt;&gt;&gt; taco_truck.serve()
+<div class="alt prompt-7">______</div><div class="solution prompt-7">&#x27;&#x4d;&#x6d;&#x6d;&#x21;&#x27;</div>
+&gt;&gt;&gt; taco_truck.size = &#x27;delicious&#x27;
+&gt;&gt;&gt; taco_truck.serve()
+<div class="alt prompt-7">______</div><div class="solution prompt-7">&#x27;&#x4d;&#x6d;&#x6d;&#x21;&#x27;</div>
+&gt;&gt;&gt; FoodTruck.pop_tire()
+<div class="alt prompt-7">______</div><div class="solution prompt-7">&#x45;&#x72;&#x72;&#x6f;&#x72;</div>
+&gt;&gt;&gt; FoodTruck.pop_tire(taco_truck)
+<div class="alt prompt-7">______</div><div class="solution prompt-7">&#x4e;&#x6f;&#x74;&#x68;&#x69;&#x6e;&#x67;</div>
+&gt;&gt;&gt; taco_truck.drive()
+<div class="alt prompt-7">______</div><div class="solution prompt-7">&#x56;&#x72;&#x6f;&#x6f;&#x6d;&#x21;&#x20;&#x54;&#x68;&#x69;&#x73;&#x20;&#x4d;&#x6f;&#x6e;&#x73;&#x74;&#x65;&#x72;&#x20;&#x54;&#x72;&#x75;&#x63;&#x6b;&#x20;&#x69;&#x73;&#x20;&#x68;&#x75;&#x67;&#x65;&#x21;&#xa;&#x27;&#x54;&#x61;&#x63;&#x6f;&#x73;&#x20;&#x54;&#x72;&#x75;&#x63;&#x6b;&#x20;&#x63;&#x61;&#x6e;&#x6e;&#x6f;&#x74;&#x20;&#x64;&#x72;&#x69;&#x76;&#x65;&#x21;&#x27;</div></code></pre>
+        <button id='prompt-7' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+-->
+
+
+<h2 id="coding-practice">Coding Practice</h2>
+
+
+<p>Let's say we'd like to model a bank account that can handle interactions
+such as depositing funds or gaining interest on current funds.
+In the following questions, we will be building off of the <code>Account</code> class.
+Here's our current definition of the class:</p>
+
+<pre><code>class Account:
+    &quot;&quot;&quot;An account has a balance and a holder.
+    &gt;&gt;&gt; a = Account(&#x27;John&#x27;)
+    &gt;&gt;&gt; a.deposit(10)
+    10
+    &gt;&gt;&gt; a.balance
+    10
+    &gt;&gt;&gt; a.interest
+    0.02
+    &gt;&gt;&gt; a.time_to_retire(10.25) # 10 &#x2d;&gt; 10.2 &#x2d;&gt; 10.404
+    2
+    &gt;&gt;&gt; a.balance               # balance should not change
+    10
+    &gt;&gt;&gt; a.time_to_retire(11)    # 10 &#x2d;&gt; 10.2 &#x2d;&gt; ... &#x2d;&gt; 11.040808032
+    5
+    &gt;&gt;&gt; a.time_to_retire(100)
+    117
+    &quot;&quot;&quot;
+    max_withdrawal = 10
+    interest = 0.02
+
+    def __init__(self, account_holder):
+        self.balance = 0
+        self.holder = account_holder
+
+    def deposit(self, amount):
+        self.balance = self.balance + amount
+        return self.balance
+
+    def withdraw(self, amount):
+        if amount &gt; self.balance:
+            return &quot;Insufficient funds&quot;
+        if amount &gt; self.max_withdrawal:
+            return &quot;Can&#x27;t withdraw that amount&quot;
+        self.balance = self.balance &#x2d; amount
+        return self.balance</code></pre>
+
+
+<h3 id="q2-retirement">Q2: Retirement</h3>
+
+
+<p>Add a <code>time_to_retire</code> method to the <code>Account</code> class.
+This method takes in an <code>amount</code> and returns how many years the holder would
+need to wait in order for the current <code>balance</code> to grow to at least <code>amount</code>,
+assuming that the bank adds <code>balance</code> times the <code>interest</code> rate to the total
+balance at the end of every year.</p>
+
+<pre><code>    def time_to_retire(self, amount):
+        &quot;&quot;&quot;Return the number of years until balance would grow to amount.&quot;&quot;&quot;
+        assert self.balance &gt; 0 and amount &gt; 0 and self.interest &gt; 0
+<div class="sol-highlight">        future = self.balance
+        years = 0
+        while future &lt; amount:
+            future += self.interest * future
+            years += 1
+        return years</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q Account<button id="copy-code-python3ok-qAccount" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qAccount").onclick = () => copyCode('python3 ok -q Account', "copy-code-python3ok-qAccount");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>We take of our current balance, and simulate the growth from interest over
+many years. We stop once we hit the target value.</p>
+
+<p>Note that the problem solving procedure does not differ very much from an
+non OOP problem. The main difference here is make sure that we do not
+change the account balance while in the process of calculating the future
+balance. Therefore, something along these lines is necessary:</p>
+
+<pre><code>future = self.balance</code></pre>
+
+<p>Video walkthrough: <p><a href='https://youtu.be/fQzeZcI-4a0'> YouTube link </a></p></p>
+
+</div>
+
+
+<h3 id="q3-freechecking">Q3: FreeChecking</h3>
+
+
+<p>Implement the <code>FreeChecking</code> class, which is like the <code>Account</code> class from
+lecture except that it charges a withdraw fee after 2 withdrawals.
+If a withdrawal is unsuccessful, it still counts towards the number of free
+withdrawals remaining, but no fee for the withdrawal will be charged.</p>
+
+<blockquote><p><strong>Hint</strong>:
+Don't forget that <code>FreeChecking</code> inherits from <code>Account</code>! Check the Inheritance section in Topics for a refresher.</p></blockquote>
+
+<pre><code>class FreeChecking(Account):
+    &quot;&quot;&quot;A bank account that charges for withdrawals, but the first two are free!
+    &gt;&gt;&gt; ch = FreeChecking(&#x27;Jack&#x27;)
+    &gt;&gt;&gt; ch.balance = 20
+    &gt;&gt;&gt; ch.withdraw(100)  # First one&#x27;s free. Still counts as a free withdrawal even though it was unsuccessful
+    &#x27;Insufficient funds&#x27;
+    &gt;&gt;&gt; ch.withdraw(3)    # Second withdrawal is also free
+    17
+    &gt;&gt;&gt; ch.balance
+    17
+    &gt;&gt;&gt; ch.withdraw(3)    # Ok, two free withdrawals is enough
+    13
+    &gt;&gt;&gt; ch.withdraw(3)
+    9
+    &gt;&gt;&gt; ch2 = FreeChecking(&#x27;John&#x27;)
+    &gt;&gt;&gt; ch2.balance = 10
+    &gt;&gt;&gt; ch2.withdraw(3) # No fee
+    7
+    &gt;&gt;&gt; ch.withdraw(3)  # ch still charges a fee
+    5
+    &gt;&gt;&gt; ch.withdraw(5)  # Not enough to cover fee + withdraw
+    &#x27;Insufficient funds&#x27;
+    &quot;&quot;&quot;
+    withdraw_fee = 1
+    free_withdrawals = 2
+
+<div class="sol-highlight">    def __init__(self, account_holder):
+        super().__init__(account_holder)
+        self.withdrawals = 0
+
+    def withdraw(self, amount):
+        self.withdrawals += 1
+        fee = 0
+        if self.withdrawals &gt; self.free_withdrawals:
+            fee = self.withdraw_fee
+        return super().withdraw(amount + fee)
+
+    # Alternative solution where you don&#x27;t need to include init.
+    # Check out the video solution for more.
+    def withdraw(self, amount):
+        self.free_withdrawals &#x2d;= 1
+        if self.free_withdrawals &gt;= 0:
+            return super().withdraw(amount)
+        return super().withdraw(amount + self.withdraw_fee)</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q FreeChecking<button id="copy-code-python3ok-qFreeChecking" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qFreeChecking").onclick = () => copyCode('python3 ok -q FreeChecking', "copy-code-python3ok-qFreeChecking");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>We can take advantage of inheritance to make sure we add just what we need
+to <code>withdraw</code>.</p>
+
+<ul>
+  <li>For starters, a withdrawal with a fee is the same as the original
+  withdraw amount plus the amount from the fee. We can therefore represent
+  a <code>FreeChecking</code> withdraw as a "regular" <code>Account</code> withdraw in this way.</li>
+  <li>On top of the note from before, we need to do a little bit of extra
+  bookkeeping to make sure the first few withdrawals do not add the extra
+  fee. We can either create a new instance attribute or modify an existing
+  one.</li>
+</ul>
+
+<p>Video walkthrough: <p><a href='https://youtu.be/flIMJC2lY3M'> YouTube link </a></p></p>
+
+</div>
+
+
+<h2 id="magic-the-lambda-ing">Magic: the Lambda-ing</h2>
+
+
+<p>In the next part of this lab, we will be implementing a card game!
+This game is inspired by the similarly named
+<a href="https://en.wikipedia.org/wiki/Magic:_The_Gathering">Magic: The Gathering</a>.</p>
+
+<p>Once you've implemented the game, you can start it by typing:</p>
+
+<pre><code>python3 cardgame.py</code></pre>
+
+<p>While playing the game, you can exit it and return to the command line
+with <code>Ctrl&#x2d;C</code> or <code>Ctrl&#x2d;D</code>.</p>
+
+<p>This game uses several different files.</p>
+
+<ul>
+  <li>Code for all questions can be found in <code>classes.py</code>.</li>
+  <li>The game loop can be found in <code>cardgame.py</code>, and is responsible for
+  running the game. You won't need to open or read this file to receive
+  full credit.</li>
+  <li>If you want to modify your game later to add your own custom cards and decks,
+  you can look in <code>cards.py</code> to see all the standard cards and the default deck;
+  here, you can add more cards and change what decks you and your opponent use.
+  If you're familiar with the original game, you may notice the cards were not
+  created with balance in mind, so feel free to modify the stats
+  and add or remove cards as desired.</li>
+</ul>
+
+
+<h3 id="rules-of-the-game">Rules of the Game</h3>
+
+
+<p>Here's how the game goes:</p>
+
+<p>There are two players.
+Each player has a hand of cards and a deck, and at the start of each round,
+each player draws a random card from their deck. If a player's deck is empty
+when they try to draw, they will automatically lose the game.</p>
+
+<p>Cards have a name, an attack value, and a defense value.
+Each round, each player chooses one card to play from their own hands.
+The cards' <em>power</em> values are then calculated and compared. The card with the higher power wins the round.
+Each played card's power value is calculated as follows:</p>
+
+<pre><code>(player card&#x27;s attack) &#x2d; (opponent card&#x27;s defense)</code></pre>
+
+<p>For example, let's say Player 1 plays a card with 2000 attack and 1000 defense
+and Player 2 plays a card with 1500 attack and 3000 defense.
+Their cards' powers are calculated as:</p>
+
+<pre><code>P1: 2000 &#x2d; 3000 = 2000 &#x2d; 3000 = &#x2d;1000
+P2: 1500 &#x2d; 1000 = 1500 &#x2d; 1000 = 500</code></pre>
+
+<p>So Player 2 would win this round.</p>
+
+<p>The first player to win 8 rounds wins the match!</p>
+
+<p>However, there are a few effects we can add (in the optional questions section) to make this game a more interesting.
+A card can be of type AI, Tutor, TA, or Instructor,
+and each type has a different <strong>effect</strong> when they are played. Note that when a card is played, the card is removed from the player's hand. This means that the card is no longer in the hand when the effect takes place.
+All effects are applied <em>before</em> power is calculated during that round:</p>
+
+<ul>
+  <li>An <code>AICard</code> will allow you to add the top two cards of your
+  deck to your hand via drawing.</li>
+  <li>A <code>TutorCard</code> will add a copy of the first card in your hand
+  to your hand, at the cost of automatically losing the current round.</li>
+  <li>A <code>TACard</code> discards the card with the highest <code>power</code> in
+  your hand, and adds the discarded card's attack and defense
+  to the played <code>TACard</code>'s stats.</li>
+  <li>An <code>InstructorCard</code> can survive multiple rounds, as long as it
+  has a non-negative <code>attack</code> or <code>defense</code>. However, at the beginning of each round that it is played, its
+  attack and defense are reduced by 1000 each.</li>
+</ul>
+
+<p>Feel free to refer back to these series of rules later on, and let's start making the game!</p>
+
+
+<h3 id="q4-making-cards">Q4: Making Cards</h3>
+
+
+<p>To play a card game, we're going to need to have cards, so let's make some!
+We're gonna implement the basics of the <code>Card</code> class first.</p>
+
+<p>First, implement the <code>Card</code> class' constructor in <code>classes.py</code>. This constructor
+takes three arguments:</p>
+
+<ul>
+  <li>a string as the <code>name</code> of the card</li>
+  <li>an integer as the <code>attack</code> value of the card</li>
+  <li>an integer as the <code>defense</code> value of the card</li>
+</ul>
+
+<p>Each <code>Card</code> instance should keep track of these values
+using instance attributes called <code>name</code>, <code>attack</code>, and <code>defense</code>.</p>
+
+<p>You should also implement the <code>power</code> method in <code>Card</code>,
+which takes in another card as an input and calculates the current card's power.
+Refer to the <a href="#rules-of-the-game">Rules of the Game</a>
+if you'd like a refresher on how power is calculated.</p>
+
+<pre><code>class Card:
+    cardtype = &#x27;Staff&#x27;
+
+    def __init__(self, name, attack, defense):
+        &quot;&quot;&quot;
+        Create a Card object with a name, attack,
+        and defense.
+        &gt;&gt;&gt; staff_member = Card(&#x27;staff&#x27;, 400, 300)
+        &gt;&gt;&gt; staff_member.name
+        &#x27;staff&#x27;
+        &gt;&gt;&gt; staff_member.attack
+        400
+        &gt;&gt;&gt; staff_member.defense
+        300
+        &gt;&gt;&gt; other_staff = Card(&#x27;other&#x27;, 300, 500)
+        &gt;&gt;&gt; other_staff.attack
+        300
+        &gt;&gt;&gt; other_staff.defense
+        500
+        &quot;&quot;&quot;
+<div class="sol-highlight">        self.name = name
+        self.attack = attack
+        self.defense = defense</div>
+    def power(self, opponent_card):
+        &quot;&quot;&quot;
+        Calculate power as:
+        (player card&#x27;s attack) &#x2d; (opponent card&#x27;s defense)
+        &gt;&gt;&gt; staff_member = Card(&#x27;staff&#x27;, 400, 300)
+        &gt;&gt;&gt; other_staff = Card(&#x27;other&#x27;, 300, 500)
+        &gt;&gt;&gt; staff_member.power(other_staff)
+        &#x2d;100
+        &gt;&gt;&gt; other_staff.power(staff_member)
+        0
+        &gt;&gt;&gt; third_card = Card(&#x27;third&#x27;, 200, 400)
+        &gt;&gt;&gt; staff_member.power(third_card)
+        0
+        &gt;&gt;&gt; third_card.power(staff_member)
+        &#x2d;100
+        &quot;&quot;&quot;
+<div class="sol-highlight">        return self.attack &#x2d; opponent_card.defense</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q Card.__init__
+python3 ok -q Card.power<button id="copy-code-python3ok-qCard.__init__python3ok-qCard.power" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qCard.__init__python3ok-qCard.power").onclick = () => copyCode('python3 ok -q Card.__init__\npython3 ok -q Card.power', "copy-code-python3ok-qCard.__init__python3ok-qCard.power");
+        </script>
+        <br/>
+
+
+<h3 id="q5-making-a-player">Q5: Making a Player</h3>
+
+<p>Now that we have cards, we can make a deck, but we still need players to
+actually use them. We'll now fill in the implementation of the <code>Player</code> class.</p>
+
+<p>A <code>Player</code> instance has three instance attributes:</p>
+
+<ul>
+  <li><code>name</code> is the player's name. When you play the game, you can enter your name,
+  which will be converted into a string to be passed to the constructor.</li>
+  <li><code>deck</code> is an instance of the <code>Deck</code> class. You can draw from it using
+  its <code>.draw()</code> method.</li>
+  <li><code>hand</code> is a list of <code>Card</code> instances. Each player should start with 5
+  cards in their hand, drawn from their <code>deck</code>. Each card in the hand can be
+  selected by its index in the list during the game. When a player draws a new
+  card from the deck, it is added to the end of this list.</li>
+</ul>
+
+<p>Complete the implementation of the constructor for <code>Player</code> so that <code>self.hand</code>
+is set to a list of 5 cards drawn from the player's <code>deck</code>.</p>
+
+<p>Next, implement the <code>draw</code> and <code>play</code> methods in the <code>Player</code> class.  The
+<code>draw</code> method draws a card from the deck and adds it to the
+player's hand. The <code>play</code> method removes and returns a card from the player's hand at the
+given index.</p>
+
+<blockquote><p><strong>Hint:</strong> use methods from the <code>Deck</code> class wherever possible when attempting to draw from the <code>deck</code> when implementing <code>Player.__init__</code> and <code>Player.draw</code>.</p></blockquote>
+
+<pre><code>class Player:
+    def __init__(self, deck, name):
+        &quot;&quot;&quot;Initialize a Player object.
+        A Player starts the game by drawing 5 cards from their deck. Each turn,
+        a Player draws another card from the deck and chooses one to play.
+        &gt;&gt;&gt; test_card = Card(&#x27;test&#x27;, 100, 100)
+        &gt;&gt;&gt; test_deck = Deck([test_card.copy() for _ in range(6)])
+        &gt;&gt;&gt; test_player = Player(test_deck, &#x27;tester&#x27;)
+        &gt;&gt;&gt; len(test_deck.cards)
+        1
+        &gt;&gt;&gt; len(test_player.hand)
+        5
+        &quot;&quot;&quot;
+        self.deck = deck
+        self.name = name
+<div class="sol-highlight">        self.hand = [deck.draw() for _ in range(5)]</div>
+    def draw(self):
+        &quot;&quot;&quot;Draw a card from the player&#x27;s deck and add it to their hand.
+        &gt;&gt;&gt; test_card = Card(&#x27;test&#x27;, 100, 100)
+        &gt;&gt;&gt; test_deck = Deck([test_card.copy() for _ in range(6)])
+        &gt;&gt;&gt; test_player = Player(test_deck, &#x27;tester&#x27;)
+        &gt;&gt;&gt; test_player.draw()
+        &gt;&gt;&gt; len(test_deck.cards)
+        0
+        &gt;&gt;&gt; len(test_player.hand)
+        6
+        &quot;&quot;&quot;
+        assert not self.deck.is_empty(), &#x27;Deck is empty!&#x27;
+<div class="sol-highlight">        self.hand.append(self.deck.draw())</div>
+    def play(self, index):
+        &quot;&quot;&quot;Remove and return a card from the player&#x27;s hand at the given INDEX.
+        &gt;&gt;&gt; from cards import *
+        &gt;&gt;&gt; test_player = Player(standard_deck, &#x27;tester&#x27;)
+        &gt;&gt;&gt; ta1, ta2 = TACard(&quot;ta_1&quot;, 300, 400), TACard(&quot;ta_2&quot;, 500, 600)
+        &gt;&gt;&gt; tutor1, tutor2 = TutorCard(&quot;t1&quot;, 200, 500), TutorCard(&quot;t2&quot;, 600, 400)
+        &gt;&gt;&gt; test_player.hand = [ta1, ta2, tutor1, tutor2]
+        &gt;&gt;&gt; test_player.play(0) is ta1
+        True
+        &gt;&gt;&gt; test_player.play(2) is tutor2
+        True
+        &gt;&gt;&gt; len(test_player.hand)
+        2
+        &quot;&quot;&quot;
+<div class="sol-highlight">        return self.hand.pop(index)</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q Player.__init__
+python3 ok -q Player.draw
+python3 ok -q Player.play<button id="copy-code-python3ok-qPlayer.__init__python3ok-qPlayer.drawpython3ok-qPlayer.play" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qPlayer.__init__python3ok-qPlayer.drawpython3ok-qPlayer.play").onclick = () => copyCode('python3 ok -q Player.__init__\npython3 ok -q Player.draw\npython3 ok -q Player.play', "copy-code-python3ok-qPlayer.__init__python3ok-qPlayer.drawpython3ok-qPlayer.play");
+        </script>
+        <br/>
+
+<p>After you complete this problem, you'll be able to play a working version of the game! Type:</p>
+
+<pre><code>python3 cardgame.py</code></pre>
+
+<p>to start a game of Magic: The Lambda-ing!</p>
+
+<p>This version doesn't have the effects for different cards yet. To get those working, you can implement the optional questions below.</p>
+
+
+<h2 id="submit">Submit</h2>
+
+
+<p>Make sure to submit this assignment by running:</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;submit</code></pre>
+
+
+<h1 id="optional-questions">Optional Questions</h1>
+
+
+<p>To make the card game more interesting, let's add effects to our cards!
+We can do this by implementing an <code>effect</code> function for each card class,
+which takes in the opponent card, the current player, and the opponent player. Remember that by the time <code>effect</code> is called, the played card is no longer in the player's hand.</p>
+
+<p>You can find the following questions in <code>classes.py</code>.</p>
+
+<blockquote><p><strong>Important:</strong>
+For the following sections,
+do <strong>not</strong> overwrite any lines already provided in the code.</p></blockquote>
+
+
+<h3 id="q6-ais-resourceful-resources">Q6: AIs: Resourceful Resources</h3>
+
+
+<p>In the <code>AICard</code> class, implement the <code>effect</code> method for AIs. An <code>AICard</code> will allow you
+to add the top two cards of your deck to your hand via <code>draw</code>ing from your deck.</p>
+
+<blockquote><p>Once you have finished writing your code for this problem, set <code>implemented</code> to <code>True</code> so that the text is printed when playing an <code>AICard</code>! <em>This is specifically for the</em> <code>AICard</code><em>!</em> For future questions, make sure to look at the problem description carefully to know when to reassign any pre-designated variables.</p></blockquote>
+
+<pre><code>class AICard(Card):
+    cardtype = &#x27;AI&#x27;
+
+    def effect(self, opponent_card, player, opponent):
+        &quot;&quot;&quot;
+        Add the top two cards of your deck to your hand via drawing.
+        Once you have finished writing your code for this problem,
+        set implemented to True so that the text is printed when
+        playing an AICard.
+
+        &gt;&gt;&gt; from cards import *
+        &gt;&gt;&gt; player1, player2 = Player(standard_deck.copy(), &#x27;p1&#x27;), Player(standard_deck.copy(), &#x27;p2&#x27;)
+        &gt;&gt;&gt; opponent_card = Card(&quot;other&quot;, 500, 500)
+        &gt;&gt;&gt; test_card = AICard(&quot;AI Card&quot;, 500, 500)
+        &gt;&gt;&gt; initial_deck_length = len(player1.deck.cards)
+        &gt;&gt;&gt; initial_hand_size = len(player1.hand)
+        &gt;&gt;&gt; test_card.effect(opponent_card, player1, player2)
+        AI Card allows me to draw two cards!
+        &gt;&gt;&gt; initial_hand_size == len(player1.hand) &#x2d; 2
+        True
+        &gt;&gt;&gt; initial_deck_length == len(player1.deck.cards) + 2
+        True
+        &quot;&quot;&quot;
+<div class="sol-highlight">        implemented = False
+        player.draw()
+        player.draw()
+        implemented = True</div>        # You should add your implementation above this.
+        if implemented:
+            print(f&quot;{self.name} allows me to draw two cards!&quot;)</code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q AICard.effect<button id="copy-code-python3ok-qAICard.effect" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qAICard.effect").onclick = () => copyCode('python3 ok -q AICard.effect', "copy-code-python3ok-qAICard.effect");
+        </script>
+        <br/>
+
+
+<h3 id="q7-tutors-sneaky-search">Q7: Tutors: Sneaky Search</h3>
+
+
+<p>In the <code>TutorCard</code> class, implement the <code>effect</code> method for Tutors.
+A <code>TutorCard</code> will add a copy of the first card in your hand to
+your hand, at the cost of automatically losing the current round. Note that if there are no
+cards in hand, a <code>TutorCard</code> will not add any cards to the hand,
+but must still lose the round.</p>
+
+<blockquote><p>To implement the "losing" functionality, it is sufficient to override
+<code>Card</code>'s <code>power</code> method to return <code>&#x2d;float(&#x27;inf&#x27;)</code> in the <code>TutorCard</code> class. In addition, be sure to add
+copies of cards, instead of the chosen card itself! Class methods may
+come in handy.</p></blockquote>
+
+<pre><code>class TutorCard(Card):
+    cardtype = &#x27;Tutor&#x27;
+
+    def effect(self, opponent_card, player, opponent):
+        &quot;&quot;&quot;
+        Add a copy of the first card in your hand
+        to your hand, at the cost of losing the current
+        round. If there are no cards in hand, this card does
+        not add any cards, but still loses the round.  To
+        implement the second part of this effect, a Tutor
+        card&#x27;s power should be less than all non&#x2d;Tutor cards.
+
+        &gt;&gt;&gt; from cards import *
+        &gt;&gt;&gt; player1, player2 = Player(standard_deck.copy(), &#x27;p1&#x27;), Player(standard_deck.copy(), &#x27;p2&#x27;)
+        &gt;&gt;&gt; opponent_card = Card(&quot;other&quot;, 500, 500)
+        &gt;&gt;&gt; test_card = TutorCard(&quot;Tutor Card&quot;, 10000, 10000)
+        &gt;&gt;&gt; player1.hand = [Card(&quot;card1&quot;, 0, 100), Card(&quot;card2&quot;, 100, 0)]
+        &gt;&gt;&gt; test_card.effect(opponent_card, player1, player2)
+        Tutor Card allows me to add a copy of a card to my hand!
+        &gt;&gt;&gt; print(player1.hand)
+        [card1: Staff, [0, 100], card2: Staff, [100, 0], card1: Staff, [0, 100]]
+        &gt;&gt;&gt; player1.hand[0] is player1.hand[2] # must add a copy!
+        False
+        &gt;&gt;&gt; player1.hand = []
+        &gt;&gt;&gt; test_card.effect(opponent_card, player1, player2)
+        &gt;&gt;&gt; print(player1.hand) # must not add a card if not available
+        []
+        &gt;&gt;&gt; test_card.power(opponent_card) &lt; opponent_card.power(test_card)
+        True
+        &quot;&quot;&quot;
+<div class="sol-highlight">        added = False
+        if len(player.hand) &gt; 0:
+            player.hand += [player.hand[0].copy()]
+            added = True</div>        # You should add your implementation above this.
+        if added:
+            print(f&quot;{self.name} allows me to add a copy of a card to my hand!&quot;)
+
+<div class="sol-highlight">    def power(self, opponent_card):
+        return &#x2d;float(&quot;inf&quot;)</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q TutorCard.effect<button id="copy-code-python3ok-qTutorCard.effect" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qTutorCard.effect").onclick = () => copyCode('python3 ok -q TutorCard.effect', "copy-code-python3ok-qTutorCard.effect");
+        </script>
+        <br/>
+
+
+<h3 id="q8-tas-power-transfer">Q8: TAs: Power Transfer</h3>
+
+
+<p>In the <code>TACard</code> class, implement the <code>effect</code> method for TAs.
+A <code>TACard</code> discards the card with the highest <code>power</code> in
+your hand, and adds the discarded card's attack and defense
+to the played <code>TACard</code>'s stats. <strong>Discarding</strong> a card removes
+the card from your <code>hand</code>. If there are no cards in hand, the
+<code>TACard</code> should not do anything for its effect.</p>
+
+<pre><code>class TACard(Card):
+    cardtype = &#x27;TA&#x27;
+
+    def effect(self, opponent_card, player, opponent, arg=None):
+        &quot;&quot;&quot;
+        Discard the card with the highest `power` in your hand,
+        and add the discarded card&#x27;s attack and defense
+        to this card&#x27;s own respective stats.
+
+        &gt;&gt;&gt; from cards import *
+        &gt;&gt;&gt; player1, player2 = Player(standard_deck.copy(), &#x27;p1&#x27;), Player(standard_deck.copy(), &#x27;p2&#x27;)
+        &gt;&gt;&gt; opponent_card = Card(&quot;other&quot;, 500, 500)
+        &gt;&gt;&gt; test_card = TACard(&quot;TA Card&quot;, 500, 500)
+        &gt;&gt;&gt; player1.hand = []
+        &gt;&gt;&gt; test_card.effect(opponent_card, player1, player2) # if no cards in hand, no effect.
+        &gt;&gt;&gt; print(test_card.attack, test_card.defense)
+        500 500
+        &gt;&gt;&gt; player1.hand = [Card(&quot;card1&quot;, 0, 100), TutorCard(&quot;tutor&quot;, 10000, 10000), Card(&quot;card3&quot;, 100, 0)]
+        &gt;&gt;&gt; test_card.effect(opponent_card, player1, player2) # must use card&#x27;s power method.
+        TA Card discards card3 from my hand to increase its own power!
+        &gt;&gt;&gt; print(player1.hand)
+        [card1: Staff, [0, 100], tutor: Tutor, [10000, 10000]]
+        &gt;&gt;&gt; print(test_card.attack, test_card.defense)
+        600 500
+        &quot;&quot;&quot;
+<div class="sol-highlight">        best_card = None
+        if len(player.hand) &gt; 0:
+            best_card = max(player.hand, key = lambda c: c.power(opponent_card))
+            self.attack += best_card.attack
+            self.defense += best_card.defense
+            player.hand.remove(best_card)</div>        # You should add your implementation above this.
+        if best_card:
+            print(f&quot;{self.name} discards {best_card.name} from my hand to increase its own power!&quot;)</code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q TACard.effect<button id="copy-code-python3ok-qTACard.effect" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qTACard.effect").onclick = () => copyCode('python3 ok -q TACard.effect', "copy-code-python3ok-qTACard.effect");
+        </script>
+        <br/>
+
+
+<h3 id="q9-instructors-immovable">Q9: Instructors: Immovable</h3>
+
+
+<p>In the <code>InstructorCard</code> class, implement the <code>effect</code> method for Instructors.
+An <code>InstructorCard</code> can survive multiple rounds, as long as it has a non-negative <code>attack</code>
+or <code>defense</code> at the end of a round. However, at the beginning of each
+round that it is played (including the first time!), its attack and defense are permanently reduced by 1000 each.</p>
+
+<blockquote><p>To implement the "survive" functionality, the <code>InstructorCard</code> should re-add
+itself to the player's hand.</p></blockquote>
+
+<pre><code>class InstructorCard(Card):
+    cardtype = &#x27;Instructor&#x27;
+
+    def effect(self, opponent_card, player, opponent, arg=None):
+        &quot;&quot;&quot;
+        Survives multiple rounds, as long as it has a non&#x2d;negative
+        attack or defense at the end of a round. At the beginning of the round,
+        its attack and defense are permanently reduced by 1000 each.
+        If this card would survive, it is added back to the hand.
+
+        &gt;&gt;&gt; from cards import *
+        &gt;&gt;&gt; player1, player2 = Player(standard_deck.copy(), &#x27;p1&#x27;), Player(standard_deck.copy(), &#x27;p2&#x27;)
+        &gt;&gt;&gt; opponent_card = Card(&quot;other&quot;, 500, 500)
+        &gt;&gt;&gt; test_card = InstructorCard(&quot;Instructor Card&quot;, 1000, 1000)
+        &gt;&gt;&gt; player1.hand = [Card(&quot;card1&quot;, 0, 100)]
+        &gt;&gt;&gt; test_card.effect(opponent_card, player1, player2)
+        Instructor Card returns to my hand!
+        &gt;&gt;&gt; print(player1.hand) # survives with non&#x2d;negative attack
+        [card1: Staff, [0, 100], Instructor Card: Instructor, [0, 0]]
+        &gt;&gt;&gt; player1.hand = [Card(&quot;card1&quot;, 0, 100)]
+        &gt;&gt;&gt; test_card.effect(opponent_card, player1, player2)
+        &gt;&gt;&gt; print(player1.hand)
+        [card1: Staff, [0, 100]]
+        &gt;&gt;&gt; print(test_card.attack, test_card.defense)
+        &#x2d;1000 &#x2d;1000
+        &quot;&quot;&quot;
+<div class="sol-highlight">        re_add = False
+        self.attack &#x2d;= 1000
+        self.defense &#x2d;= 1000
+        if max(self.attack, self.defense) &gt;= 0:
+            re_add = True
+            player.hand += [self]</div>        # You should add your implementation above this.
+        if re_add:
+            print(f&quot;{self.name} returns to my hand!&quot;)</code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q InstructorCard.effect<button id="copy-code-python3ok-qInstructorCard.effect" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qInstructorCard.effect").onclick = () => copyCode('python3 ok -q InstructorCard.effect', "copy-code-python3ok-qInstructorCard.effect");
+        </script>
+        <br/>
+
+<p>After you complete this problem,
+you'll have a fully functional game of Magic: The Lambda-ing! This doesn't have to be the end, though;
+we encourage you to get creative with more card types, effects,
+and even adding more custom cards to your deck!</p>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#topics">Topics</a></li>
+  <ul>
+    <li><a href="#object-oriented-programming">Object-Oriented Programming</a></li>
+  </ul>
+  <li><a href="#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="#getting-started-videos">Getting Started Videos</a></li>
+    <li><a href="#what-would-python-display">What Would Python Display?</a></li>
+    <ul>
+      <li><a href="#q1-wwpd-classy-cars">Q1: WWPD: Classy Cars</a></li>
+    </ul>
+    <li><a href="#coding-practice">Coding Practice</a></li>
+    <ul>
+      <li><a href="#q2-retirement">Q2: Retirement</a></li>
+      <li><a href="#q3-freechecking">Q3: FreeChecking</a></li>
+    </ul>
+    <li><a href="#magic-the-lambda-ing">Magic: the Lambda-ing</a></li>
+    <ul>
+      <li><a href="#rules-of-the-game">Rules of the Game</a></li>
+      <li><a href="#q4-making-cards">Q4: Making Cards</a></li>
+      <li><a href="#q5-making-a-player">Q5: Making a Player</a></li>
+    </ul>
+    <li><a href="#submit">Submit</a></li>
+  </ul>
+  <li><a href="#optional-questions">Optional Questions</a></li>
+  <ul>
+    <li><a href="#q6-ais-resourceful-resources">Q6: AIs: Resourceful Resources</a></li>
+    <li><a href="#q7-tutors-sneaky-search">Q7: Tutors: Sneaky Search</a></li>
+    <li><a href="#q8-tas-power-transfer">Q8: TAs: Power Transfer</a></li>
+    <li><a href="#q9-instructors-immovable">Q9: Instructors: Immovable</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>
