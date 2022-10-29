@@ -79,6 +79,10 @@ def couple(s, t):
     """
     assert len(s) == len(t)
     "*** YOUR CODE HERE ***"
+    res=[]
+    for i in range(len(s)):
+        res.append([s[i],t[i]])
+    return res
 
 
 def double_eights(n):
