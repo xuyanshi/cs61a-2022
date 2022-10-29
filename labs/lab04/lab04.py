@@ -37,7 +37,14 @@ def pascal(row, column):
     6
     """
     "*** YOUR CODE HERE ***"
-
+    if column==0:
+        return 1
+    elif row==column:
+        return 1
+    elif column>row:
+        return 0
+    else:
+        return pascal(row-1,column-1)+pascal(row-1,column)
 
 def paths(m, n):
     """Return the number of paths from one corner of an
