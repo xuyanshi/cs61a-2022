@@ -133,6 +133,17 @@ def count_coins(change):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(change,max_coin):
+        if change<0:
+            return 0
+        elif change==0:
+            return 1
+        elif max_coin==None:
+            return 0
+        else:
+            return helper(change-max_coin,max_coin)+helper(change,next_larger_coin(max_coin))
+    return helper(change,1)
+        
 
 
 anonymous = False  # Change to True if you would like to remain anonymous on the final leaderboard.
