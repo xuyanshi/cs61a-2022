@@ -107,7 +107,15 @@ def double_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if n==88:
+        return True
+    elif n<100:
+        return False
+    else:
+        if n%100==88:
+            return True
+        else:
+            return double_eights(n//10)
 
 def coords(fn, seq, lower, upper):
     """
