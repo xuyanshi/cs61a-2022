@@ -60,7 +60,10 @@ def paths(m, n):
     1
     """
     "*** YOUR CODE HERE ***"
-
+    if m==1 or n==1:
+        return 1
+    return paths(m-1,n)+paths(m,n-1)
+    
 
 def couple(s, t):
     """Return a list of two-element lists in which the i-th element is [s[i], t[i]].
