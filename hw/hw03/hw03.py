@@ -1,3 +1,6 @@
+from operator import truediv
+
+
 HW_SOURCE_FILE = __file__
 
 
@@ -64,7 +67,16 @@ def pingpong(n):
     ...       ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def helper(ans,k,add):
+        if n<=k:
+            return ans
+        elif num_eights(k)>0 or k%8==0:
+            return helper(ans-add,k+1,-add)
+        else:
+            return helper(ans+add,k+1,add)
+    return helper(1,1,1)
+
+    
 
 
 def next_larger_coin(coin):
