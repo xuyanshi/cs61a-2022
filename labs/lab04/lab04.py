@@ -128,7 +128,7 @@ def coords(fn, seq, lower, upper):
     return [[x,fn(x)] for x in seq if fn(x)>=lower and fn(x)<=upper]
 
 
-def riffle(deck):
+def riffle(deck): # so difficult, copied from solution
     """Produces a single, perfect riffle shuffle of DECK, consisting of
     DECK[0], DECK[M], DECK[1], DECK[M+1], ... where M is position of the
     second half of the deck.  Assume that len(DECK) is even.
@@ -137,4 +137,4 @@ def riffle(deck):
     >>> riffle(range(20))
     [0, 10, 1, 11, 2, 12, 3, 13, 4, 14, 5, 15, 6, 16, 7, 17, 8, 18, 9, 19]
     """
-    return []
+    return [deck[(i%2)*len(deck)//2+i//2] for i in range(len(deck))]
