@@ -1,6 +1,6 @@
-# CS 61A Fall 2022
+# [CS 61A Fall 2022](https://cs61a.org)
 ## self-study
 
-***I didn't upload my code until the deadline.***
+***I DO NOT upload my code before the deadline of labs, homework or projects.***
 
-Start DateTime:  Tue Oct 11 11:20:32 2022 +0800
+Start Date: Tue Oct 11 2022
