@@ -231,6 +231,8 @@ def feline_fixes(typed, source, limit):
 
 
 import functools
+
+
 @functools.lru_cache(None)
 def minimum_mewtations(start, goal, limit):
     # LeetCode 72 (Hard): https://leetcode.com/problems/edit-distance/
@@ -266,7 +268,8 @@ def minimum_mewtations(start, goal, limit):
 def final_diff(typed, source, limit):
     """A diff function that takes in a string TYPED, a string SOURCE, and a number LIMIT.
     If you implement this function, it will be used."""
-    assert False, 'Remove this line to use your final_diff function.'
+    # assert False, 'Remove this line to use your final_diff function.'
+    return minimum_mewtations(typed, source, limit)
 
 
 FINAL_DIFF_LIMIT = 6  # REPLACE THIS WITH YOUR LIMIT
