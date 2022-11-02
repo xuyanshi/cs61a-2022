@@ -194,8 +194,8 @@ def feline_fixes(typed, source, limit):
     min_len=min(t_len,s_len)
     if t_len == s_len:
         if t_len==0:
-            if limit<=0:
-                return feline_fixes(typed,source,10000)
+            # if limit<=0:
+            #     return 1-limit
             return 0
         else:
             if typed[0]!=source[0]:
