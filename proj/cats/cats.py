@@ -229,7 +229,11 @@ def feline_fixes(typed, source, limit):
 
 # feline_fixes("car", "cad", 10)
 
+
+import functools
+@functools.lru_cache(None)
 def minimum_mewtations(start, goal, limit):
+    # LeetCode 72 (Hard): https://leetcode.com/problems/edit-distance/
     """A diff function that computes the edit distance from START to GOAL.
     This function takes in a string START, a string GOAL, and a number LIMIT.
     Arguments:
@@ -244,21 +248,18 @@ def minimum_mewtations(start, goal, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ______________:  # Fill in the condition
+    if len(start) == 0 or len(goal) == 0:  # Feel free to remove or add additional cases
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return min(len(start) + len(goal), limit + 1)
         # END
-    elif ___________:  # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+    elif start[0] == goal[0]:
+        return min(minimum_mewtations(start[1:], goal[1:], limit), limit + 1)
     else:
-        add = ...  # Fill in these lines
-        remove = ...
-        substitute = ...
+        add = 1 + minimum_mewtations(start, goal[1:], limit)  # Fill in these lines
+        remove = 1 + minimum_mewtations(start[1:], goal, limit)
+        substitute = 1 + minimum_mewtations(start[1:], goal[1:], limit)
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return min(add, remove, substitute, limit + 1)
         # END
 
 
