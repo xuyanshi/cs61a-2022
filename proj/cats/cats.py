@@ -207,7 +207,19 @@ def feline_fixes(typed, source, limit):
         extra_len=max(t_len,s_len)-min_len
         return extra_len+feline_fixes(typed[:min_len],source[:min_len],limit-extra_len)
     '''
-    
+    def counts(start,goal,cnt):
+        start_l,goal_l=len(start),len(goal)
+        if cnt>limit:
+            return limit+1
+        elif start_l==0 and goal_l==0:
+            return cnt
+        elif start_l==0 or goal_l==0:
+            return min(cnt+abs(start_l-goal_l),limit+1)
+        elif start[0]==goal[0]:
+            return counts(start[1:],goal[1:],cnt)
+        else:
+            return counts(start[1:],goal[1:],cnt+1)
+    return counts(typed,source,0)
     # END PROBLEM 6
     
 # feline_fixes("car", "cad", 10)
