@@ -31,11 +31,11 @@ def pick(paragraphs, select, k):
     """
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
-    idx=-1
+    idx = -1
     for p in paragraphs:
         if select(p):
-            idx+=1
-            if idx==k:
+            idx += 1
+            if idx == k:
                 return p
     return ''
     # END PROBLEM 1
@@ -57,6 +57,7 @@ def about(topic):
     assert all([lower(x) == x for x in topic]), 'topics should be lowercase.'
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+
     def select(p):
         p_list = split(lower(remove_punctuation(p)))
         for t in topic:
@@ -64,8 +65,9 @@ def about(topic):
             if t in p_list:
                 return True
         return False
+
     return select
-            
+
     # END PROBLEM 2
 
 
@@ -96,17 +98,17 @@ def accuracy(typed, source):
     source_words = split(source)
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
-    t_len,s_len=len(typed_words),len(source_words)
-    if t_len==0 and s_len==0:
+    t_len, s_len = len(typed_words), len(source_words)
+    if t_len == 0 and s_len == 0:
         return 100.0
-    elif t_len==0 or s_len==0:
+    elif t_len == 0 or s_len == 0:
         return 0.0
     else:
-        cnt=0
-        for i in range(min(t_len,s_len)):
-            if typed_words[i]==source_words[i]:
-                cnt+=1
-        return cnt*100.0/t_len
+        cnt = 0
+        for i in range(min(t_len, s_len)):
+            if typed_words[i] == source_words[i]:
+                cnt += 1
+        return cnt * 100.0 / t_len
     # END PROBLEM 3
 
 
@@ -125,7 +127,7 @@ def wpm(typed, elapsed):
     assert elapsed > 0, 'Elapsed time must be positive'
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
-    return len(typed)*12.0/elapsed
+    return len(typed) * 12.0 / elapsed
     # END PROBLEM 4
 
 
@@ -153,15 +155,15 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
-    mindiff = limit+10
-    closed_word=typed_word
+    mindiff = limit + 10
+    closed_word = typed_word
     for w in word_list:
-        if w==typed_word:
+        if w == typed_word:
             return typed_word
-        diff = diff_function(typed_word,w,limit)
-        if mindiff>diff and diff<=limit:
-            mindiff=diff
-            closed_word=w
+        diff = diff_function(typed_word, w, limit)
+        if mindiff > diff and diff <= limit:
+            mindiff = diff
+            closed_word = w
     return closed_word
     # END PROBLEM 5
 
@@ -207,21 +209,24 @@ def feline_fixes(typed, source, limit):
         extra_len=max(t_len,s_len)-min_len
         return extra_len+feline_fixes(typed[:min_len],source[:min_len],limit-extra_len)
     '''
-    def counts(start,goal,cnt):
-        start_l,goal_l=len(start),len(goal)
-        if cnt>limit:
-            return limit+1
-        elif start_l==0 and goal_l==0:
+
+    def counts(start, goal, cnt):
+        start_l, goal_l = len(start), len(goal)
+        if cnt > limit:
+            return limit + 1
+        elif start_l == 0 and goal_l == 0:
             return cnt
-        elif start_l==0 or goal_l==0:
-            return min(cnt+abs(start_l-goal_l),limit+1)
-        elif start[0]==goal[0]:
-            return counts(start[1:],goal[1:],cnt)
+        elif start_l == 0 or goal_l == 0:
+            return min(cnt + abs(start_l - goal_l), limit + 1)
+        elif start[0] == goal[0]:
+            return counts(start[1:], goal[1:], cnt)
         else:
-            return counts(start[1:],goal[1:],cnt+1)
-    return counts(typed,source,0)
+            return counts(start[1:], goal[1:], cnt + 1)
+
+    return counts(typed, source, 0)
     # END PROBLEM 6
-    
+
+
 # feline_fixes("car", "cad", 10)
 
 def minimum_mewtations(start, goal, limit):
@@ -337,7 +342,7 @@ def fastest_words(match):
     [4, 1, 6]
     """
     player_indices = range(len(get_all_times(match)))  # contains an *index* for each player
-    word_indices = range(len(get_all_words(match)))    # contains an *index* for each word
+    word_indices = range(len(get_all_words(match)))  # contains an *index* for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
     # END PROBLEM 10
@@ -392,6 +397,7 @@ def match_string(match):
 
 
 enable_multiplayer = False  # Change to True when you're ready to race.
+
 
 ##########################
 # Command Line Interface #
