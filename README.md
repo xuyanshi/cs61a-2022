@@ -1,5 +1,6 @@
-# CS 61A
-UCB CS 61A Fall 2022
-Self-study
+# [CS 61A Fall 2022](https://cs61a.org)
+## self-study
 
-Start DateTime:  Tue Oct 11 11:20:32 2022 +0800
+***I DO NOT upload my code before the deadline of labs, homework or projects.***
+
+Start Date: Tue Oct 11 2022
