@@ -189,7 +189,13 @@ def feline_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    # assert False, 'Remove this line'
+    t_len,s_len=len(typed),len(source)
+    min_len=min(t_len,s_len)
+    if t_len == s_len:
+        return 0
+    else:
+        return max(t_len,s_len)-min_len+feline_fixes(typed[:min_len],source[:min_len],limit)
     # END PROBLEM 6
 
 
