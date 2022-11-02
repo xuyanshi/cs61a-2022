@@ -189,6 +189,8 @@ def feline_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
+    '''
+    This was first version of my implement, but...failed.
     t_len,s_len=len(typed),len(source)
     min_len=min(t_len,s_len)
     if t_len == s_len:
@@ -198,12 +200,14 @@ def feline_fixes(typed, source, limit):
             return 0
         else:
             if typed[0]!=source[0]:
-                return 1+feline_fixes(typed[1:],source[1:],limit-1)
+                return min(1+feline_fixes(typed[1:],source[1:],limit-1),limit+1)
             else:
-                return feline_fixes(typed[1:],source[1:],limit-1)
+                return min(feline_fixes(typed[1:],source[1:],limit-1),limit+1)
     else:
         extra_len=max(t_len,s_len)-min_len
         return extra_len+feline_fixes(typed[:min_len],source[:min_len],limit-extra_len)
+    '''
+    
     # END PROBLEM 6
     
 # feline_fixes("car", "cad", 10)
