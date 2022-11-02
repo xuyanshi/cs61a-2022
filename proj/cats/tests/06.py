@@ -36,23 +36,18 @@ test = {
           'code': r"""
           >>> big_limit = 10
           >>> feline_fixes("nice", "rice", big_limit)    # Substitute: n -> r
-          52f1b72ba99dddc798bb5cebce0be695
-          # locked
+          1
           >>> feline_fixes("range", "rungs", big_limit)  # Substitute: a -> u, e -> s
-          45c27a29bbaeb163dec9a0eaed9c7c9c
-          # locked
+          2
           >>> feline_fixes("pill", "pillage", big_limit) # Don't substitute anything, length difference of 3.
-          91711de69bc1d16e478231c51fac5db8
-          # locked
+          3
           >>> feline_fixes("roses", "arose", big_limit)  # Substitute: r -> a, o -> r, s -> o, e -> s, s -> e
-          f29bb7189bc0116caaaf05635899b49b
-          # locked
+          5
           >>> feline_fixes("rose", "hello", big_limit)   # Substitute: r->h, o->e, s->l, e->l, length difference of 1.
-          f29bb7189bc0116caaaf05635899b49b
-          # locked
+          5
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
