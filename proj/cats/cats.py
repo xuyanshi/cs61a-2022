@@ -305,6 +305,20 @@ def report_progress(typed, prompt, user_id, upload):
     """
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+
+    cnt = 0
+    for i in range(len(typed)):
+        if typed[i] == prompt[i]:
+            cnt += 1
+        else:
+            break
+    if len(prompt) == 0:
+        prog = 0.0
+    else:
+        prog = cnt / len(prompt)
+    dic = {'id': user_id, 'progress': prog}
+    upload(dic)
+    return prog
     # END PROBLEM 8
 
 
