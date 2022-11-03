@@ -1,4 +1,5 @@
 """Typing test implementation"""
+from collections import defaultdict
 
 from utils import lower, split, remove_punctuation, lines_from_file
 from ucb import main, interact, trace
@@ -341,6 +342,20 @@ def time_per_word(words, times_per_player):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    wo = words
+
+    # ti = [[0] * (len(times_per_player[0]) - 1)] * len(times_per_player)
+    # This is wrong due to the difference of copy and deepcopy.
+    ti = [None] * len(times_per_player)
+
+    for i in range(len(times_per_player)):
+
+        ti[i] = [0] * (len(times_per_player[0]) - 1)
+
+        player = times_per_player[i]
+        for j in range(len(player) - 1):
+            ti[i][j] = player[j + 1] - player[j]
+    return match(wo, ti)
     # END PROBLEM 9
 
 
