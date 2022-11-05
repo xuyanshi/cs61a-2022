@@ -1,0 +1,32 @@
+{
+    "name": "Project 4: Scheme Interpreter",
+    "endpoint": "cal/cs61a/fa22/proj04challenge",
+    "src": [
+        "scheme_eval_apply.py",
+        "scheme_forms.py",
+        "scheme_classes.py",
+        "questions.scm"
+    ],
+    "tests": {
+        "tests/*.py": "ok_test",
+        "tests.scm": "scheme_test"
+    },
+    "default_tests": [
+        "01",
+        "02",
+        "03",
+        "tests.scm",
+        "04",
+        "05",
+        "EC"
+    ],
+    "protocols": [
+        "restore",
+        "file_contents",
+        "unlock",
+        "grading",
+        "analytics",
+        "collaborate",
+        "backup"
+    ]
+}
