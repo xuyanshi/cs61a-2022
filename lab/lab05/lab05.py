@@ -172,6 +172,12 @@ def berry_finder(t):
     True
     """
     "*** YOUR CODE HERE ***"
+    if label(t) == 'berry':
+        return True
+    for branch in branches(t):
+        if berry_finder(branch):
+            return True
+    return False
 
 
 def sprout_leaves(t, leaves):
