@@ -134,6 +134,16 @@ def balanced(m):
     True
     """
     "*** YOUR CODE HERE ***"
+    if is_planet(m):
+        return True
+    # left_balance, right_balance = True, True
+    # if is_mobile(end(left(m))):
+    #     left_balance = balanced(end(left(m)))
+    # if is_mobile(end(right(m))):
+    #     right_balance = True
+    return balanced(end(left(m))) and balanced(end(right(m))) and total_weight(end(left(m))) * length(
+        left(m)) == total_weight(
+        end(right(m))) * length(right(m))
 
 
 def totals_tree(m):
