@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 passphrase = '*** PASSPHRASE HERE ***'
 
 
@@ -256,6 +258,30 @@ def has_path(t, word):
     """
     assert len(word) > 0, 'no path for empty word.'
     "*** YOUR CODE HERE ***"
+
+    # if label(t) == word:
+    #     return True
+    # @lru_cache(None)
+    # def helper(t, ans):
+    #     ans += label(t)
+    #     if ans == word:
+    #         return True
+    #     for branch in branches(t):
+    #         if helper(branch, ans):
+    #             return True
+    #     ans = ans[:(len(ans) - 1)]
+    #
+    # return helper(t, '')
+    # the above is the wrong solution
+
+    if label(t)==word:
+        return True
+    elif len(word)==1:
+        return False
+    for branch in branches(t):
+        if has_path(branch,word[1:]):
+            return True
+    return False
 
 
 def str_interval(x):
