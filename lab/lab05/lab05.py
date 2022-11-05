@@ -66,7 +66,7 @@ def closer_city(lat, lon, city_a, city_b):
     coor_city = make_city('Coor', lat, lon)
     d_a = distance(coor_city, city_a)
     d_b = distance(coor_city, city_b)
-    if d_a<=d_b:
+    if d_a <= d_b:
         return get_name(city_a)
     return get_name(city_b)
 
@@ -172,7 +172,6 @@ def berry_finder(t):
     True
     """
     "*** YOUR CODE HERE ***"
-    
 
 
 def sprout_leaves(t, leaves):
