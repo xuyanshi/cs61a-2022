@@ -66,12 +66,14 @@ def planet(mass):
     """Construct a planet of some mass."""
     assert mass > 0
     "*** YOUR CODE HERE ***"
+    return ['planet', mass]
 
 
 def mass(w):
     """Select the mass of a planet."""
     assert is_planet(w), 'must call mass on a planet'
     "*** YOUR CODE HERE ***"
+    return w[1]
 
 
 def is_planet(w):
@@ -84,7 +86,7 @@ def examples():
                arm(2, planet(1)))
     u = mobile(arm(5, planet(1)),
                arm(1, mobile(arm(2, planet(3)),
-                              arm(3, planet(2)))))
+                             arm(3, planet(2)))))
     v = mobile(arm(4, t), arm(2, u))
     return (t, u, v)
 
