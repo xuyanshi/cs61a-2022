@@ -274,12 +274,12 @@ def has_path(t, word):
     # return helper(t, '')
     # the above is the wrong solution
 
-    if label(t)==word:
+    if label(t) == word:
         return True
-    elif len(word)==1:
+    elif len(word) == 1:
         return False
     for branch in branches(t):
-        if has_path(branch,word[1:]):
+        if has_path(branch, word[1:]):
             return True
     return False
 
@@ -314,6 +314,7 @@ def upper_bound(x):
     "*** YOUR CODE HERE ***"
     return x[1]
 
+
 def str_interval(x):
     """Return a string representation of interval x."""
     return '{0} to {1}'.format(lower_bound(x), upper_bound(x))
@@ -330,17 +331,19 @@ def add_interval(x, y):
 def mul_interval(x, y):
     """Return the interval that contains the product of any value in x and any
     value in y."""
-    p1 = x[0] * y[0]
-    p2 = x[0] * y[1]
-    p3 = x[1] * y[0]
-    p4 = x[1] * y[1]
-    return [min(p1, p2, p3, p4), max(p1, p2, p3, p4)]
+    p1 = lower_bound(x) * lower_bound(y)
+    p2 = lower_bound(x) * upper_bound(y)
+    p3 = upper_bound(x) * lower_bound(y)
+    p4 = upper_bound(x) * upper_bound(y)
+    return interval(min(p1, p2, p3, p4), max(p1, p2, p3, p4))
 
 
 def sub_interval(x, y):
     """Return the interval that contains the difference between any value in x
     and any value in y."""
     "*** YOUR CODE HERE ***"
+    nega_y=interval(-upper_bound(y),-lower_bound(y))
+    return add_interval(x,nega_y)
 
 
 def div_interval(x, y):
@@ -348,6 +351,7 @@ def div_interval(x, y):
     any value in y. Division is implemented as the multiplication of x by the
     reciprocal of y."""
     "*** YOUR CODE HERE ***"
+    assert lower_bound(y) > 0 and upper_bound(y) > 0
     reciprocal_y = interval(1 / upper_bound(y), 1 / lower_bound(y))
     return mul_interval(x, reciprocal_y)
 
