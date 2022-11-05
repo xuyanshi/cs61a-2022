@@ -184,7 +184,6 @@ def totals_tree(m):
     return tree(total_weight(m), [left_tree, right_tree])
 
 
-
 def replace_loki_at_leaf(t, lokis_replacement):
     """Returns a new tree where every leaf value equal to "loki" has
     been replaced with lokis_replacement.
@@ -215,6 +214,14 @@ def replace_loki_at_leaf(t, lokis_replacement):
     True
     """
     "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        if label(t) == 'loki':
+            return tree(lokis_replacement)
+        return tree(label(t))
+    new_branches = []
+    for branch in branches(t):
+        new_branches += [replace_loki_at_leaf(branch, lokis_replacement)]
+    return tree(label(t), new_branches)
 
 
 def has_path(t, word):
