@@ -216,7 +216,8 @@ def sprout_leaves(t, leaves):
     "*** YOUR CODE HERE ***"
     if is_leaf(t):
         return tree(label(t), [tree(leaf) for leaf in leaves])
-    return tree(label(t), [sprout_leaves(child,leaves) for child in branches(t)])
+    return tree(label(t), [sprout_leaves(child, leaves) for child in branches(t)])
+
 
 # Abstraction tests for sprout_leaves and berry_finder
 
@@ -280,6 +281,14 @@ def preorder(t):
     [2, 4, 6]
     """
     "*** YOUR CODE HERE ***"
+
+    def helper(tr, ans):
+        ans.append(label(tr))
+        for branch in branches(tr):
+            helper(branch, ans)
+        return ans
+
+    return helper(t, [])
 
 
 def add_trees(t1, t2):
