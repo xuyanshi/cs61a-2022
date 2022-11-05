@@ -177,6 +177,13 @@ def totals_tree(m):
     """
     "*** YOUR CODE HERE ***"
 
+    if is_planet(m):
+        return tree(total_weight(m))
+    left_tree = totals_tree(end(left(m)))
+    right_tree = totals_tree(end(right(m)))
+    return tree(total_weight(m), [left_tree, right_tree])
+
+
 
 def replace_loki_at_leaf(t, lokis_replacement):
     """Returns a new tree where every leaf value equal to "loki" has
