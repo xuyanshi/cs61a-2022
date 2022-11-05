@@ -15,6 +15,14 @@ def flatten(s):
     [[1, [1, 1]], 1, [1, 1]]
     """
     "*** YOUR CODE HERE ***"
+    def helper(s,ans):
+        for i in s:
+            if type(i)!=list:
+                ans.append(i)
+            else:
+                ans.extend(helper(i,[]))
+        return ans
+    return helper(s,[])
 
 
 from math import sqrt
