@@ -15,14 +15,16 @@ def flatten(s):
     [[1, [1, 1]], 1, [1, 1]]
     """
     "*** YOUR CODE HERE ***"
-    def helper(s,ans):
+
+    def helper(s, ans):
         for i in s:
-            if type(i)!=list:
+            if type(i) != list:
                 ans.append(i)
             else:
-                ans.extend(helper(i,[]))
+                ans.extend(helper(i, []))
         return ans
-    return helper(s,[])
+
+    return helper(s, [])
 
 
 from math import sqrt
@@ -40,6 +42,9 @@ def distance(city_a, city_b):
     5.0
     """
     "*** YOUR CODE HERE ***"
+    lat_a, lon_a = get_lat(city_a), get_lon(city_a)
+    lat_b, lon_b = get_lat(city_b), get_lon(city_b)
+    return sqrt((lat_a - lat_b) ** 2 + (lon_b - lon_a) ** 2)
 
 
 def closer_city(lat, lon, city_a, city_b):
@@ -82,6 +87,7 @@ def check_city_abstraction():
     'Bucharest'
     >>> change_abstraction(False)
     """
+
 
 # Treat all the following code as being behind an abstraction layer,
 # you shouldn't need to look at it.
@@ -137,6 +143,7 @@ def get_lon(city):
         return city["lon"]
     else:
         return city[2]
+
 
 ###############
 
@@ -195,6 +202,7 @@ def sprout_leaves(t, leaves):
           2
     """
     "*** YOUR CODE HERE ***"
+
 
 # Abstraction tests for sprout_leaves and berry_finder
 
