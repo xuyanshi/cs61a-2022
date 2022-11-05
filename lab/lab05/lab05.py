@@ -327,8 +327,19 @@ def add_trees(t1, t2):
       5
     """
     "*** YOUR CODE HERE ***"
-
-    
+    # Hard Problem
+    if is_leaf(t1) or is_leaf(t2):
+        return tree(label(t1) + label(t2), branches(t1) + branches(t2))
+    new_branches = []
+    len1, len2 = len(branches(t1)), len(branches(t2))
+    for i in range(min(len1, len2)):
+        new_branches += [add_trees(branches(t1)[i], branches(t2)[i])]
+    for i in range(min(len1,len2),max(len1,len2)):
+        if len1>len2:
+            new_branches += [branches(t1)[i]]
+        else:
+            new_branches += [branches(t2)[i]]
+    return tree(label(t1) + label(t2), new_branches)
 
 
 def change_abstraction(change):
