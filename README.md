@@ -9,11 +9,11 @@
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/xuyanshi/cs61a?style=flat-square) 
 ![GitHub repo size](https://img.shields.io/github/repo-size/xuyanshi/cs61a?style=flat-square) 
-![GitHub language count](https://img.shields.io/github/languages/count/xuyanshi/cs61a)  
 ![GitHub](https://img.shields.io/github/license/xuyanshi/cs61a?style=flat-square)
 
 <!--
 [![LastCommit](https://img.shields.io/github/last-commit/xuyanshi/cs61a?style=flat-square)](https://github.com/xuyanshi/cs61a)
+![GitHub language count](https://img.shields.io/github/languages/count/xuyanshi/cs61a) 
 -->
 
 ### ***I DO NOT upload my code before the deadline of labs, homework or projects.***
