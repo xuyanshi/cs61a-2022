@@ -92,3 +92,14 @@ def repeated(t, k):
     """
     assert k > 1
     "*** YOUR CODE HERE ***"
+    prev = -1
+    cnt = 0
+    for x in t:
+        if x == prev:
+            cnt += 1
+            if cnt == k:
+                return x
+        else:
+            prev = x
+            cnt = 1
+    return -1
