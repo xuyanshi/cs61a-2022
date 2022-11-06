@@ -1,0 +1,1241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/disc.css">
+
+
+    <title>
+Discussion 10 | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 10: Scheme, Scheme Lists
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc10.pdf" class="label label-outline">disc10.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<div class="alert storable-login-status"></div>
+
+This is an online worksheet that you can work on during discussions.
+Your work is not graded and you do not need to submit anything.
+
+
+    
+<!-- commenting for now
+<div class="sol-highlight">
+
+<h2 id="walkthrough-videos">Walkthrough Videos</h2>
+
+
+<p>Feel free to try these problems on the worksheet in discussion or on
+your own, and then come back to reference these walkthrough videos
+as you study.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZdUruu7L_5K_eMKnzyB2tN2"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZdUruu7L_5K_eMKnzyB2tN2'> YouTube link </a></p>
+</div>
+-->
+
+
+
+
+<h1 id="introduction">Introduction</h1>
+
+
+<p>In the next part of the course, we will be working with the <strong>Scheme</strong>
+programming language. In addition to learning how to write Scheme programs, we
+will eventually write a Scheme interpreter in Project 4!</p>
+
+<p>Scheme is a famous functional programming language from the 1970s.  It is a
+dialect of Lisp (which stands for LISt Processing).  The first observation most
+people make is the unique syntax, which uses a prefix notation and (often many)
+nested parentheses (see <a href="http://xkcd.com/297/">http://xkcd.com/297/</a>).  Scheme
+features first-class functions and optimized tail-recursion, which were
+relatively new features at the time.</p>
+
+
+<h1 id="primitives-and-defining-variables">Primitives and Defining Variables</h1>
+
+
+<p>Scheme has a set of <strong>atomic</strong> primitive expressions. Atomic means
+that these expressions cannot be divided up.</p>
+
+<pre><code class="scheme">scm&gt; 123
+123
+scm&gt; #t
+True
+scm&gt; #f
+False</code></pre>
+
+
+
+<p>Unlike in Python, the only primitive in Scheme that is a false value is
+<code>#f</code> and its equivalents, <code>false</code> and <code>False</code>. <strong>This means that 0 is not false.</strong></p>
+
+<p>In Scheme, we can use the <code>define</code> special form to bind values to symbols, which we can then use as variables. When a symbol is defined this way, the <code>define</code> special form returns the symbol.</p>
+
+<ul>
+  <li><code>(define &lt;variable name&gt; &lt;value&gt;)</code></li>
+</ul>
+
+<p>Evaluates <code>&lt;value&gt;</code> and binds the value to <code>&lt;variable name&gt;</code> in the current environment.</p>
+
+
+<h3 id="wwsd">WWSD</h3>
+
+
+<pre><code class="scheme">scm&gt; (define a 1)</code></pre>
+
+
+
+
+            <label class="sr-only" for="scheme-primitives-1-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-primitives-1-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+a
+</div>
+
+<pre><code class="scheme">scm&gt; a</code></pre>
+
+
+
+
+            <label class="sr-only" for="scheme-primitives-2-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-primitives-2-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+1
+</div>
+
+<pre><code class="scheme">scm&gt; (define b a)</code></pre>
+
+
+
+
+            <label class="sr-only" for="scheme-primitives-3-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-primitives-3-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+b
+</div>
+
+<pre><code class="scheme">scm&gt; b</code></pre>
+
+
+
+
+            <label class="sr-only" for="scheme-primitives-4-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-primitives-4-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+1
+</div>
+
+<pre><code class="scheme">scm&gt; (define c &#x27;a)</code></pre>
+
+
+
+
+            <label class="sr-only" for="scheme-primitives-5-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-primitives-5-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+c
+</div>
+
+<pre><code class="scheme">scm&gt; c</code></pre>
+
+
+
+
+            <label class="sr-only" for="scheme-primitives-6-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-primitives-6-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+a
+
+<p><a href="https://youtu.be/J0wAfcoBoR4?t=10m46s}">Video walkthrough</a>
+</div></p>
+
+
+<h1 id="call-expressions">Call Expressions</h1>
+
+
+<p>Call expressions apply a procedure to some arguments.</p>
+
+<pre><code class="scheme">(&lt;operator&gt; &lt;operand1&gt; &lt;operand2&gt; ...)</code></pre>
+
+
+
+<p>Call expressions in Scheme work exactly like they do in Python. To evaluate
+them:</p>
+
+<ol>
+  <li>Evaluate the operator to get a procedure.</li>
+  <li>Evaluate each of the operands from left to right.</li>
+  <li>Apply the value of the operator to the evaluated operands.</li>
+</ol>
+
+<p>For example, consider the call expression <code>(+ 1 2)</code>. First, we evaluate
+the symbol <code>+</code> to get the built-in addition procedure. Then we evaluate
+the two operands <code>1</code> and <code>2</code> to get their corresponding atomic
+values. Finally, we apply the addition procedure to the values <code>1</code> and
+<code>2</code> to get the return value <code>3</code>.</p>
+
+<p>Operators may be symbols, such as <code>+</code> and <code>*</code>, or more
+complex expressions, as long as they evaluate to procedure values.</p>
+
+<p>Here is a reference for the <a href="https://cs61a.org/articles/scheme-builtins/">Scheme Built-In Procedures</a>.</p>
+
+<pre><code class="scheme">scm&gt; (&#x2d; 1 1)                 ; 1 &#x2d; 1
+0
+scm&gt; (* (+ 1 2) (+ 1 2))     ; (1 + 2) * (1 + 2)
+9</code></pre>
+
+
+
+
+<h3 id="wwsd-2">WWSD</h3>
+
+
+<p>What would Scheme display? As a reminder, the built-in <code>quotient</code> function performs floor division.</p>
+
+
+
+<pre><code class="scheme">scm&gt; (define a (+ 1 2))</code></pre>
+
+
+
+
+            <label class="sr-only" for="scheme-callexprs-1-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-callexprs-1-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+a
+</div>
+
+<pre><code class="scheme">scm&gt; a</code></pre>
+
+
+
+
+            <label class="sr-only" for="scheme-callexprs-2-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-callexprs-2-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+3
+</div>
+
+<pre><code class="scheme">scm&gt; (define b (&#x2d; (+ (* 3 3) 2) 1))</code></pre>
+
+
+
+
+            <label class="sr-only" for="scheme-callexprs-3-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-callexprs-3-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+b
+</div>
+
+<pre><code class="scheme">scm&gt; (+ a b)</code></pre>
+
+
+
+
+            <label class="sr-only" for="scheme-callexprs-4-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-callexprs-4-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+13
+</div>
+
+<pre><code class="scheme">scm&gt; (= (modulo b a) (quotient 5 3))</code></pre>
+
+
+
+
+            <label class="sr-only" for="scheme-callexprs-5-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-callexprs-5-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+#t
+</div>
+
+
+<h1 id="special-forms">Special Forms</h1>
+
+
+<p>Special form expressions contain a <strong>special form</strong> as the operator.
+Special form expressions <em>do not</em> follow the same rules of evaluation as
+call expressions.  Each special form has its own rules of evaluation -- that's
+what makes them special!
+Here's the <a href="https://cs61a.org/articles/scheme-spec/#special-forms-2">Scheme Specification</a> to reference the special forms we will cover in this class.</p>
+
+<p>It is important to note that everything in Scheme is either an <strong>atomic</strong> or an <strong>expression</strong>, so although these special forms look and operate similarly to Python, they are evaluated differently.</p>
+
+<p>Special forms like <code>if</code>, <code>cond</code>, <code>and</code>, <code>or</code> in Python direct the control flow of a program and allow you to evaluate specific expressions under some condition. In Scheme, however, these special forms are expressions that take in a set amount of parameters and return some value based on the condition passed in.</p>
+
+<p><strong>If Expression</strong></p>
+
+<p>An <code>if</code> expression looks like this:</p>
+
+<p><code>(if &lt;predicate&gt; &lt;if&#x2d;true&gt; [if&#x2d;false])</code></p>
+
+<p><code>&lt;predicate&gt;</code> and <code>&lt;if&#x2d;true&gt;</code> are required expressions and
+<code>[if&#x2d;false]</code> is optional.</p>
+
+<p>The rules for evaluation are as follows:</p>
+
+<ol>
+  <li>Evaluate <code>&lt;predicate&gt;</code>.</li>
+  <li>If <code>&lt;predicate&gt;</code> evaluates to a truth-y value, evaluate <code>&lt;if&#x2d;true&gt;</code>
+  and return its value. Otherwise, evaluate <code>[if&#x2d;false]</code> if
+  provided and return its value.</li>
+</ol>
+
+<p><code>if</code> is a special form as not all of its operands will be evaluated. The value of the first operand determines whether the second or the third operator is evaluated.</p>
+
+<blockquote><p><strong>Important:</strong>
+Only <code>#f</code> is a false-y value in Scheme;
+everything else is truth-y, including <code>0</code>.</p></blockquote>
+
+<pre><code class="scheme">scm&gt; (if (&lt; 4 5) 1 2)
+1
+scm&gt; (if #f (/ 1 0) 42)
+42</code></pre>
+
+
+
+<p><strong>Cond Expression</strong></p>
+
+<p>A <code>cond</code> expression looks like this:</p>
+
+<p><code>(cond (&lt;pred1&gt; &lt;if&#x2d;pred1&gt;) (&lt;pred2&gt; &lt;if&#x2d;pred2&gt;) ... (&lt;predn&gt; &lt;if&#x2d;predn&gt;) [(else &lt;else&#x2d;expression&gt;)])</code></p>
+
+<p>Must have at least one <code>&lt;predn&gt;</code> and <code>&lt;if&#x2d;predn&gt;</code> and
+<code>[(else &lt;else&#x2d;expression&gt;)]</code> is optional.</p>
+
+<div class="page-break"></div>
+
+<p>The rules for evaluation are as follows:</p>
+
+<ol>
+  <li>Evaluate the predicates <code>&lt;pred1&gt;</code>, <code>&lt;pred2&gt;</code>, ..., <code>&lt;predn&gt;</code> in order until you reach one that evaluates to a truth-y value.</li>
+  <li>If you reach a predicate that evaluates to a truth-y value, evaluate and return the corresponding expression in the clause.</li>
+  <li>If none of the predicates are truth-y and there is an else clause, evaluate and return <code>&lt;else&#x2d;expression&gt;</code>.</li>
+</ol>
+
+<p><code>cond</code> is a special form because it does not evaluate its operands in their entirety; the predicates are evaluated separately from their corresponding return expression. In addition, the expression short circuits upon reaching the first predicate that evaluates to a truth-y value, leaving the remaining predicates unevaluated.</p>
+
+<pre><code class="scheme">scm&gt; (cond
+        ((&lt; 4 5) 1)
+        (else 2)
+      )
+1
+scm&gt; (cond
+        (#f (/ 1 0))
+        (else 42)
+      )
+42</code></pre>
+
+
+
+<p><strong>Boolean operators</strong></p>
+
+<p>Like Python, Scheme has the boolean operators <code>and</code>,
+<code>or</code>, and <code>not</code>.  <code>and</code> and <code>or</code> are
+special forms because they are short-circuiting operators,
+while <code>not</code> is a builtin procedure.</p>
+
+<ul>
+  <li><code>and</code> takes in any amount of operands and evaluates these operands
+  from left to right until one evaluates to a false-y value. It returns
+  that first false-y value or the value of the last expression if there are no false-y values.</li>
+  <li><code>or</code> also evaluates any number of operands from left to right
+  until one evaluates to a truth-y value. It returns
+  that first truth-y value or the value of the last expression if there are no truth-y values.</li>
+  <li><code>not</code> takes in a single operand, evaluates it, and returns its
+  opposite truthiness value.</li>
+</ul>
+
+<pre><code class="scheme">scm&gt; (and 25 32)
+32
+scm&gt; (or 1 (/ 1 0))    ; Short&#x2d;circuits
+1
+scm&gt; (not (odd? 10))
+#t</code></pre>
+
+
+<div class="page-break"></div>
+
+
+<h3 id="wwsd-3">WWSD</h3>
+
+
+<p>What would Scheme display?</p>
+
+
+
+<pre><code class="scheme">scm&gt; (and (and 14 0.0) (or (or (not 0) (define a 2) (/ 1 0)) 8))</code></pre>
+
+
+
+            <label class="sr-only" for="scheme-ifexprs-1-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-ifexprs-1-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+a
+<br>
+<strong>Note</strong>: 0.0 and 0 are truth-y in Scheme! Also, <code>define</code> expressions evaluate to the symbol that is being assigned to a value, so <code>(define a 2)</code> is evaluated to <code>a</code>.
+</div>
+
+<pre><code class="scheme">scm&gt; (if (or #t (/ 1 0)) 1 (/ 1 0))</code></pre>
+
+
+
+            <label class="sr-only" for="scheme-ifexprs-1-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-ifexprs-1-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+1
+</div>
+
+<pre><code class="scheme">scm&gt; ((if (&lt; 4 3) + &#x2d;) 4 100)</code></pre>
+
+
+
+            <label class="sr-only" for="scheme-ifexprs-2-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-ifexprs-2-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+-96
+</div>
+
+<pre><code class="scheme">scm&gt; (cond
+        ((and (&#x2d; 4 4) (not #t)) 1)
+        ((and (or (&lt; 9 (/ 100 10)) (/ 1 0)) #t) &#x2d;1)
+        (else (/ 1 0))
+    )</code></pre>
+
+
+
+            <label class="sr-only" for="scheme-ifexprs-3-input">Your Answer:</label>
+            <input class="form-control storable" id="scheme-ifexprs-3-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight">
+-1
+</div>
+
+<div class="sol-highlight">
+<a href="https://youtu.be/DlA7f9KTs5o?list=PLx38hZJ5RLZfBXJRWlsQyOg3lrHzfvWu0&t=525">Walkthrough video</a>
+</div>
+
+
+<h1 id="defining-functions">Defining Functions</h1>
+
+
+<p>All Scheme procedures are constructed as lambda procedures.</p>
+
+<p>One way to create a procedure is to use the <code>lambda</code> special form.</p>
+
+<p><code>(lambda (&lt;param1&gt; &lt;param2&gt; ...) &lt;body&gt;)</code></p>
+
+<p>This expression creates a lambda function with the given parameters and body,
+but does not evaluate the body. As in Python, the body is not
+evaluated until the function is called and applied to some argument
+values. The fact that neither the parameters nor the body is evaluated is what
+makes <code>lambda</code> a special form.</p>
+
+<p>We can also assign the value of an expression to a
+name with a <code>define</code> special form:</p>
+
+<ol>
+  <li><code>(define (&lt;name&gt; &lt;param&gt; ...) &lt;body&gt; ...)</code></li>
+  <li><code>(define &lt;name&gt; (lambda (&lt;param&gt; ...) &lt;body&gt; ...))</code></li>
+</ol>
+
+<p>These two expressions are equivalent;
+the first is a concise version of the second.</p>
+
+<pre><code class="scheme">scm&gt; ; Bind lambda function to square
+scm&gt; (define square (lambda (x) (* x x)))
+square
+scm&gt; (define (square x) (* x x))          ; Same as above
+square
+scm&gt; square
+(lambda (x) (* x x))
+scm&gt; (square 4)
+16</code></pre>
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q1-virahanka-fibonacci">Q1: Virahanka-Fibonacci</h3>
+
+
+<p>Write a function that returns the <code>n</code>-th Virahanka-Fibonacci number.</p>
+
+
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="scheme-fibonacci-input" style="height:180px;"></div>
+            <a href="javascript:void" id="modal-link-scheme-fibonacci-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-scheme-fibonacci-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-scheme-fibonacci-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor("(define (vir&#x2d;fib n)\n    'YOUR-CODE-HERE\n)\n\n(expect (vir&#x2d;fib 10) 55)\n(expect (vir&#x2d;fib 1) 1)\n", "scheme", "scheme-fibonacci-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define (vir&#x2d;fib n)
+    (if (&lt;= n 1)
+        n
+        (+ (vir&#x2d;fib (&#x2d; n 1)) (vir&#x2d;fib (&#x2d; n 2))))
+)
+
+(expect (vir&#x2d;fib 10) 55)
+(expect (vir&#x2d;fib 1) 1)</code></pre>
+
+            </div>
+        
+
+<pre><code class="scheme">scm&gt; (vir&#x2d;fib 0)
+0
+scm&gt; (vir&#x2d;fib 1)
+1
+scm&gt; (vir&#x2d;fib 10)
+55</code></pre>
+
+
+
+<div class="sol-highlight">
+<a href="https://youtu.be/DlA7f9KTs5o?list=PLx38hZJ5RLZfBXJRWlsQyOg3lrHzfvWu0&t=1223">Walkthrough video</a>
+</div>
+
+<div class="page-break"></div>
+
+
+<h1 id="pairs-and-lists">Pairs and Lists</h1>
+
+
+<p>All lists in Scheme are linked lists. Scheme lists are composed of two element pairs.
+We define a list as being either</p>
+
+<ul>
+  <li>the empty list, <code>nil</code></li>
+  <li>a pair whose second element is a list</li>
+</ul>
+
+<p>As in Python, linked lists are recursive data structures. The base case is the empty list.</p>
+
+<p>We use the following procedures to construct and select from lists:</p>
+
+<ul>
+  <li><code>(cons first rest)</code> constructs a list with the given first element
+  and rest of the list. For now, if <code>rest</code> is not a pair or <code>nil</code> it will error.</li>
+  <li><code>(car lst)</code> gets the first item of the list</li>
+  <li><code>(cdr lst)</code> gets the rest of the list</li>
+</ul>
+
+<p>To visualize Scheme lists, you can use the <code>draw</code> function in code.cs61a.org.</p>
+
+<pre><code class="scheme">scm&gt; nil
+()
+scm&gt; (define lst (cons 1 (cons 2 (cons 3 nil))))
+lst
+scm&gt; lst
+(1 2 3)
+scm&gt; (car lst)
+1
+scm&gt; (cdr lst)
+(2 3)</code></pre>
+
+
+<p>Scheme lists are displayed in a similar way to the Link class we defined in Python.
+<a href="https://code.cs61a.org/EarlySorryBottom">Here is an example in 61A Code</a>.</p>
+
+<p>Two other ways of creating lists are using the built-in <code>list</code>
+procedure or the <code>quote</code> special form.</p>
+
+<p>The <code>list</code> procedure has the syntax <code>(list &lt;item&gt; ...)</code>. It takes in an arbitrary number of operands and constructs a list with their values.</p>
+
+<pre><code class="scheme">scm&gt; (list 1 2 3)
+(1 2 3)</code></pre>
+
+
+
+<p>The <code>quote</code> special form has the syntax <code>(quote &lt;expression&gt;)</code>. It returns the literal <code>expression</code> without evaluating it.
+A shorthand for the <code>quote</code> special form is <code>&#x27;&lt;expression&gt;</code>.</p>
+
+<pre><code class="scheme">scm&gt; (define a 61)
+a
+scm&gt; a
+61
+scm&gt; (quote a)
+a
+scm&gt; &#x27;a
+a</code></pre>
+
+
+
+<p>We can use the <code>quote</code> form to create a list by passing in a combination as the <code>expression</code>:</p>
+
+<pre><code class="scheme">scm&gt; (quote (1 x 3))
+(1 x 3)
+scm&gt; &#x27;(1 x 3)   ; Equivalent to the previous quote expression
+(1 x 3)</code></pre>
+
+
+
+<p>An important difference between <code>list</code> (along with <code>cons</code>) and <code>quote</code> is that <code>list</code> and <code>cons</code> evaluate each of their operands before putting them into a list, while <code>quote</code> will return the list exactly as typed, without evaluating any of the individual elements.</p>
+
+<pre><code class="scheme">scm&gt; (define a 1)
+a
+scm&gt; (define b 2)
+b
+scm&gt; (list a b 3)
+(1 2 3)
+scm&gt; &#x27;(a b 3)
+(a b 3)</code></pre>
+
+
+
+<p>Note that if we wanted to create the list <code>(a b 3)</code> using the <code>list</code> procedure, we could quote the symbols <code>a</code> and <code>b</code> so that they are not evaluated
+when making the list:</p>
+
+<pre><code class="scheme">scm&gt; (list &#x27;a &#x27;b 3)
+(a b 3)</code></pre>
+
+
+
+<p><strong>=, eq?, equal?</strong></p>
+
+<ul>
+  <li><code>(= &lt;a&gt; &lt;b&gt;)</code> returns true if <code>a</code> equals <code>b</code>. Both must be numbers.</li>
+  <li><code>(eq? &lt;a&gt; &lt;b&gt;)</code> returns true if <code>a</code> and <code>b</code> are equivalent primitive values.
+  For two objects, <code>eq?</code> returns true if both refer to the same object in memory. Similar to checking identity between two objects using <code>is</code> in Python</li>
+  <li><code>(equal? &lt;a&gt; &lt;b&gt;)</code> returns true if <code>a</code> and <code>b</code> are <em>pairs</em> that have the same contents (<code>car</code>s and <code>cdr</code>s are equivalent). Similar to checking equality between two lists using <code>==</code> in Python. If <code>a</code> and <code>b</code> are not pairs, <code>equal?</code> behaves like <code>eq?</code>.</li>
+</ul>
+
+<pre><code class="scheme">scm&gt; (define a &#x27;(1 2 3))
+a
+scm&gt; (= a a)
+Error
+scm&gt; (equal? a &#x27;(1 2 3))
+#t
+scm&gt; (eq? a &#x27;(1 2 3))
+#f</code></pre>
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q2-list-making">Q2: List Making</h3>
+
+
+<p>Let's make some Scheme lists. We'll define the same list with <code>list</code>, <code>quote</code>, and <code>cons</code>.</p>
+
+<p>The following list was visualized using the <code>draw</code> feature of code.cs61a.org.</p>
+
+<br>
+<img class="img-responsive center-block" src="assets/make-list.png" alt="linked list" width="" height="">
+
+<p>First, use <code>list</code>:</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="list-construct-input" style="height:144px;"></div>
+            <a href="javascript:void" id="modal-link-list-construct-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-list-construct-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-list-construct-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor("(define with&#x2d;list\n    (list\n        'YOUR-CODE-HERE\n    )\n)\n(draw with&#x2d;list)\n", "scheme", "list-construct-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define with&#x2d;list
+    (list
+        (list &#x27;a &#x27;b) &#x27;c &#x27;d (list &#x27;e)
+    )
+)
+(draw with&#x2d;list)</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+<p>Now use <code>quote</code>. What differences are there?</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="quote-construct-input" style="height:162px;"></div>
+            <a href="javascript:void" id="modal-link-quote-construct-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-quote-construct-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-quote-construct-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor("(define with&#x2d;quote\n    &#x27;(\n        'YOUR-CODE-HERE\n    )\n\n)\n(draw with&#x2d;quote)\n", "scheme", "quote-construct-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define with&#x2d;quote
+    &#x27;(
+        (a b) c d (e)
+    )
+
+)
+(draw with&#x2d;quote)</code></pre>
+
+            </div>
+        
+
+<p>Now try with <code>cons</code>. For convenience, we've defined a <code>helpful&#x2d;list</code> and <code>another&#x2d;helpful&#x2d;list</code>:</p>
+
+
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="cons-construct-input" style="height:288px;"></div>
+            <a href="javascript:void" id="modal-link-cons-construct-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-cons-construct-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-cons-construct-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor("(define helpful&#x2d;list\n   (cons &#x27;a (cons &#x27;b nil)))\n(draw helpful&#x2d;list)\n\n(define another&#x2d;helpful&#x2d;list\n    (cons &#x27;c (cons &#x27;d (cons (cons &#x27;e nil) nil))))\n(draw another&#x2d;helpful&#x2d;list)\n\n(define with&#x2d;cons\n    (cons\n        'YOUR-CODE-HERE\n    )\n)\n(draw with&#x2d;cons)\n", "scheme", "cons-construct-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define helpful&#x2d;list
+   (cons &#x27;a (cons &#x27;b nil)))
+(draw helpful&#x2d;list)
+
+(define another&#x2d;helpful&#x2d;list
+    (cons &#x27;c (cons &#x27;d (cons (cons &#x27;e nil) nil))))
+(draw another&#x2d;helpful&#x2d;list)
+
+(define with&#x2d;cons
+    (cons
+        (cons &#x27;a (cons &#x27;b nil)) (cons &#x27;c (cons &#x27;d (cons (cons &#x27;e nil) nil)))
+    )
+)
+(draw with&#x2d;cons)</code></pre>
+
+            </div>
+        
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q3-list-concatenation">Q3: List Concatenation</h3>
+
+
+<p>Write a function which takes two lists and concatenates them.</p>
+
+
+
+<p>Notice that simply calling <code>(cons a b)</code>  would not work because it will
+create a deep list. Do not call the builtin procedure <code>append</code>, since it
+does the same thing as <code>list&#x2d;concat</code> should do.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="scheme-list-concatenate-input" style="height:180px;"></div>
+            <a href="javascript:void" id="modal-link-scheme-list-concatenate-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-scheme-list-concatenate-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-scheme-list-concatenate-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor("(define (list&#x2d;concat a b)\n    'YOUR-CODE-HERE\n)\n\n(expect (list&#x2d;concat &#x27;(1 2 3) &#x27;(2 3 4)) (1 2 3 2 3 4))\n(expect (list&#x2d;concat &#x27;(3) &#x27;(2 1 0)) (3 2 1 0))\n", "scheme", "scheme-list-concatenate-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define (list&#x2d;concat a b)
+    (if (null? a)
+    b
+    (cons (car a) (list&#x2d;concat (cdr a) b)))
+)
+
+(expect (list&#x2d;concat &#x27;(1 2 3) &#x27;(2 3 4)) (1 2 3 2 3 4))
+(expect (list&#x2d;concat &#x27;(3) &#x27;(2 1 0)) (3 2 1 0))</code></pre>
+
+            </div>
+        
+
+<pre><code class="scheme">scm&gt; (list&#x2d;concat &#x27;(1 2 3) &#x27;(2 3 4))
+(1 2 3 2 3 4)</code></pre>
+
+
+
+<div class="sol-highlight">
+<a href="https://www.youtube.com/watch?v=8FO2ZYkXwb0">Walkthrough video</a>
+</div>
+
+<div class="page-break"></div>
+
+
+<h3 id="q4-map">Q4: Map</h3>
+
+
+<p>Write a function that takes a procedure and applies it to every element in a
+given list using your own implementation <em>without</em> using the built-in <code>map</code>
+function.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="map-fn-input" style="height:180px;"></div>
+            <a href="javascript:void" id="modal-link-map-fn-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-map-fn-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-map-fn-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor("(define (map&#x2d;fn fn lst)\n    'YOUR-CODE-HERE\n)\n\n(map&#x2d;fn (lambda (x) (* x x)) &#x27;(1 2 3))\n; expect (1 4 9)\n", "scheme", "map-fn-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define (map&#x2d;fn fn lst)
+    (if (null? lst)
+        nil
+        (cons (fn (car lst)) (map&#x2d;fn fn (cdr lst))))
+)
+
+(map&#x2d;fn (lambda (x) (* x x)) &#x27;(1 2 3))
+; expect (1 4 9)</code></pre>
+
+            </div>
+        
+
+<pre><code class="scheme">scm&gt; (map&#x2d;fn (lambda (x) (* x x)) &#x27;(1 2 3))
+(1 4 9)</code></pre>
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q5-remove">Q5: Remove</h3>
+
+
+<p>Implement a procedure <code>remove</code> that takes in a list and returns a new list with
+<em>all</em> instances of <code>item</code> removed from <code>lst</code>. You may assume the list will only
+consist of numbers and will not have nested lists.</p>
+
+<blockquote><p><em>Hint</em>: You might find the built-in <code>filter</code> procedure useful
+(though it is definitely possible to complete this question without it).</p>
+
+<p>You can find information about how to use <code>filter</code> in
+<a href="https://cs61a.org/articles/scheme-builtins/#pair-and-list-manipulation">the 61A Scheme builtin specification</a>!</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="scheme-remove-input" style="height:234px;"></div>
+            <a href="javascript:void" id="modal-link-scheme-remove-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-scheme-remove-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-scheme-remove-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor("(define (remove item lst)\n  'YOUR-CODE-HERE\n)\n\n(expect (remove 3 nil) ())\n(expect (remove 2 &#x27;(1 3 2)) (1 3))\n(expect (remove 1 &#x27;(1 3 2)) (3 2))\n(expect (remove 42 &#x27;(1 3 2)) (1 3 2))\n(expect (remove 3 &#x27;(1 3 3 7)) (1 7))\n", "scheme", "scheme-remove-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define (remove item lst)
+  (cond ((null? lst) &#x27;())
+        ((equal? item (car lst)) (remove item (cdr lst)))
+        (else (cons (car lst) (remove item (cdr lst)))))
+)
+
+(expect (remove 3 nil) ())
+(expect (remove 2 &#x27;(1 3 2)) (1 3))
+(expect (remove 1 &#x27;(1 3 2)) (3 2))
+(expect (remove 42 &#x27;(1 3 2)) (1 3 2))
+(expect (remove 3 &#x27;(1 3 3 7)) (1 7))</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+
+<p>Solution done with <code>filter</code>:</p>
+
+<pre><code class="scheme">(define (remove item lst)
+  (filter (lambda (x) (not (= x item))) lst))</code></pre>
+
+
+
+</div>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#walkthrough-videos">Walkthrough Videos</a></li>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#primitives-and-defining-variables">Primitives and Defining Variables</a></li>
+  <ul>
+    <li><a href="#wwsd">WWSD</a></li>
+  </ul>
+  <li><a href="#call-expressions">Call Expressions</a></li>
+  <ul>
+    <li><a href="#wwsd-2">WWSD</a></li>
+  </ul>
+  <li><a href="#special-forms">Special Forms</a></li>
+  <ul>
+    <li><a href="#wwsd-3">WWSD</a></li>
+  </ul>
+  <li><a href="#defining-functions">Defining Functions</a></li>
+  <ul>
+    <li><a href="#q1-virahanka-fibonacci">Q1: Virahanka-Fibonacci</a></li>
+  </ul>
+  <li><a href="#pairs-and-lists">Pairs and Lists</a></li>
+  <ul>
+    <li><a href="#q2-list-making">Q2: List Making</a></li>
+    <li><a href="#q3-list-concatenation">Q3: List Concatenation</a></li>
+    <li><a href="#q4-map">Q4: Map</a></li>
+    <li><a href="#q5-remove">Q5: Remove</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

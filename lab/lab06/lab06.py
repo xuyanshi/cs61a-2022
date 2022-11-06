@@ -32,6 +32,7 @@ def insert_items(lst, entry, elem):
     "*** YOUR CODE HERE ***"
 
 
+
 def count_occurrences(t, n, x):
     """Return the number of times that x appears in the first n elements of iterator t.
 
