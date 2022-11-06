@@ -30,7 +30,14 @@ def insert_items(lst, entry, elem):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    idx = 0
+    while idx < len(lst):
+        if lst[idx] == entry:
+            lst.insert(idx+1,elem)
+            idx += 2
+        else:
+            idx += 1
+    return lst
 
 
 def count_occurrences(t, n, x):
