@@ -48,6 +48,13 @@ def gen_perms(seq):
     [['a', 'b'], ['b', 'a']]
     """
     "*** YOUR CODE HERE ***"
+    # Hard
+    if not seq:
+        yield []
+    else:
+        for perm in gen_perms(seq[1:]):
+            for i in range(len(seq)):
+                yield perm[:i] + [seq[0]] + perm[i:]
 
 
 def yield_paths(t, value):
@@ -85,10 +92,11 @@ def yield_paths(t, value):
     [[0, 2], [0, 2, 1, 2]]
     """
     "*** YOUR CODE HERE ***"
-    for _______________ in _________________:
-        for _______________ in _________________:
-            "*** YOUR CODE HERE ***"
-
+    if label(t) == value:
+        yield [label(t)]
+    for branch in branches(t):
+        for path in yield_paths(branch,value):
+            yield [label(t)]+path
 
 def hailstone(n):
     """Yields the elements of the hailstone sequence starting at n.
