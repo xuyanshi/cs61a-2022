@@ -220,6 +220,7 @@ class TutorCard(Card):
             print(f"{self.name} allows me to add a copy of a card to my hand!")
 
     "*** YOUR CODE HERE ***"
+
     def power(self, opponent_card):
         return -float('inf')
 
@@ -257,6 +258,12 @@ class TACard(Card):
         """
         "*** YOUR CODE HERE ***"
         best_card = None
+        # Excellent Solution!!!
+        if len(player.hand) > 0:
+            best_card = max(player.hand, key=lambda c: c.power(opponent_card))
+            self.attack += best_card.attack
+            self.defense += best_card.defense
+            player.hand.remove(best_card)
         # You should add your implementation above this.
         if best_card:
             print(f"{self.name} discards {best_card.name} from my hand to increase its own power!")
@@ -296,6 +303,11 @@ class InstructorCard(Card):
         """
         "*** YOUR CODE HERE ***"
         re_add = False
+        self.attack -= 1000
+        self.defense -= 1000
+        if max(self.attack, self.defense) >= 0:
+            re_add = True
+            player.hand += [self]
         # You should add your implementation above this.
         if re_add:
             print(f"{self.name} returns to my hand!")
