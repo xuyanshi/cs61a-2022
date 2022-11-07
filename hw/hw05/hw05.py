@@ -152,6 +152,14 @@ def remainders_generator(m):
     """
     "*** YOUR CODE HERE ***"
 
+    def generator(i):
+        for x in naturals():
+            if x % m == i:
+                yield x
+
+    for i in range(m):
+        yield generator(i)
+
 
 # Tree ADT
 
