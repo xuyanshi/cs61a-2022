@@ -167,7 +167,7 @@ class AICard(Card):
         "*** YOUR CODE HERE ***"
         player.draw()
         player.draw()
-        
+
         implemented = True
         # You should add your implementation above this.
         if implemented:
@@ -212,11 +212,16 @@ class TutorCard(Card):
         """
         "*** YOUR CODE HERE ***"
         added = False
+        if len(player.hand) > 0:
+            player.hand.append(player.hand[0].copy())
+            added = True
         # You should add your implementation above this.
         if added:
             print(f"{self.name} allows me to add a copy of a card to my hand!")
 
     "*** YOUR CODE HERE ***"
+    def power(self, opponent_card):
+        return -float('inf')
 
     def copy(self):
         """
