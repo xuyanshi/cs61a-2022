@@ -11,6 +11,18 @@ def merge(a, b):
     [2, 3, 5, 7, 8, 9, 11, 13, 14, 15]
     """
     "*** YOUR CODE HERE ***"
+    a_num, b_num = next(a), next(b)
+    while True:
+        if a_num < b_num:
+            yield a_num
+            a_num = next(a)
+        elif a_num == b_num:
+            yield a_num
+            a_num = next(a)
+            b_num = next(b)
+        elif a_num > b_num:
+            yield b_num
+            b_num = next(b)
 
 
 def gen_perms(seq):
