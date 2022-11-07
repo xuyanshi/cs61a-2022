@@ -9,7 +9,7 @@
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/xuyanshi/cs61a?style=flat-square) 
 ![GitHub repo size](https://img.shields.io/github/repo-size/xuyanshi/cs61a?style=flat-square) 
-![GitHub](https://img.shields.io/github/license/xuyanshi/cs61a?style=flat-square)
+![GitHub license](https://img.shields.io/github/license/xuyanshi/cs61a?style=flat-square)
 
 <!--
 [![LastCommit](https://img.shields.io/github/last-commit/xuyanshi/cs61a?style=flat-square)](https://github.com/xuyanshi/cs61a)
