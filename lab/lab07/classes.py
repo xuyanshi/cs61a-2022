@@ -24,7 +24,9 @@ class Card:
         500
         """
         "*** YOUR CODE HERE ***"
-        
+        self.name = name
+        self.attack = attack
+        self.defense = defense
 
     def power(self, opponent_card):
         """
@@ -43,6 +45,7 @@ class Card:
         -100
         """
         "*** YOUR CODE HERE ***"
+        return self.attack - opponent_card.defense
 
     def effect(self, opponent_card, player, opponent):
         """
@@ -126,6 +129,7 @@ class Player:
         Play a random card from hand.
         """
         return self.play(random.randrange(len(self.hand)))
+
 
 ######################
 # Optional Questions #
