@@ -187,7 +187,8 @@ class ThrowerAnt(Ant):
     food_cost = 3
     health = 1
     lower_bound = 0
-    upper_bound = float('inf')
+    # upper_bound = float('inf')
+    upper_bound = 100000000
 
     def nearest_bee(self):
         """Return the nearest Bee in a Place that is not the HIVE, connected to
@@ -197,13 +198,13 @@ class ThrowerAnt(Ant):
         """
         # BEGIN Problem 3 and 4
         p = self.place
-        select_bees = []
         transition = 0
-        while not select_bees and not p.is_hive and self.lower_bound <= transition <= self.upper_bound:
-            bees = p.bees
+        while not p.is_hive:
+            if len(p.bees) and self.lower_bound <= transition <= self.upper_bound:
+                return random_bee(p.bees)
             p = p.entrance
             transition += 1
-        return random_bee(select_bees)
+        return None
         # return random_bee(self.place.bees)  # REPLACE THIS LINE
         # END Problem 3 and 4
 
