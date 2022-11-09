@@ -281,8 +281,23 @@ class FireAnt(Ant):
         "*** YOUR CODE HERE ***"
 
         p = self.place
-        # if p.bees:
-        for bee in p.bees[:]:  # This "[:]" is indispensable! But I do not know the reasons.
+        '''
+        ---------------------------------------------------------------------
+        Problem 5 > Suite 1 > Case 3
+        (cases remaining: 14)
+
+        Q: Can you iterate over a list while mutating it?
+        Choose the number of the correct choice:
+        0) Yes, you can mutate a list while iterating over it with no problems
+        1) Yes, but you should iterate over a copy of the list to avoid skipping elements
+        2) No, Python doesn't allow list mutation on a list that is being iterated through
+        
+        ? 1
+        -- OK! --
+
+        ---------------------------------------------------------------------
+        '''
+        for bee in p.bees[:]:  # This "[:]" is indispensable!!! It makes a copy of the original list.
             if self.health <= amount:
                 bee.reduce_health(self.damage + amount)
             else:
