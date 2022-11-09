@@ -306,6 +306,7 @@ class FireAnt(Ant):
 
         # END Problem 5
 
+
 # BEGIN Problem 6
 # The WallAnt class
 # END Problem 6
