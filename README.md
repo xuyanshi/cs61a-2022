@@ -16,7 +16,7 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/xuyanshi/cs61a) 
 -->
 
-### **I *DO NOT* upload my code before the deadline of labs, homework or projects.**
+### **I *DO NOT* upload any code before the deadline of labs, homework or projects.**
 
 ### Start Date:   Tue Oct 11 2022
 ### Finish Date:  
