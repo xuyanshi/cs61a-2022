@@ -55,6 +55,7 @@ class Insect:
     """An Insect, the base class of Ant and Bee, has health and a Place."""
 
     damage = 0
+    is_waterproof = False
 
     # ADD CLASS ATTRIBUTES HERE
 
@@ -431,9 +432,10 @@ class TankAnt(ContainerAnt):
 
     def action(self, gamestate):
         super().action(gamestate)
-        p=self.place
+        p = self.place
         for bee in p.bees[:]:  # This "[:]" is indispensable!!! It makes a copy of the original list.
             bee.reduce_health(self.damage)
+
 
 # END Problem 9
 
@@ -446,6 +448,9 @@ class Water(Place):
         its health to 0."""
         # BEGIN Problem 10
         "*** YOUR CODE HERE ***"
+        super().add_insect(insect)
+        if not insect.is_waterproof:
+            insect.reduce_health(insect.health)
         # END Problem 10
 
 
@@ -510,6 +515,7 @@ class Bee(Insect):
 
     name = 'Bee'
     damage = 1
+    is_waterproof = True
 
     # OVERRIDE CLASS ATTRIBUTES HERE
 
