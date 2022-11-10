@@ -426,6 +426,14 @@ class TankAnt(ContainerAnt):
     name = 'Tank'
     implemented = True
 
+    def __init__(self, health=2):
+        super().__init__(health)
+
+    def action(self, gamestate):
+        super().action(gamestate)
+        p=self.place
+        for bee in p.bees[:]:  # This "[:]" is indispensable!!! It makes a copy of the original list.
+            bee.reduce_health(self.damage)
 
 # END Problem 9
 
