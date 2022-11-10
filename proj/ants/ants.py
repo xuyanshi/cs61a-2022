@@ -360,11 +360,15 @@ class ContainerAnt(Ant):
     def can_contain(self, other):
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
+        if self.ant_contained is None and not other.is_container:
+            return True
+        return False
         # END Problem 8a
 
     def store_ant(self, ant):
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
+        self.ant_contained=ant
         # END Problem 8a
 
     def remove_ant(self, ant):
@@ -385,6 +389,8 @@ class ContainerAnt(Ant):
     def action(self, gamestate):
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
+        if self.ant_contained is not None:
+            self.ant_contained.action(gamestate)
         # END Problem 8a
 
 
@@ -392,15 +398,29 @@ class BodyguardAnt(ContainerAnt):
     """BodyguardAnt provides protection to other Ants."""
 
     name = 'Bodyguard'
-    food_cost = 4
+    food_cost = 2
+
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 8c
-    implemented = False  # Change to True to view in the GUI
-    # END Problem 8c
+    implemented = True  # Change to True to view in the GUI
+
+    def __init__(self, health=2):
+        self.health = health
+        super(BodyguardAnt, self).__init__()
+
+
+# END Problem 8c
 
 
 # BEGIN Problem 9
 # The TankAnt class
+class TankAnt(ContainerAnt):
+    damage = 1
+    food_cost = 6
+    name = 'Tank'
+    implemented = True
+
+
 # END Problem 9
 
 
