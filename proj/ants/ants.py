@@ -368,7 +368,7 @@ class ContainerAnt(Ant):
     def store_ant(self, ant):
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
-        self.ant_contained=ant
+        self.ant_contained = ant
         # END Problem 8a
 
     def remove_ant(self, ant):
