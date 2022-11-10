@@ -405,15 +405,14 @@ class BodyguardAnt(ContainerAnt):
     """BodyguardAnt provides protection to other Ants."""
 
     name = 'Bodyguard'
-    food_cost = 2
+    food_cost = 4
 
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 8c
     implemented = True  # Change to True to view in the GUI
 
     def __init__(self, health=2):
-        self.health = health
-        super(BodyguardAnt, self).__init__()
+        super().__init__(health)
 
 
 # END Problem 8c

@@ -5,13 +5,13 @@ test = {
     {
       'cases': [
         {
-          'answer': 'c1637d7df9f040dc0b1cd3b7d43616a9',
+          'answer': 'Yes!',
           'choices': [
             'No, I will go do them right now',
             'Yes!'
           ],
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False,
           'question': 'Did you complete all the unlocking tests for each subpart?'
         }
