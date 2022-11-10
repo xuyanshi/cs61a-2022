@@ -139,6 +139,7 @@ class Ant(Insect):
         else:
             # BEGIN Problem 8b
             assert place.ant is None, 'Two ants in {0}'.format(place)
+            
             # END Problem 8b
         Insect.add_to(self, place)
 
