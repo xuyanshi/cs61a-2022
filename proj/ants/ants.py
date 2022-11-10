@@ -116,6 +116,7 @@ class Ant(Insect):
     def __init__(self, health=1):
         """Create an Insect with a HEALTH quantity."""
         super().__init__(health)
+        self.doubled = False
 
     @classmethod
     def construct(cls, gamestate):
@@ -163,6 +164,12 @@ class Ant(Insect):
         """Double this ants's damage, if it has not already been doubled."""
         # BEGIN Problem 12
         "*** YOUR CODE HERE ***"
+        if not self.doubled:
+            self.damage *= 2
+            self.doubled = True
+        if self.is_container and self.ant_contained is not None and not self.ant_contained.doubled:
+            self.ant_contained.damage *= 2
+            self.ant_contained.doubled = True
         # END Problem 12
 
 
@@ -494,9 +501,10 @@ class QueenAnt(ScubaThrower):  # You should change this line
         # BEGIN Problem 12
         "*** YOUR CODE HERE ***"
         if not gamestate.queen_exists:
-            super().construct(gamestate)
             gamestate.queen_exists = True
-
+            return super().construct(gamestate)
+        # else:
+        #     return None
         # END Problem 12
 
     def action(self, gamestate):
@@ -505,6 +513,12 @@ class QueenAnt(ScubaThrower):  # You should change this line
         """
         # BEGIN Problem 12
         "*** YOUR CODE HERE ***"
+        super().action(gamestate)
+        p = self.place.exit
+        while p:
+            if p.ant is not None:
+                p.ant.double()
+            p = p.exit
         # END Problem 12
 
     def reduce_health(self, amount):
@@ -518,6 +532,8 @@ class QueenAnt(ScubaThrower):  # You should change this line
         super().reduce_health(amount)
         # END Problem 12
 
+    def remove_from(self, place):
+        pass
 
 class AntRemover(Ant):
     """Allows the player to remove ants from the board in the GUI."""
