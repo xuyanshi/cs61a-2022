@@ -535,6 +535,7 @@ class QueenAnt(ScubaThrower):  # You should change this line
     def remove_from(self, place):
         pass
 
+
 class AntRemover(Ant):
     """Allows the player to remove ants from the board in the GUI."""
 
@@ -627,13 +628,14 @@ class SlowThrower(ThrowerAnt):
     name = 'Slow'
     food_cost = 6
     # BEGIN Problem EC
-    implemented = False  # Change to True to view in the GUI
+    implemented = True  # Change to True to view in the GUI
 
     # END Problem EC
 
     def throw_at(self, target):
         # BEGIN Problem EC
         "*** YOUR CODE HERE ***"
+        
         # END Problem EC
 
 
