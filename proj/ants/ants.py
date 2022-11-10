@@ -493,8 +493,9 @@ class QueenAnt(ScubaThrower):  # You should change this line
         """
         # BEGIN Problem 12
         "*** YOUR CODE HERE ***"
-        super().construct(gamestate)
-        cls.queen_exist = True
+        if not gamestate.queen_exists:
+            super().construct(gamestate)
+            gamestate.queen_exists = True
 
         # END Problem 12
 
@@ -762,6 +763,7 @@ class GameState:
         self.configure(beehive, create_places)
         # BEGIN Problem 12
         "*** YOUR CODE HERE ***"
+        self.queen_exists = False
         # END Problem 12
 
     def configure(self, beehive, create_places):
