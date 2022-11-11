@@ -34,9 +34,11 @@ class Mint:
 
     def create(self, coin):
         "*** YOUR CODE HERE ***"
+        self.year = coin.year
 
     def update(self):
         "*** YOUR CODE HERE ***"
+        # self.present_year
 
 
 class Coin:
@@ -253,4 +255,5 @@ class Tree:
             for b in t.branches:
                 tree_str += print_tree(b, indent + 1)
             return tree_str
+
         return print_tree(self).rstrip()
