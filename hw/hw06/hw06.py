@@ -137,6 +137,17 @@ def two_list(vals, counts):
     Link(1, Link(1, Link(3, Link(3, Link(2)))))
     """
     "*** YOUR CODE HERE ***"
+    nums = []
+    for i in range(len(vals)):
+        for _ in range(counts[i]):
+            nums.append(vals[i])
+    def build(lst):
+        if not lst:
+            return Link.empty
+        else:
+            return Link(lst[0],build(lst[1:]))
+
+    return build(nums)
 
 
 class VirFib():
