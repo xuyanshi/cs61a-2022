@@ -141,11 +141,12 @@ def two_list(vals, counts):
     for i in range(len(vals)):
         for _ in range(counts[i]):
             nums.append(vals[i])
+
     def build(lst):
         if not lst:
             return Link.empty
         else:
-            return Link(lst[0],build(lst[1:]))
+            return Link(lst[0], build(lst[1:]))
 
     return build(nums)
 
@@ -177,6 +178,12 @@ class VirFib():
 
     def next(self):
         "*** YOUR CODE HERE ***"
+        if self.value==0:
+            result = VirFib(1)
+        else:
+            result = VirFib(self.prev+self.value)
+        result.prev = self.value
+        return result
 
     def __repr__(self):
         return "VirFib object, value " + str(self.value)
