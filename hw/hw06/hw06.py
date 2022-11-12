@@ -36,7 +36,6 @@ class Mint:
         "*** YOUR CODE HERE ***"
         return coin(self.year)
 
-
     def update(self):
         "*** YOUR CODE HERE ***"
         self.year = Mint.present_year
@@ -50,11 +49,12 @@ class Coin:
 
     def worth(self):
         "*** YOUR CODE HERE ***"
-        bonus=0
-        pass_year=Mint.present_year-self.year
-        if pass_year>=50:
-            bonus=pass_year-50
-        return self.cents+bonus
+        bonus = 0
+        pass_year = Mint.present_year - self.year
+        if pass_year >= 50:
+            bonus = pass_year - 50
+        return self.cents + bonus
+
 
 class Nickel(Coin):
     cents = 5
@@ -81,6 +81,13 @@ def store_digits(n):
     >>> link1 = Link(3, Link(Link(4), Link(5, Link(6))))
     """
     "*** YOUR CODE HERE ***"
+    if n < 10:
+        return Link(n)
+    result = Link.empty
+    while n:
+        result = Link(n % 10, result)
+        n //= 10
+    return result
 
 
 def deep_map_mut(func, lnk):
