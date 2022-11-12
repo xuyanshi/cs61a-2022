@@ -34,11 +34,12 @@ class Mint:
 
     def create(self, coin):
         "*** YOUR CODE HERE ***"
-        self.year = coin.year
+        return coin(self.year)
+
 
     def update(self):
         "*** YOUR CODE HERE ***"
-        # self.present_year
+        self.year = Mint.present_year
 
 
 class Coin:
@@ -49,7 +50,11 @@ class Coin:
 
     def worth(self):
         "*** YOUR CODE HERE ***"
-
+        bonus=0
+        pass_year=Mint.present_year-self.year
+        if pass_year>=50:
+            bonus=pass_year-50
+        return self.cents+bonus
 
 class Nickel(Coin):
     cents = 5
