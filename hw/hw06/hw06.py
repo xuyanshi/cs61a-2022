@@ -215,18 +215,19 @@ def is_bst(t):
     False
     """
     "*** YOUR CODE HERE ***"
-    left, right = -float('inf'), float('inf')
-    if len(t.branches)>2:
-        return False
-    elif t.is_leaf():
-        return True
-    elif len(t.branches)==1:
-        left = t.branches[0].label
-        return left <= t.label <= right and is_bst(t.branches[0])
-    else:
-        left = t.branches[0].label
-        right = t.branches[1].label
-        return left <= t.label <= right and is_bst(t.branches[0]) and is_bst(t.branches[1])
+    # My WRONG answer below, it may not a BST
+    # left, right = -float('inf'), float('inf')
+    # if len(t.branches)>2:
+    #     return False
+    # elif t.is_leaf():
+    #     return True
+    # elif len(t.branches)==1:
+    #     left = t.branches[0].label
+    #     return left <= t.label <= right and is_bst(t.branches[0])
+    # else:
+    #     left = t.branches[0].label
+    #     right = t.branches[1].label
+    #     return left <= t.label <= right and is_bst(t.branches[0]) and is_bst(t.branches[1])
 
 
 
