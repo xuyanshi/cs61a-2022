@@ -8,16 +8,19 @@ def convert_link(link):
     []
     """
     "*** YOUR CODE HERE ***"
+    # Tedious Solution
+    # def helper(lnk, lst):
+    #     if lnk is Link.empty:
+    #         return lst
+    #     lst.append(lnk.first)
+    #     helper(lnk.rest, lst)
+    #     return lst
+    #
+    # return helper(link, [])
 
-    def helper(lnk, lst):
-        if lnk is Link.empty:
-            return lst
-        lst.append(lnk.first)
-        helper(lnk.rest, lst)
-        return lst
-
-    return helper(link, [])
-
+    if link is Link.empty:
+        return []
+    return [link.first] + convert_link(link.rest)
 
 def duplicate_link(link, val):
     """Mutates `link` such that if there is a linked list
