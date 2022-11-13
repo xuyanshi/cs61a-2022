@@ -8,7 +8,15 @@ def convert_link(link):
     []
     """
     "*** YOUR CODE HERE ***"
-    
+
+    def helper(lnk, lst):
+        if lnk is Link.empty:
+            return lst
+        lst.append(lnk.first)
+        helper(lnk.rest, lst)
+        return lst
+
+    return helper(link, [])
 
 
 def duplicate_link(link, val):
@@ -168,4 +176,5 @@ class Tree:
             for b in t.branches:
                 tree_str += print_tree(b, indent + 1)
             return tree_str
+
         return print_tree(self).rstrip()
