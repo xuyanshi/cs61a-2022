@@ -51,7 +51,13 @@ def duplicate_link(link, val):
     Link(1, Link(2, Link(2, Link(2, Link(2, Link(3))))))
     """
     "*** YOUR CODE HERE ***"
-    
+    if link is Link.empty:
+        return
+    if link.first == val:
+        link.rest = Link(val, link.rest)
+        duplicate_link(link.rest.rest, val)
+    else:
+        duplicate_link(link.rest, val)
 
 
 def cumulative_mul(t):
