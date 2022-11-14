@@ -74,6 +74,15 @@ def cumulative_mul(t):
     Tree(5040, [Tree(60, [Tree(3), Tree(4), Tree(5)]), Tree(42, [Tree(7)])])
     """
     "*** YOUR CODE HERE ***"
+    def helper(t):
+        if t.is_leaf():
+            return t.label
+        new_label = t.label
+        for br in t.branches:
+            new_label *= helper(br)
+        t.label = new_label
+        return new_label
+    helper(t)
 
 
 def every_other(s):
