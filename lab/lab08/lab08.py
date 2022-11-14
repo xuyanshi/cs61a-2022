@@ -74,6 +74,7 @@ def cumulative_mul(t):
     Tree(5040, [Tree(60, [Tree(3), Tree(4), Tree(5)]), Tree(42, [Tree(7)])])
     """
     "*** YOUR CODE HERE ***"
+
     def helper(t):
         if t.is_leaf():
             return t.label
@@ -82,6 +83,7 @@ def cumulative_mul(t):
             new_label *= helper(br)
         t.label = new_label
         return new_label
+
     helper(t)
 
 
@@ -103,6 +105,11 @@ def every_other(s):
     Link(4)
     """
     "*** YOUR CODE HERE ***"
+    if s is Link.empty or s.rest is Link.empty:
+        return
+    s.rest = s.rest.rest
+    s = s.rest
+    every_other(s)
 
 
 def prune_small(t, n):
