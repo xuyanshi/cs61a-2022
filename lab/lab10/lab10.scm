@@ -10,7 +10,9 @@
   (lambda (inc) (+ inc num))
   )
 
-(define (composed f g) 'YOUR-CODE-HERE)
+(define (composed f g)
+  
+  )
 
 (define lst 'YOUR-CODE-HERE)
 
