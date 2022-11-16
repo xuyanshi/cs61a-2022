@@ -4,7 +4,9 @@
 
 (define (caddr s) (car (cdr (cdr s))))
 
-(define (ascending? asc-lst) 'YOUR-CODE-HERE)
+(define (ascending? asc-lst)
+  
+  )
 
 (define (square n) (* n n))
 
