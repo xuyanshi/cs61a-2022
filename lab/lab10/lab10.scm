@@ -11,7 +11,7 @@
   )
 
 (define (composed f g)
-  
+  (lambda (x) (f (g x)))
   )
 
 (define lst 'YOUR-CODE-HERE)
