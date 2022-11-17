@@ -1,4 +1,6 @@
-(define (my-filter pred s) 'YOUR-CODE-HERE)
+(define (my-filter pred s)
+  
+  )
 
 (define (interleave lst1 lst2) 'YOUR-CODE-HERE)
 
