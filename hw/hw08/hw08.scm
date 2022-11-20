@@ -23,6 +23,28 @@
   )
 
 (define (accumulate joiner start n term)
-  'YOUR-CODE-HERE)
+  (if
+        (= n 0)
+        start
+        (accumulate
+            joiner
+            (joiner
+                    start
+                    (term n))
+            (- n 1)
+            term
+            )))
 
-(define (no-repeats lst) 'YOUR-CODE-HERE)
+(define (no-repeats lst)
+  (if
+        (null? lst)
+        lst
+        (cons
+            (car lst)
+            (no-repeats
+                (my-filter
+                    (lambda (x) (not (= x (car lst))))
+                    (cdr lst)))
+            )
+        )
+  )
