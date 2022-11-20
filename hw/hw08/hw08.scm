@@ -6,7 +6,21 @@
           )
   )
 
-(define (interleave lst1 lst2) 'YOUR-CODE-HERE)
+(define (interleave s1 s2)
+  (cond
+        ((null? s1) s2)
+        ((null? s2) s1)
+        (else (cons
+                  (car s1)
+                  (cons
+                      (car s2)
+                      (interleave
+                          (cdr s1)
+                          (cdr s2))
+                      )
+                  ))
+        )
+  )
 
 (define (accumulate joiner start n term)
   'YOUR-CODE-HERE)
