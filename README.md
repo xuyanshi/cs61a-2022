@@ -20,6 +20,6 @@
 
 ### Start Date:   Tue Oct 11 2022
 ### Pause Date:   Sun Nov 20 2022
-I paused this course due to my busy work. 
-I will complete all of it in in a few months.
-The jobs before project4(Scheme, Week11, Fri 11/4) are finished, which is consisting of Disc00-10, Lab00-10, HW01-08 and Project1-3(Hog, Cats and Ants).
+#### I paused this course due to my busy work. 
+#### I will complete all of it in in a few months.
+#### The jobs before project4(Scheme, Week11, Fri 11/4) are finished, which is consisting of Disc00-10, Lab00-10, HW01-08 and Project1-3(Hog, Cats and Ants).
