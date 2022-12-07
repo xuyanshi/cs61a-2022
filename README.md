@@ -24,5 +24,5 @@
 I paused this course due to my busy work. ~~And I will complete all of it in in a few months.~~ The jobs before project4(Scheme, Week11, Fri 11/4) are finished, which is consisting of Disc00-10, Lab00-10, HW01-08 and Project1-3(Hog, Cats and Ants).
 
 ### Continue Date:   Wed Dec 7 2022
-I have to skip the Scheme project because it's too difficult for me now.
+I have to skip the Scheme project and some other things related to the Scheme because it's too difficult for me now.
 ### Finish Date:   
