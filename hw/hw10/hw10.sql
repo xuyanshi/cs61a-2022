@@ -35,7 +35,13 @@ ORDER BY height DESC
 
 -- The size of each dog
 CREATE TABLE size_of_dogs AS
-  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+  SELECT name, CASE
+WHEN height>24 AND height<=28 THEN "toy"
+WHEN height>28 AND height<=35 THEN "mini"
+WHEN height>35 AND height<=45 THEN "medium"
+WHEN height>45 AND height<=60 THEN "standard"
+END size
+FROM dogs;
 
 
 -- Filling out this helper table is optional
