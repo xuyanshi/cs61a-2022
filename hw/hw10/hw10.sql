@@ -43,9 +43,13 @@ WHERE dogs.height > sizes.min AND dogs.height <= sizes.max
 
 -- Filling out this helper table is optional
 CREATE TABLE siblings AS
-  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+  SELECT a.child AS doga, b.child AS dogb, c.size AS size
+    FROM parents AS a, parents AS b, size_of_dogs AS c, size_of_dogs AS d
+    WHERE a.parent = b.parent  AND a.child < b.child AND a.child = c.name AND b.child = d.name
+        AND c.size = d.size;
 
 -- Sentences about siblings that are the same size
 CREATE TABLE sentences AS
-  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+  SELECT "The two siblings, " || sib.doga || " plus " || sib.dogb || " have the same size: " || sib.size
+    FROM siblings AS sib;
 
