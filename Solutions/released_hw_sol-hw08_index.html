@@ -1,0 +1,506 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/hw.css">
+
+
+    <title>
+Homework 8 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Homework 8 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="hw08.zip" class="label label-outline">hw08.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+<p>You can find the solutions in <a href="hw08.scm">hw08.scm</a>.</p>
+
+    
+<p>Scheme is a famous functional programming language from the 1970s.  It is a
+dialect of Lisp (which stands for LISt Processing).  The first observation most
+people make is the unique syntax, which uses a prefix notation and (often many)
+nested parentheses (see <a href="http://xkcd.com/297/">http://xkcd.com/297/</a>).  Scheme
+features first-class functions and optimized tail-recursion, which were
+relatively new features at the time.</p>
+
+<p><img class="img-responsive center-block" src="assets/lisp_cycles.png" alt="Fun comic" width="" height=""></p>
+
+
+<h3 id="recommended-vscode-extensions">Recommended VSCode Extensions</h3>
+
+
+<p>If you use VSCode as your text editor, we have found these extensions to be quite helpful for Scheme :)</p>
+
+<p>Before:</p>
+
+<img class="img-responsive center-block" src="assets/before.png" width="600">
+
+<p>After:</p>
+
+<img class="img-responsive center-block" src="assets/after.png" width="600">
+
+<br>
+
+<p><strong>Extensions</strong>:</p>
+
+<p><strong><a href="https://marketplace.visualstudio.com/items?itemName=sjhuangx.vscode-scheme">vscode-scheme</a></strong></p>
+
+<img class="img-responsive center-block" src="assets/vscode-scheme.png" width="600">
+
+<br>
+
+<p><strong><a href="https://marketplace.visualstudio.com/items?itemName=2gua.rainbow-brackets">Rainbow Brackets</a></strong></p>
+
+<img class="img-responsive center-block" src="assets/rainbow-brackets.png" width="600">
+
+<br>
+
+<p>You may find it useful to try <a href="https://code.cs61a.org/scheme">code.cs61a.org/scheme</a> when
+working through problems, as it can draw environment and box-and-pointer
+diagrams and it lets you walk your code step-by-step (similar to Python Tutor).
+Don't forget to submit your code through Ok though!</p>
+
+
+<h3 id="scheme-editor">Scheme Editor</h3>
+
+
+<p>You can write your code by either opening the designated <code>.scm</code> file in your text editor, or by typing directly in the Scheme Editor, which can also be useful for debugging. To run this editor, run <code>python3 editor</code>. This should pop up a window in your browser; if it does not, please navigate to <a href="localhost:31415">localhost:31415</a> while <code>python3 editor</code> is still running and you should see it. If you choose to code directly in the Scheme Editor, don't forget to save your work before running Ok tests and before closing the editor. To stop running the editor and return to the command line, type <code>Ctrl&#x2d;C</code>.</p>
+
+<p>Make sure to run <code>python3 ok</code> in a separate tab or window so that the editor keeps running.</p>
+
+<p>If you find that your code works in the online editor but not in your own interpreter, it's possible you have a bug in your code from an earlier part that you'll have to track down. Every once in a while there's a bug that our tests don't catch, and if you find one you should let us know!</p>
+
+
+<h2 id="required-questions">Required Questions</h2>
+
+
+<br />
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+<h2 id="getting-started-videos">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZdAmOQU7B4mObR8nSuFjagg"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZdAmOQU7B4mObR8nSuFjagg'> YouTube link </a></p>
+</div>
+
+
+<h3 id="q1-my-filter">Q1: My Filter</h3>
+
+
+<p>Write a procedure <code>my&#x2d;filter</code>, which takes a predicate <code>pred</code> and a list <code>s</code>, and
+returns a new list containing only elements of the list that satisfy the
+predicate. The output should contain the elements in the same order that they
+appeared in the original list.</p>
+
+<p><strong>Note:</strong> Make sure that you are not just calling the built-in <code>filter</code> function in Scheme - we are asking you to re-implement this!</p>
+
+<solution>
+
+<pre><code class="scheme">(define (my&#x2d;filter pred s)
+<div class="sol-highlight">  (cond ((null? s) &#x27;())
+        ((pred (car s)) (cons (car s) (my&#x2d;filter pred (cdr s))))
+        (else (my&#x2d;filter pred (cdr s))))
+</div>)</code></pre>
+
+
+<div class="sol-highlight">
+Video walkthrough:
+<p>
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/UJ37SCaM3cQ?t=39m39s"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/UJ37SCaM3cQ?t=39m39s'> YouTube link </a></p>
+</div>
+</solution>
+
+<p>Use Ok to unlock and test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q filter -u
+python3 ok -q filter<button id="copy-code-python3ok-qfilter-upython3ok-qfilter" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qfilter-upython3ok-qfilter").onclick = () => copyCode('python3 ok -q filter -u\npython3 ok -q filter', "copy-code-python3ok-qfilter-upython3ok-qfilter");
+        </script>
+        <br/>
+
+
+<h3 id="q2-interleave">Q2: Interleave</h3>
+
+
+<p>Implement the function <code>interleave</code>, which takes a two lists <code>lst1</code> and <code>lst2</code> as
+arguments. <code>interleave</code> should return a new list that interleaves the elements
+of the two lists. (In other words, the resulting list should contain elements
+alternating between <code>lst1</code> and <code>lst2</code>.)</p>
+
+<p>If one of the input lists to <code>interleave</code> is shorter than the other, then
+<code>interleave</code> should alternate elements from both lists until one list has no
+more elements, and then the remaining elements from the longer list should be
+added to the end of the new list.</p>
+
+<solution>
+
+<pre><code class="scheme">(define (interleave lst1 lst2)
+<div class="sol-highlight">  (if (or (null? lst1) (null? lst2))
+      (append lst1 lst2)
+      (cons (car lst1)
+            (cons (car lst2)
+                  (interleave (cdr lst1) (cdr lst2)))))</div>)</code></pre>
+
+
+</solution>
+
+<p>Use Ok to unlock and test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q interleave -u
+python3 ok -q interleave<button id="copy-code-python3ok-qinterleave-upython3ok-qinterleave" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qinterleave-upython3ok-qinterleave").onclick = () => copyCode('python3 ok -q interleave -u\npython3 ok -q interleave', "copy-code-python3ok-qinterleave-upython3ok-qinterleave");
+        </script>
+        <br/>
+
+
+<h3 id="q3-accumulate">Q3: Accumulate</h3>
+
+
+<p>Fill in the definition for the procedure <code>accumulate</code>, which joins the first
+<code>n</code> natural numbers (ie. 1 to n, inclusive) according to the following parameters:</p>
+
+<ol>
+  <li><code>joiner</code>: a function of two arguments</li>
+  <li><code>start</code>: a number with which we start joining</li>
+  <li><code>n</code>: the number of natural numbers to join</li>
+  <li><code>term</code>: a function of one argument that computes the <em>n</em>th term of
+  a sequence</li>
+</ol>
+
+<p>For example, we can find the product of all the numbers from 1 to 5 by
+using the multiplication operator as the <code>joiner</code>, and starting our
+product at 1:</p>
+
+<pre><code class="scheme">scm&gt; (define (identity x) x)
+scm&gt; (accumulate * 1 5 identity)  ; 1 * 1 * 2 * 3 * 4 * 5
+120</code></pre>
+
+
+
+<p>We can also find the sum of the squares of the same numbers by using the
+addition operator as the <code>joiner</code> and <code>square</code> as the <code>term</code>:</p>
+
+<pre><code class="scheme">scm&gt; (define (square x) (* x x))
+scm&gt; (accumulate + 0 5 square)  ; 0 + 1^2 + 2^2 + 3^2 + 4^2 + 5^2
+55
+scm&gt; (accumulate + 5 5 square)  ; 5 + 1^2 + 2^2 + 3^2 + 4^2 + 5^2
+60</code></pre>
+
+
+
+<p>You may assume that the <code>joiner</code> will always be commutative: i.e. the order
+of arguments do not matter.</p>
+
+<solution>
+
+<pre><code class="scheme">(define (accumulate joiner start n term)
+<div class="sol-highlight">  (if (= n 0)
+    start
+    (accumulate joiner (joiner (term n) start) (&#x2d; n 1) term))</div>)</code></pre>
+
+
+</solution>
+
+<p>Use Ok to unlock and test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q accumulate -u
+python3 ok -q accumulate<button id="copy-code-python3ok-qaccumulate-upython3ok-qaccumulate" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qaccumulate-upython3ok-qaccumulate").onclick = () => copyCode('python3 ok -q accumulate -u\npython3 ok -q accumulate', "copy-code-python3ok-qaccumulate-upython3ok-qaccumulate");
+        </script>
+        <br/>
+
+<!--
+<div class="sol-highlight">
+
+<ul>
+  <li>Base case: only one item to accumulate, so we return the <code>start</code>ing value</li>
+  <li>Recursive call: returns the result of accumulating n-1 numbers,
+  beginning with <code>start</code> using <code>term</code>.  All that's missing is the current
+  value <code>n</code>.</li>
+</ul>
+
+</div>
+-->
+
+
+<h3 id="q4-no-repeats">Q4: No Repeats</h3>
+
+
+<p>Implement <code>no&#x2d;repeats</code>, which takes a list of numbers <code>lst</code> as input and returns
+a list that has all of the unique elements of <code>lst</code> in the order that they first
+appear, but no repeats. For example, <code>(no&#x2d;repeats (list 5 4 5 4 2 2))</code>
+evaluates to <code>(5 4 2)</code>.</p>
+
+<blockquote><p><strong>Hint:</strong> How can you make the first time you see an element in the input list be
+the first and only time you see the element in the resulting list you return?</p></blockquote>
+
+<!-- breaking up the hints requires a comment -->
+
+<blockquote><p><strong>Hint:</strong> You may find it helpful to use the <code>my&#x2d;filter</code> procedure with a helper
+<code>lambda</code> function to use as a filter. To test if two numbers are equal, use the <code>=</code>
+procedure. To test if two numbers are not equal, use the <code>not</code> procedure in
+combination with <code>=.</code></p></blockquote>
+
+<solution>
+
+<pre><code class="scheme">(define (no&#x2d;repeats lst)
+<div class="sol-highlight">  (if (null? lst) lst
+    (cons (car lst)
+      (no&#x2d;repeats (my&#x2d;filter (lambda (x) (not (= (car lst) x))) (cdr lst)))))</div>)</code></pre>
+
+
+</solution>
+
+<p>Use Ok to unlock and test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q no_repeats -u
+python3 ok -q no_repeats<button id="copy-code-python3ok-qno_repeats-upython3ok-qno_repeats" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qno_repeats-upython3ok-qno_repeats").onclick = () => copyCode('python3 ok -q no_repeats -u\npython3 ok -q no_repeats', "copy-code-python3ok-qno_repeats-upython3ok-qno_repeats");
+        </script>
+        <br/>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#recommended-vscode-extensions">Recommended VSCode Extensions</a></li>
+  <li><a href="#scheme-editor">Scheme Editor</a></li>
+  <li><a href="#required-questions">Required Questions</a></li>
+  <li><a href="#getting-started-videos">Getting Started Videos</a></li>
+  <ul>
+    <li><a href="#q1-my-filter">Q1: My Filter</a></li>
+    <li><a href="#q2-interleave">Q2: Interleave</a></li>
+    <li><a href="#q3-accumulate">Q3: Accumulate</a></li>
+    <li><a href="#q4-no-repeats">Q4: No Repeats</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,27 @@
+{
+    "name": "Lab 12",
+    "endpoint": "cal/cs61a/fa22/lab12",
+    "src": [
+        "lab12.scm"
+    ],
+    "tests": {
+        "lab*.py": "doctest",
+        "tests/*.py": "ok_test"
+    },
+    "default_tests": [
+        "wwsd-quasiquote",
+        "or-macro",
+        "repeat-macro",
+        "list-comp-func",
+        "list-comp",
+        "if-macro"
+    ],
+    "protocols": [
+        "restore",
+        "file_contents",
+        "unlock",
+        "grading",
+        "analytics",
+        "backup"
+    ]
+}

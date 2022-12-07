@@ -1,0 +1,24 @@
+{
+    "name": "Homework 9",
+    "endpoint": "cal/cs61a/fa22/hw09",
+    "src": [
+        "hw09.scm"
+    ],
+    "tests": {
+        "hw*.py": "doctest",
+        "tests/*.py": "ok_test"
+    },
+    "default_tests": [
+        "wwsd-eval_apply",
+        "switch",
+        "when-macro"
+    ],
+    "protocols": [
+        "restore",
+        "file_contents",
+        "grading",
+        "analytics",
+        "unlock",
+        "backup"
+    ]
+}

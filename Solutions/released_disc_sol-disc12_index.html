@@ -1,0 +1,1014 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/disc.css">
+
+
+    <title>
+Discussion 12 | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 12: Macros, Tail Calls
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc12.pdf" class="label label-outline">disc12.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<div class="alert storable-login-status"></div>
+
+This is an online worksheet that you can work on during discussions.
+Your work is not graded and you do not need to submit anything.
+
+
+    
+
+
+
+<h1 id="macros">Macros</h1>
+
+
+<!-- This is a copy of <code>disc/topics/macros/text/introduction.tex</code> but adapted for web -->
+
+<p>So far we've been able to define our own procedures in Scheme using the
+<code>define</code> special form. When we call these procedures, we have to follow
+the rules for evaluating call expressions, which involve evaluating all the
+operands.</p>
+
+<p>We know that special form expressions do not follow the evaluation rules of
+call expressions. Instead, each special form has its own rules of evaluation,
+which may include not evaluating all the operands.  Wouldn't it be cool if we
+could define our own special forms where we decide which operands are
+evaluated?  Consider the following example where we attempt to write a function
+that evaluates a given expression twice:</p>
+
+<pre><code class="scheme">scm&gt; (define (twice f) (begin f f))
+twice
+scm&gt; (twice (print &#x27;woof))
+woof</code></pre>
+
+
+
+<p>Since <code>twice</code> is a regular procedure, a call to <code>twice</code> will
+follow the same rules of evaluation as regular call expressions; first we
+evaluate the operator and then we evaluate the operands.  That means that
+<code>woof</code> was printed when we evaluated the operand <code>(print &#x27;woof)</code>.
+Inside the body of <code>twice</code>, the name <code>f</code> is bound to the value
+<code>undefined</code>, so the expression <code>(begin f f)</code> does nothing at all!</p>
+
+<p>The problem here is clear: we need to prevent the given expression from
+evaluating until we're inside the body of the procedure. This is where the
+<code>define&#x2d;macro</code> special form, which has identical syntax to the regular
+<code>define</code> form, comes in:</p>
+
+<pre><code class="scheme">scm&gt; (define&#x2d;macro (twice f) (list &#x27;begin f f))
+twice</code></pre>
+
+
+
+<p><code>define&#x2d;macro</code> allows us to define what's known as a <code>macro</code>,
+which is simply a way for us to combine unevaluated input expressions together
+into another expression. When we call macros, the operands are not evaluated,
+but rather are treated as Scheme data. This means that any operands that are
+call expressions or special form expression are treated like lists.</p>
+
+<p>If we call <code>(twice (print &#x27;woof))</code>, <code>f</code> will actually be bound to
+the list <code>(print &#x27;woof)</code> instead of the value <code>undefined</code>.
+Inside the body of <code>define&#x2d;macro</code>, we can insert these expressions into
+a larger Scheme expression. In our case, we would want a <code>begin</code>
+expression that looks like the following:</p>
+
+<pre><code>(begin (print &#x27;woof) (print &#x27;woof))</code></pre>
+
+<p>As Scheme data, this expression is really just a list containing three
+elements: <code>begin</code> and <code>(print &#x27;woof)</code> twice, which is exactly
+what <code>(list &#x27;begin f f)</code> returns.  Now, when we call <code>twice</code>,
+this list is evaluated as an expression and <code>(print &#x27;woof)</code> is evaluated
+twice.</p>
+
+<pre><code class="scheme">scm&gt; (twice (print &#x27;woof))
+woof
+woof</code></pre>
+
+
+
+<p>To recap, macros are called similarly to regular procedures, but the rules for
+evaluating them are different. We evaluated lambda procedures in the following
+way:</p>
+
+<ul>
+  <li>Evaluate operator</li>
+  <li>Evaluate operands</li>
+  <li>Apply operator to operands, evaluating the body of the procedure</li>
+</ul>
+
+<p>However, the rules for evaluating calls to macro procedures are:</p>
+
+<ul>
+  <li>Evaluate operator</li>
+  <li>Apply operator to unevaluated operands</li>
+  <li>Evaluate the expression returned by the macro in the frame it was called in.</li>
+</ul>
+
+
+<h3 id="q1-shapeshifting-macros">Q1: Shapeshifting Macros</h3>
+
+
+<p>When writing macros in Scheme, we often create a list of symbols that evaluates to a desired Scheme expression. In this question, we'll practice different methods of creating such Scheme lists.</p>
+
+<p>We have executed the following code to define <code>x</code> and <code>y</code> in our current environment.</p>
+
+<pre><code class="scheme">(define x &#x27;(+ 1 1))
+(define y &#x27;(+ 2 3))</code></pre>
+
+
+
+<p>We want to use <code>x</code> and <code>y</code> to build a list that represents the following expression:</p>
+
+<pre><code class="scheme">(begin (+ 1 1) (+ 2 3))</code></pre>
+
+
+
+<p>What would be the result of calling <code>eval</code> on a quoted version of the expression above?</p>
+
+<pre><code class="scheme">(eval &#x27;(begin (+ 1 1) (+ 2 3)))</code></pre>
+
+
+
+            <label class="sr-only" for="macro-warmup1-input">Your Answer:</label>
+            <input class="form-control storable" id="macro-warmup1-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+5
+</div>
+
+<p>Now that we know what this expression should evaluate to, let's build our scheme list.</p>
+
+<p>How would we construct the scheme list for the expression <code>(begin (+ 1 1) (+ 2 3))</code> using quasiquotation?</p>
+
+
+            <label class="sr-only" for="macro-warmup2-input">Your Answer:</label>
+            <input class="form-control storable" id="macro-warmup2-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+<code>`(begin ,x ,y)</code>
+</div>
+
+<p>How would we construct this scheme list using the <code>list</code> special form?</p>
+
+
+            <label class="sr-only" for="macro-warmup2-input">Your Answer:</label>
+            <input class="form-control storable" id="macro-warmup2-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+<code>(list &#x27;begin x y)</code>
+</div>
+
+<p>How would we construct this scheme list using the <code>cons</code> special form?</p>
+
+
+            <label class="sr-only" for="macro-warmup2-input">Your Answer:</label>
+            <input class="form-control storable" id="macro-warmup2-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+<code>(cons &#x27;begin (cons x (cons y nil)))</code>
+</div>
+
+
+<h3 id="q2-multiple-assignment">Q2: Multiple Assignment</h3>
+
+
+
+
+<p>Recall that in Scheme, the expression returned by a macro procedure is evaluated in the environment that called the macro. This concept allows us to set variables in the calling environment using calls to macro procedures! This is not possible with regular scheme procedures because any <code>define</code> expressions would be evaluated in the procedure's environment (and thus bind a symbol in that environment rather than the calling environment). In this problem, we'll explore this idea in more detail.</p>
+
+<p>In Python, we can bind two variables in one line as follows:</p>
+
+<pre><code>&gt;&gt;&gt; x, y = 1, 2
+&gt;&gt;&gt; x
+1
+&gt;&gt;&gt; y
+2
+&gt;&gt;&gt; x, y = y, x # swap the values of x and y
+&gt;&gt;&gt; x
+2
+&gt;&gt;&gt; y
+1</code></pre>
+
+
+
+<p>The expressions on the right of the assignment are first evaluated, then assigned to the variables on the left. Let's try to implement a similar feature in Scheme using macros.</p>
+
+<p>Write a macro <code>multi&#x2d;assign</code> which takes in two symbols <code>sym1</code> and <code>sym2</code> as well as two expressions <code>expr1</code> and <code>expr2</code>. It should bind <code>sym1</code> to the value of <code>expr1</code> and <code>sym2</code> to the value of <code>expr2</code> in the environment from which the macro was called.</p>
+
+<pre><code class="scheme">scm&gt; (multi&#x2d;assign x y 1 (&#x2d; 3 1))
+scm&gt; x
+1
+scm&gt; y
+2</code></pre>
+
+
+
+<p>First, implement a version of <code>multi&#x2d;assign</code> which evaluates <code>expr1</code> first, binds it to <code>sym1</code>, then evaluates <code>expr2</code> and binds it to <code>sym2</code> (the order here is important).</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="multi-assign-seq-input" style="height:90px;"></div>
+            <a href="javascript:void" id="modal-link-multi-assign-seq-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-multi-assign-seq-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-multi-assign-seq-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('(define&#x2d;macro (multi&#x2d;assign sym1 sym2 expr1 expr2)\n    `(_________ (define ____________ ____________) (define ____________ ____________) undefined)\n)\n', "scheme", "multi-assign-seq-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define&#x2d;macro (multi&#x2d;assign sym1 sym2 expr1 expr2)
+    `(begin (define ,sym1 ,expr1) (define ,sym2 ,expr2) undefined)
+)</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+
+<p>Note that we use undefined as the last expression in the <code>begin</code> form so that nothing is output to the terminal.</p>
+
+</div>
+
+<p>This solution is great, but it doesn't quite behave in quite the same way that it does in Python:</p>
+
+<pre><code class="scheme">scm&gt; (multi&#x2d;assign x y 1 (+ 2 3))
+scm&gt; x
+1
+scm&gt; y
+5
+scm&gt; (multi&#x2d;assign x y y x)
+scm&gt; x
+5
+scm&gt; y
+5</code></pre>
+
+
+<p>Notice that <code>x</code> and <code>y</code> were not swapped like we wanted. This is because of the order of evaluation and bindings: first, the value of <code>y</code> is bound to <code>x</code>. Afterwards, <code>x</code> is evaluated and bound to <code>y</code>, but at this point, <code>x</code> no longer has its old value, it is actually the value of <code>y</code>!</p>
+
+<p>Now, try writing a version of <code>multi&#x2d;assign</code> which matches the behavior in Python, i.e. <code>expr1</code> and <code>expr2</code> should be both evaluated before being assigned to <code>sym1</code> and <code>sym2</code>.</p>
+
+<pre><code class="scheme">scm&gt; (multi&#x2d;assign x y 5 6)
+scm&gt; x
+5
+scm&gt; y
+6
+scm&gt; (multi&#x2d;assign x y y x)
+scm&gt; x
+6
+scm&gt; y
+5</code></pre>
+
+
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="multi-assign-simul-input" style="height:144px;"></div>
+            <a href="javascript:void" id="modal-link-multi-assign-simul-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-multi-assign-simul-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-multi-assign-simul-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('(define&#x2d;macro (multi&#x2d;assign sym1 sym2 expr1 expr2)\n    `(_________ (define ,sym2 (list ______________________________________))\n            (define ___________ ____________________________________________)\n            (define ___________ ____________________________________________))\n            undefined))\n)\n', "scheme", "multi-assign-simul-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define&#x2d;macro (multi&#x2d;assign sym1 sym2 expr1 expr2)
+    `(begin (define ,sym2 (list ,expr1 ,expr2)) 
+            (define ,sym1 (car ,sym2)) 
+            (define ,sym2 (car (cdr ,sym2)))
+            undefined))
+)</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+
+<p>The idea behind this solution is to make <code>sym2</code> hold the values of <em>both</em> <code>expr1</code> and <code>expr2</code>, so that even after <code>sym1</code> gets bound to the value of <code>expr1</code>, <code>sym2</code> will have access to the previous value of <code>expr2</code> (even if <code>expr2</code> happens to be <code>sym1</code> itself, as it is in the variable swapping case). We can achieve this by binding <code>sym2</code> to a list containing the values of <code>expr1</code> and <code>expr2</code>!</p>
+
+<p>To understand the motivation behind this somewhat strange looking solution, let's take a look at a different, and perhaps more intuitive, way to write this macro:</p>
+
+<pre><code class="scheme">(define&#x2d;macro (multi&#x2d;assign sym1 sym2 expr1 expr2) 
+    `(begin (define val1 ,expr1) (define val2 ,expr2) 
+            (define ,sym1 val1) (define ,sym2 val2) undefined))</code></pre>
+
+
+
+<p>This achieves the desired behavior for the most part. It improves upon the solution in the first part of the problem by evaluating <code>expr1</code> and <code>expr2</code> before assigning them to <code>sym1</code> and <code>sym2</code>, allowing us to do variable swapping. However, there's one issue with this solution which is that it uses <code>val1</code> and <code>val2</code> to store the values of <code>expr1</code> and <code>expr2</code> in the current environment. If these symbols have already been defined in this environment (and were perhaps being used for something else), they will be overwritten!</p>
+
+<p>Therefore, we need to write <code>multi&#x2d;assign</code> so that it only binds symbols that were passed into the macro.
+</div></p>
+
+
+
+
+<h3 id="q3-replace">Q3: Replace</h3>
+
+
+<!-- __Difficulty: ⭐⭐__ -->
+
+<p>Write the macro <code>replace</code>, which takes in a Scheme expression <code>expr</code>, a Scheme symbol or number <code>old</code>, and a Scheme expression <code>new</code>. The macro replaces all instances of <code>old</code> with <code>new</code> before running the modified code.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="replace_p1-input" style="height:144px;"></div>
+            <a href="javascript:void" id="modal-link-replace_p1-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-replace_p1-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-replace_p1-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('(define (replace&#x2d;helper e o n)\n  (if ___________________________________\n      ___________________________________________________________________\n      ___________________________________________________________________))\n(define&#x2d;macro (replace expr old new)\n    (replace&#x2d;helper expr old new))\n', "scheme", "replace_p1-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define (replace&#x2d;helper e o n)
+  (if (pair? e)
+      (cons (replace&#x2d;helper (car e) o n) (replace&#x2d;helper (cdr e) o n))
+      (if (eq? e o) n e)))
+(define&#x2d;macro (replace expr old new)
+    (replace&#x2d;helper expr old new))</code></pre>
+
+            </div>
+        
+
+
+<h1 id="tail-recursion">Tail Recursion</h1>
+
+
+<p>When writing a recursive procedure, it's possible to write
+it in a <strong>tail recursive</strong> way, where all of the recursive calls are tail calls.
+A <strong>tail call</strong> occurs when a function calls another function as the last action of the
+current frame.</p>
+
+<p>Consider this implementation of <code>factorial</code> that is <em>not</em> tail recursive:</p>
+
+<pre><code class="scheme">(define (factorial n)
+  (if (= n 0)
+      1
+      (* n (factorial (&#x2d; n 1)))))</code></pre>
+
+
+
+<p>The recursive call occurs in the last line, but it is not the last expression
+evaluated. After calling <code>(factorial (&#x2d; n 1))</code>, the function still needs to
+multiply that result with <code>n</code>. The final expression that is evaluated is
+a call to the multiplication function, not <code>factorial</code> itself.  Therefore,
+the recursive call is <code>not</code> a tail call.</p>
+
+<p>Here's a visualization of the recursive process for computing <code>(factorial 6)</code> :</p>
+
+<pre><code class="scheme">(factorial 6)
+(* 6 (factorial 5))
+(* 6 (* 5 (factorial 4)))
+(* 6 (* 5 (* 4 (factorial 3))))
+(* 6 (* 5 (* 4 (* 3 (factorial 2)))))
+(* 6 (* 5 (* 4 (* 3 (* 2 (factorial 1))))))
+(* 6 (* 5 (* 4 (* 3 (* 2 1)))))
+(* 6 (* 5 (* 4 (* 3 2))))
+(* 6 (* 5 (* 4 6)))
+(* 6 (* 5 24))
+(* 6 120)
+720</code></pre>
+
+
+
+<p>The interpreter first must reach the base case and only then can it begin
+to calculate the products in each of the earlier frames.</p>
+
+<p>We can rewrite this function using a helper function that remembers the
+temporary product that we have calculated so far in each recursive step.</p>
+
+<pre><code class="scheme">(define (factorial n)
+  (define (fact&#x2d;tail n result)
+    (if (= n 0)
+        result
+        (fact&#x2d;tail (&#x2d; n 1) (* n result))))
+  (fact&#x2d;tail n 1))</code></pre>
+
+
+
+<p><code>fact&#x2d;tail</code> makes a single recursive call to <code>fact&#x2d;tail</code>, and
+that recursive call is the last expression to be evaluated, so it is a tail
+call. Therefore, <code>fact&#x2d;tail</code> is a tail recursive process.</p>
+
+<p>Here's a visualization of the tail recursive process for computing <code>(factorial 6)</code>:</p>
+
+<pre><code class="scheme">(factorial 6)
+(fact&#x2d;tail 6 1)
+(fact&#x2d;tail 5 6)
+(fact&#x2d;tail 4 30)
+(fact&#x2d;tail 3 120)
+(fact&#x2d;tail 2 360)
+(fact&#x2d;tail 1 720)
+(fact&#x2d;tail 0 720)
+720</code></pre>
+
+
+
+<p>The interpreter needed less steps to come up with the result, and it didn't need
+to re-visit the earlier frames to come up with the final product.</p>
+
+<p>In this example, we've utilized a common strategy in implementing tail-recursive procedures which is to pass the result that we're building (e.g. a list, count, sum, product, etc.) as a argument to our procedure that gets changed across recursive calls. By doing this, we do not have to do any computation to build up the result after the recursive call in the current frame, instead any computation is done <em>before</em> the recursive call and the result is passed to the next frame to be modified further. Often, we do not have a parameter in our procedure that can store this result, but in these cases we can define a helper procedure with an extra parameter(s) and recurse on the helper. This is what we did in the <code>factorial</code> procedure above, with <code>fact&#x2d;tail</code> having the extra parameter <code>result</code>.</p>
+
+
+<h2 id="tail-call-optimization">Tail Call Optimization</h2>
+
+
+<p>When a recursive procedure is not written in a tail recursive way,
+the interpreter must have enough memory to store all of the previous recursive calls.</p>
+
+<p>For example, a call to the <code>(factorial 3)</code> in the non tail-recursive version
+must keep the frames for all the numbers from 3 down to the base case,
+until it's finally able to calculate the intermediate products and forget those frames:</p>
+
+<p><img class="img-responsive center-block" src="assets/factorial_stack.svg" alt="Example Tree" width="" height=""></p>
+
+<p>For non tail-recursive procedures, the number of active frames grows proportionally to the number
+of recursive calls. That may be fine for small inputs, but imagine calling <code>factorial</code>
+on a large number like 10000. The interpreter would need enough memory for all 1000 calls!</p>
+
+<p>Fortunately, proper Scheme interpreters implement <strong>tail-call optimization</strong>
+as a requirement of the language specification. TCO ensures that tail recursive
+procedures can execute with a constant number of active frames, so programmers
+can call them on large inputs without fear of exceeding the available memory.</p>
+
+<p>When the tail recursive <code>factorial</code> is run in an interpreter with tail-call optimization,
+the interpreter knows that it does not need to keep the previous frames around,
+so it never needs to store the whole stack of frames in memory:</p>
+
+<p><img class="img-responsive center-block" src="assets/factorial_optimized.svg" alt="Example Tree" width="" height=""></p>
+
+<p>Tail-call optimization can be implemented in a few ways:</p>
+
+<ol>
+  <li>Instead of creating a new frame, the interpreter can just update
+  the values of the relevant variables in the current frame (like <code>n</code> and <code>result</code>
+  for the <code>fact&#x2d;tail</code> procedure). It reuses the same frame for the
+  entire calculation, constantly changing the bindings to match the next set of parameters.</li>
+  <li>How our 61A Scheme interpreter works: The interpreter builds a new frame as usual,
+  but then <em>replaces</em> the current frame with the new one.  The old frame is still around,
+  but the interpreter no longer has any way to get to it.  When that happens, the Python
+  interpreter does something clever: it <em>recycles</em> the old frame so that the next time
+  a new frame is needed, the system simply allocates it out of recycled space.
+  The technical term is that the old frame becomes "garbage", which the system
+  "garbage collects" behind the programmer's back.</li>
+</ol>
+
+
+<h2 id="tail-context">Tail Context</h2>
+
+
+<p>When trying to identify whether a given function call within the body of a
+function is a tail call, we look for whether the call expression is in
+<strong>tail context</strong>.</p>
+
+<p>Given that each of the following expressions is the last expression in
+the body of the function, the following expressions are tail contexts:</p>
+
+<ol>
+  <li>the second or third operand in an <code>if</code> expression</li>
+  <li>any of the non-predicate sub-expressions in a <code>cond</code> expression
+  (i.e. the second expression of each clause)</li>
+  <li>the last operand in an <code>and</code> or an <code>or</code> expression</li>
+  <li>the last operand in a <code>begin</code> expression's body</li>
+  <li>the last operand in a <code>let</code> expression's body</li>
+</ol>
+
+<p>For example, in the expression <code>(begin (+ 2 3) (&#x2d; 2 3) (* 2 3))</code>,
+<code>(* 2 3)</code> is a tail call because it is the last operand expression to be
+evaluated.</p>
+
+<!--\videowalkthrough{tail-recursion-intro}-->
+
+
+<h3 id="q4-is-tail-call">Q4: Is Tail Call</h3>
+
+<p>For each of the following procedures, identify whether it contains a recursive
+call in a tail context. Also indicate if it uses a constant number of active frames.</p>
+
+<pre><code class="scheme">(define (question&#x2d;a x)
+  (if (= x 0) 0
+      (+ x (question&#x2d;a (&#x2d; x 1)))))</code></pre>
+
+
+
+            <label class="sr-only" for="tail-call-1-input">Your Answer:</label>
+            <input class="form-control storable" id="tail-call-1-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+In the recursive case, the last expression that is evaluated is a call to
+<code>+</code>. Therefore, the recursive call is not in tail context, and each of
+the frames remain active.
+This procedure uses a number of active frames proportional to the input <code>x</code>.
+</div>
+
+<pre><code class="scheme">(define (question&#x2d;b x y)
+  (if (= x 0) y
+      (question&#x2d;b (&#x2d; x 1) (+ y x))))</code></pre>
+
+
+
+
+            <label class="sr-only" for="tail-call-2-input">Your Answer:</label>
+            <input class="form-control storable" id="tail-call-2-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+The recursive call is the third operand in the if expression, so it is in tail
+context. This means that the last expression that will be evaluated in the body
+of this procedure is the recursive procedure call, so this procedure can
+be run with a constant number of active frames.
+</div>
+
+<pre><code class="scheme">(define (question&#x2d;c x y)
+  (if (&gt; x y)
+      (question&#x2d;c (&#x2d; y 1) x)
+      (question&#x2d;c (+ x 10) y)))</code></pre>
+
+
+
+
+            <label class="sr-only" for="tail-call-3-input">Your Answer:</label>
+            <input class="form-control storable" id="tail-call-3-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+The recursive calls are the second and third operands of the <code>if</code>
+expression. Only one of these calls is actually evaluated, and whichever one it
+is will be the last expression evaluated in the body of the procedure.
+This procedure therefore can be run with a constant number of active frames.
+
+<p>Note that if you actually try and evaluate this procedure, it will never
+terminate. But at least it won't crash from hitting max recursion depth!
+</div></p>
+
+<pre><code class="scheme">(define (question&#x2d;d n)
+  (if (question&#x2d;d n)
+      (question&#x2d;d (&#x2d; n 1))
+      (question&#x2d;d (+ n 10))))</code></pre>
+
+
+
+
+            <label class="sr-only" for="tail-call-4-input">Your Answer:</label>
+            <input class="form-control storable" id="tail-call-4-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+The second and third recursive calls are in tail context, but the first is not.
+Since not all the recursive calls are tail calls, this procedure
+requires active frames for all of the recursive calls.
+
+<p>Additionally, this question will actually lead to infinite recursion because the if condition will never reach a base case!
+</div></p>
+
+<!--\videowalkthrough{tail-recursion-is-tail-call}-->
+
+<pre><code class="scheme">(define (question&#x2d;e n)
+  (cond ((&lt;= n 1) 1)
+        ((question&#x2d;e (&#x2d; n 1)) (question&#x2d;e (&#x2d; n 2)))
+        (else (begin (print 2) (question&#x2d;e (&#x2d; n 3))))))</code></pre>
+
+
+
+
+            <label class="sr-only" for="tail-call-5-input">Your Answer:</label>
+            <input class="form-control storable" id="tail-call-5-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+The second and third recursive calls are the second expressions in a clause, so
+they are in tail context. However, the first recursive call is not in tail
+context. Since not all recursive calls are tail calls, this procedure is not
+tail recursive and does not use a constant number of active frames.
+</div>
+
+<div class="page-break"></div>
+
+
+<h3 id="q5-sum">Q5: Sum</h3>
+
+<p>Write a tail recursive function that takes in a Scheme list and returns
+the numerical sum of all values in the list. You can assume that the list
+contains only numbers (no nested lists).</p>
+
+<pre><code class="scheme">scm&gt; (sum &#x27;(1 2 3))
+6
+scm&gt; (sum &#x27;(10 &#x2d;3 4))
+11</code></pre>
+
+
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="sum-input" style="height:396px;"></div>
+            <a href="javascript:void" id="modal-link-sum-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-sum-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-sum-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor("(define (sum lst)\n  'YOUR-CODE-HERE\n)\n\n(expect (sum &#x27;(1 2 3)) 6)\n(expect (sum &#x27;(10 &#x2d;3 4)) 11)\n", "scheme", "sum-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define (sum lst)
+  (define (sum&#x2d;sofar lst current&#x2d;sum)
+    (if (null? lst)
+        current&#x2d;sum
+        (sum&#x2d;sofar (cdr lst) (+ (car lst) current&#x2d;sum))))
+  (sum&#x2d;sofar lst 0)
+
+)
+
+; ALTERNATE SOLUTION
+(define (sum lst)
+    (cond
+      ((null? lst) 0)
+      ((null? (cdr lst)) (car lst))
+      (else (sum (cons (+ (car lst) (car (cdr lst))) (cdr (cdr lst)))))
+    )
+)
+
+(expect (sum &#x27;(1 2 3)) 6)
+(expect (sum &#x27;(10 &#x2d;3 4)) 11)</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+<a href="https://youtu.be/9y7rnuYp-DU?t=9m27s">Video walkthrough</a>
+</div>
+
+<div class="page-break"></div>
+
+
+<h3 id="q6-reverse">Q6: Reverse</h3>
+
+
+<p>Write a tail-recursive function <code>reverse</code> that takes in a Scheme list a
+returns a reversed copy. <em>Hint</em>: use a helper function!</p>
+
+<pre><code class="scheme">scm&gt; (reverse &#x27;(1 2 3))
+(3 2 1)
+scm&gt; (reverse &#x27;(0 9 1 2))
+(2 1 9 0)</code></pre>
+
+
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="reverse-input" style="height:216px;"></div>
+            <a href="javascript:void" id="modal-link-reverse-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-reverse-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-reverse-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor("(define (reverse lst)\n  'YOUR-CODE-HERE\n)\n\n(expect (reverse &#x27;(1 2 3)) (3 2 1))\n(expect (reverse &#x27;(0 9 1 2)) (2 1 9 0))\n", "scheme", "reverse-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define (reverse lst)
+  (define (reverse&#x2d;tail sofar rest)
+    (if (null? rest)
+          sofar
+          (reverse&#x2d;tail (cons (car rest) sofar) (cdr rest))))
+  (reverse&#x2d;tail nil lst)
+)
+
+(expect (reverse &#x27;(1 2 3)) (3 2 1))
+(expect (reverse &#x27;(0 9 1 2)) (2 1 9 0))</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#macros">Macros</a></li>
+  <ul>
+    <li><a href="#q1-shapeshifting-macros">Q1: Shapeshifting Macros</a></li>
+    <li><a href="#q2-multiple-assignment">Q2: Multiple Assignment</a></li>
+    <li><a href="#q3-replace">Q3: Replace</a></li>
+  </ul>
+  <li><a href="#tail-recursion">Tail Recursion</a></li>
+  <ul>
+    <li><a href="#tail-call-optimization">Tail Call Optimization</a></li>
+    <li><a href="#tail-context">Tail Context</a></li>
+    <ul>
+      <li><a href="#q4-is-tail-call">Q4: Is Tail Call</a></li>
+      <li><a href="#q5-sum">Q5: Sum</a></li>
+      <li><a href="#q6-reverse">Q6: Reverse</a></li>
+    </ul>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

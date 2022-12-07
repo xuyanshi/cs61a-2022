@@ -1,0 +1,743 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/lab.css">
+
+
+    <title>
+Lab 12 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Lab 12 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="lab12.zip" class="label label-outline">lab12.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+
+
+    
+<h1 id="topics">Topics</h1>
+
+
+<p>Consult this section if you need a refresher on the material for this lab. It's
+okay to skip directly to <a href="#required-questions">the questions</a> and refer back
+here should you get stuck.</p>
+
+<br>
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Quasiquotation<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+<h2 id="quasiquotation">Quasiquotation</h2>
+
+
+<p>Recall that the <code>quote</code> special form prevents the Scheme interpreter
+from executing a following expression. We saw that this helps us create complex
+lists more easily than repeatedly calling <code>cons</code> or trying to get the
+structure right with <code>list</code>. It seems like this form would come in handy
+if we are trying to construct complex Scheme expressions with many nested
+lists.</p>
+
+<p>Consider that we rewrite the <code>twice</code> macro as follows:</p>
+
+<pre><code>(define&#x2d;macro (twice f)
+  &#x27;(begin f f))</code></pre>
+
+<p>This seems like it would have the same effect, but since the <code>quote</code>
+form prevents any evaluation, the resulting expression we create would actually
+be <code>(begin f f)</code>, which is not what we want.</p>
+
+<p>The <strong>quasiquote</strong> allows us to construct literal lists in a similar way
+as quote, but also lets us specify if any sub-expression within the list should be
+evaluated.</p>
+
+<p>At first glance, the quasiquote (which can be invoked with the backtick <code>`</code> or
+the <code>quasiquote</code> special form) behaves exactly the same as <code>&#x27;</code> or
+<code>quote</code>.  However, using quasiquotes gives you the ability to
+<strong>unquote</strong> (which can be invoked with the comma <code>,</code> or the
+<code>unquote</code> special form). This removes an expression from the quoted
+context, evaluates it, and places it back in.</p>
+
+<p>By combining quasiquotes and unquoting, we can often save ourselves a lot
+of trouble when building macro expressions.</p>
+
+<p>Here is how we could use quasiquoting to rewrite our previous example:</p>
+
+<pre><code>(define&#x2d;macro (twice f)
+  `(begin ,f ,f))</code></pre>
+
+<blockquote><p>Important Note: quasiquoting isn't necessarily related to macros, in
+fact it can be used in any situation where you want to build lists
+non-recursively and you know the structure ahead of time. For example,
+instead of writing <code>(list x y z)</code> you can write <code>`(,x ,y ,z)</code> for
+100% equivalent behavior
+</div>
+<br></p></blockquote>
+
+<br>
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Macros<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+
+<h2 id="macros">Macros</h2>
+
+<!-- This is a copy of <code>disc/topics/macros/text/introduction.tex</code> but adapted for web -->
+
+<p>So far we've been able to define our own procedures in Scheme using the
+<code>define</code> special form. When we call these procedures, we have to follow
+the rules for evaluating call expressions, which involve evaluating all the
+operands.</p>
+
+<p>We know that special form expressions do not follow the evaluation rules of
+call expressions. Instead, each special form has its own rules of evaluation,
+which may include not evaluating all the operands.  Wouldn't it be cool if we
+could define our own special forms where we decide which operands are
+evaluated?  Consider the following example where we attempt to write a function
+that evaluates a given expression twice:</p>
+
+<pre><code class="scheme">scm&gt; (define (twice f) (begin f f))
+twice
+scm&gt; (twice (print &#x27;woof))
+woof</code></pre>
+
+
+
+<p>Since <code>twice</code> is a regular procedure, a call to <code>twice</code> will
+follow the same rules of evaluation as regular call expressions; first we
+evaluate the operator and then we evaluate the operands.  That means that
+<code>woof</code> was printed when we evaluated the operand <code>(print &#x27;woof)</code>.
+Inside the body of <code>twice</code>, the name <code>f</code> is bound to the value
+<code>undefined</code>, so the expression <code>(begin f f)</code> does nothing at all!</p>
+
+<p>The problem here is clear: we need to prevent the given expression from
+evaluating until we're inside the body of the procedure. This is where the
+<code>define&#x2d;macro</code> special form, which has identical syntax to the regular
+<code>define</code> form, comes in:</p>
+
+<pre><code class="scheme">scm&gt; (define&#x2d;macro (twice f) (list &#x27;begin f f))
+twice</code></pre>
+
+
+
+<p><code>define&#x2d;macro</code> allows us to define what's known as a <code>macro</code>,
+which is simply a way for us to combine unevaluated input expressions together
+into another expression. When we call macros, the operands are not evaluated,
+but rather are treated as Scheme data. This means that any operands that are
+call expressions or special form expression are treated like lists.</p>
+
+<p>If we call <code>(twice (print &#x27;woof))</code>, <code>f</code> will actually be bound to
+the list <code>(print &#x27;woof)</code> instead of the value <code>undefined</code>.
+Inside the body of <code>define&#x2d;macro</code>, we can insert these expressions into
+a larger Scheme expression. In our case, we would want a <code>begin</code>
+expression that looks like the following:</p>
+
+<pre><code>(begin (print &#x27;woof) (print &#x27;woof))</code></pre>
+
+<p>As Scheme data, this expression is really just a list containing three
+elements: <code>begin</code> and <code>(print &#x27;woof)</code> twice, which is exactly
+what <code>(list &#x27;begin f f)</code> returns.  Now, when we call <code>twice</code>,
+this list is evaluated as an expression and <code>(print &#x27;woof)</code> is evaluated
+twice.</p>
+
+<pre><code class="scheme">scm&gt; (twice (print &#x27;woof))
+woof
+woof</code></pre>
+
+
+
+<p>To recap, macros are called similarly to regular procedures, but the rules for
+evaluating them are different. We evaluated lambda procedures in the following
+way:</p>
+
+<ul>
+  <li>Evaluate operator</li>
+  <li>Evaluate operands</li>
+  <li>Apply operator to operands, evaluating the body of the procedure</li>
+</ul>
+
+<p>However, the rules for evaluating calls to macro procedures are:</p>
+
+<ul>
+  <li>Evaluate operator</li>
+  <li>Apply operator to unevaluated operands</li>
+  <li>Evaluate the expression returned by the macro in the frame it was called in.
+  </div>
+  <br></li>
+</ul>
+
+
+<h1 id="walkthrough-video">Walkthrough video</h1>
+
+<p>We've provided a walkthrough video going over the contents of this week's lab.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZelFBIqH5_R2Cpzrx9lDCLS"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZelFBIqH5_R2Cpzrx9lDCLS'> YouTube link </a></p></p></blockquote>
+
+
+<h1 id="required-questions">Required Questions</h1>
+
+
+
+<h2 id="quasiquotation-2">Quasiquotation</h2>
+
+
+
+<h3 id="q1-wwsd-quasiquote">Q1: WWSD: Quasiquote</h3>
+
+
+<blockquote><p>Use Ok to test your knowledge with the following "What Would Scheme Display?"
+questions:</p>
+
+<pre><code>python3 ok &#x2d;q wwsd&#x2d;quasiquote &#x2d;u</code></pre></blockquote>
+
+</question>
+
+<pre><code>scm&gt; &#x27;(1 x 3)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x28;&#x31;&#x20;&#x78;&#x20;&#x33;&#x29;</div>
+scm&gt; (define x 2)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x78;</div>
+scm&gt; `(1 x 3)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x28;&#x31;&#x20;&#x78;&#x20;&#x33;&#x29;</div>
+scm&gt; `(1 ,x 3)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x28;&#x31;&#x20;&#x32;&#x20;&#x33;&#x29;</div>
+scm&gt; &#x27;(1 ,x 3)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x28;&#x31;&#x20;&#x28;&#x75;&#x6e;&#x71;&#x75;&#x6f;&#x74;&#x65;&#x20;&#x78;&#x29;&#x20;&#x33;&#x29;</div>
+scm&gt; `(,1 x 3)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x28;&#x31;&#x20;&#x78;&#x20;&#x33;&#x29;</div>
+scm&gt; `,(+ 1 x 3)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x36;</div>
+scm&gt; `(1 (,x) 3)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x28;&#x31;&#x20;&#x28;&#x32;&#x29;&#x20;&#x33;&#x29;</div>
+scm&gt; `(1 ,(+ x 2) 3)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x28;&#x31;&#x20;&#x34;&#x20;&#x33;&#x29;</div>
+scm&gt; (define y 3)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x79;</div>
+scm&gt; `(x ,(* y x) y)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x28;&#x78;&#x20;&#x36;&#x20;&#x79;&#x29;</div>
+scm&gt; `(1 ,(cons x (list y 4)) 5)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x28;&#x31;&#x20;&#x28;&#x32;&#x20;&#x33;&#x20;&#x34;&#x29;&#x20;&#x35;&#x29;</div></code></pre>
+        <button id='prompt-1' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+
+
+<h2 id="macros-2">Macros</h2>
+
+
+
+<h3 id="q2-if-macro-scheme">Q2: If Macro Scheme</h3>
+
+
+<p>Use the <code>define&#x2d;macro</code> special form to define a macro, <code>if&#x2d;macro</code>,which will take in the following parameters:</p>
+
+<ol>
+  <li><code>condition</code> : an expression which will evaluate to the condition in our if expression</li>
+  <li><code>if&#x2d;true</code> : an expression which will evaluate to the value we want to return if true</li>
+  <li><code>if&#x2d;false</code> : an expression which will evaluate to the value we want to return if false</li>
+</ol>
+
+<p>and evaluates the result of the if expression passed in.</p>
+
+<pre><code class="scheme">scm&gt; (if&#x2d;macro (= 0 0) 2 3)
+2
+scm&gt; (if&#x2d;macro (= 1 0) (print 3) (print 5))
+5</code></pre>
+
+
+
+<blockquote><p>If you're having a hard time with the question revisit Question 3 (If Program Scheme)
+from <a href="/disc/disc11/#q3">Discussion 11</a>. In the past discussion, we had to <code>&#x27;</code> our arguments, and we had to call <code>eval</code> on the return value of <code>if&#x2d;function</code> to actually run the line of code we produced. Because we are using the <code>define&#x2d;macro</code> special form, the operands are no longer quoted, and we no longer have the perform an extra call to <code>eval</code>!</p></blockquote>
+
+<solution>
+
+<pre><code class="scheme">(define&#x2d;macro (if&#x2d;macro condition if&#x2d;true if&#x2d;false)
+<div class="sol-highlight">  `(if ,condition ,if&#x2d;true ,if&#x2d;false)</div>)</code></pre>
+
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q if-macro<button id="copy-code-python3ok-qif-macro" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qif-macro").onclick = () => copyCode('python3 ok -q if-macro', "copy-code-python3ok-qif-macro");
+        </script>
+        <br/>
+
+
+<h3 id="q3-or-macro">Q3: Or Macro</h3>
+
+
+<p>Implement <code>or&#x2d;macro</code>,  which takes in two expressions and <code>or</code>'s them together (applying short-circuiting rules). However, do this without using the <code>or</code> special form. You may also assume the name <code>v1</code> doesn't appear anywhere outside this macro. For a quick reminder on the short-circuiting rules for <code>or</code> take a look at slide 18 of <a href="/assets/slides/03-Control_4pp.pdf">Lecture 3 on Control</a>.</p>
+
+<p>The behavior of the <code>or</code> macro procedure is specified by the following doctests:</p>
+
+<pre><code class="scheme">scm&gt; (or&#x2d;macro (print &#x27;bork) (/ 1 0))
+bork
+scm&gt; (or&#x2d;macro (= 1 0) (+ 1 2))
+3</code></pre>
+
+
+
+<solution>
+
+<pre><code class="scheme">(define&#x2d;macro (or&#x2d;macro expr1 expr2)
+<div class="sol-highlight">    `(let ((v1 ,expr1))</div><div class="sol-highlight">        (if v1 v1 ,expr2))</div>)</code></pre>
+
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q or-macro<button id="copy-code-python3ok-qor-macro" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qor-macro").onclick = () => copyCode('python3 ok -q or-macro', "copy-code-python3ok-qor-macro");
+        </script>
+        <br/>
+
+
+<h3 id="q4-replicate">Q4: Replicate</h3>
+
+
+<p>Implement the <code>replicate</code> procedure, which takes in a value <code>x</code> and a number <code>n</code> and returns a list with <code>x</code> repeated <code>n</code>
+times. We've provided some examples for how <code>replicate</code> should function here:</p>
+
+<pre><code>scm&gt; (replicate &#x27;(+ 1 2) 3)
+((+ 1 2) (+ 1 2) (+ 1 2))
+
+scm&gt; (replicate (+ 1 2) 1)
+(3)
+
+scm&gt; (replicate &#x27;hi 0)
+()</code></pre>
+
+
+
+<p>Then, write a macro that takes an expression <code>expr</code> and a number <code>n</code> and
+repeats the expression <code>n</code> times. For example, <code>(repeat&#x2d;n expr 2)</code>
+should behave the same as <code>(twice expr)</code> from the introduction section of this worksheet.
+It's possible to pass in a combination as the second argument (e.g. <code>(+ 1 2)</code>) as long as
+it evaluates to a number. Be sure that you evaluate this expression in your
+macro so that you don't treat it as a list.</p>
+
+<p>Complete the implementation for <code>repeat&#x2d;n</code> so that its behavior matches the doctests below.</p>
+
+<pre><code>scm&gt; (repeat&#x2d;n (print &#x27;(resistance is futile)) 3)
+(resistance is futile)
+(resistance is futile)
+(resistance is futile)
+
+scm&gt; (repeat&#x2d;n (print (+ 3 3)) (+ 1 1))  ; Pass a call expression in as n
+6
+6</code></pre>
+
+
+
+<blockquote><p><strong>Hint</strong>: Consider which method to build your list (<code>list</code>, <code>cons</code>, or <code>quasiquote</code>) might help make your implementation simpler.</p></blockquote>
+
+<solution>
+
+<pre><code class="scheme">(define (replicate x n)
+<div class="sol-highlight">    (if (= n 0) nil
+        (cons x (replicate x (&#x2d; n 1))))</div>)
+
+(define&#x2d;macro (repeat&#x2d;n expr n)
+<div class="sol-highlight">    (cons &#x27;begin (replicate expr (eval n)))</div>)</code></pre>
+
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q repeat-macro<button id="copy-code-python3ok-qrepeat-macro" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qrepeat-macro").onclick = () => copyCode('python3 ok -q repeat-macro', "copy-code-python3ok-qrepeat-macro");
+        </script>
+        <br/>
+
+
+<h3 id="q5-list-comprehensions">Q5: List Comprehensions</h3>
+
+
+<p>Recall that list comprehensions in Python allow us to create lists out of
+iterables:</p>
+
+<pre><code>[&lt;map&#x2d;expression&gt; for &lt;name&gt; in &lt;iterable&gt; if &lt;conditional&#x2d;expression&gt;]</code></pre>
+
+<p>Define a procedure to implement list comprehensions in Scheme that can create lists
+out of lists. Specifically, we want a <code>list&#x2d;of</code> program that can be called as
+follows:</p>
+
+<pre><code>(list&#x2d;of &lt;map&#x2d;expression&gt; &#x27;for &lt;name&gt; &#x27;in &lt;list&gt; &#x27;if &lt;conditional&#x2d;expression&gt;)</code></pre>
+
+<p>Note that the symbols for, in, and if must be quoted when calling list-of so that they will
+not be evaluated and cause an error.</p>
+
+<p>Calling <code>list&#x2d;of</code> will return a new list constructed by doing the following for
+each element in <code>&lt;list&gt;</code>:</p>
+
+<ul>
+  <li>Bind <code>&lt;name&gt;</code> to the element.</li>
+  <li>If <code>&lt;conditional&#x2d;expression&gt;</code> evaluates to a truth-y value, evaluate
+  <code>&lt;map&#x2d;expression&gt;</code> and add it to the result list.</li>
+</ul>
+
+<p>Here are some examples:</p>
+
+<pre><code class="scheme">scm&gt; (list&#x2d;of &#x27;(* x x) &#x27;for &#x27;x &#x27;in &#x27;&#x27;(3 4 5) &#x27;if &#x27;(odd? x))
+(map (lambda (x) (* x x)) (filter (lambda (x) (odd? x)) (quote (3 4 5))))
+
+scm&gt; (eval (list&#x2d;of &#x27;(* x x) &#x27;for &#x27;x &#x27;in &#x27;&#x27;(3 4 5) &#x27;if &#x27;(odd? x)))
+(9 25)
+
+scm&gt; (list&#x2d;of &#x27;&#x27;hi &#x27;for &#x27;x &#x27;in &#x27;&#x27;(1 2 3 4 5 6) &#x27;if &#x27;(= (modulo x 3) 0))
+(map (lambda (x) (quote hi)) (filter (lambda (x) (= (modulo x 3) 0)) (quote (1 2 3 4 5 6))))
+
+scm&gt; (eval (list&#x2d;of &#x27;&#x27;hi &#x27;for &#x27;x &#x27;in &#x27;&#x27;(1 2 3 4 5 6) &#x27;if &#x27;(= (modulo x 3) 0)))
+(hi hi)
+
+scm&gt; (eval (list&#x2d;of &#x27;(car e) &#x27;for &#x27;e &#x27;in &#x27;&#x27;((10) 11 (12) 13 (14 15)) &#x27;if &#x27;(list? e)))
+(10 12 14)</code></pre>
+
+
+
+<blockquote><p><em>Hint:</em> You may use the built-in <code>map</code> and <code>filter</code> procedures. Check out the
+<a href="/articles/scheme-builtins/">Scheme Built-ins</a> reference for more
+information.</p>
+
+<p>You may also find it helpful to look at the expression returned by list-of
+in the example above.</p></blockquote>
+
+<solution>
+
+<pre><code class="scheme">(define (list&#x2d;of map&#x2d;expr for var in lst if filter&#x2d;expr)
+<div class="sol-highlight">  `(map (lambda (,var) ,map&#x2d;expr) (filter (lambda (,var) ,filter&#x2d;expr) ,lst))</div>)</code></pre>
+
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q list-comp-func<button id="copy-code-python3ok-qlist-comp-func" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qlist-comp-func").onclick = () => copyCode('python3 ok -q list-comp-func', "copy-code-python3ok-qlist-comp-func");
+        </script>
+        <br/>
+
+
+<h3 id="q6-list-comprehension-macro">Q6: List Comprehension Macro</h3>
+
+
+<p>When we wrote out our original <code>list&#x2d;of</code> program in <a href="#q5">Question 5</a>, we had to do additional work to actually run the outputted program. Particularly, we needed to quote parameters and perform an extra call to <code>eval</code> to get the desired answer. To make things easier, we can use the <code>define&#x2d;macro</code> special form to simplify the process.</p>
+
+<p>As a reminder, the <code>define&#x2d;macro</code> form changes the order of evaluation to be:</p>
+
+<ol>
+  <li>Evaluate operator</li>
+  <li>Apply operator to unevaluated operands</li>
+  <li>Evaluate the expression returned by the macro in the frame it was called in.</li>
+</ol>
+
+<p>Use the <code>define&#x2d;macro</code> special form to implement the <code>list&#x2d;of&#x2d;macro</code> macro that can be called as
+follows:</p>
+
+<pre><code>(list&#x2d;of&#x2d;macro &lt;map&#x2d;expression&gt; for &lt;name&gt; in &lt;list&gt; if &lt;conditional&#x2d;expression&gt;)</code></pre>
+
+<p>Calling <code>list&#x2d;of&#x2d;macro</code> will return a new list constructed by doing the following for
+each element in <code>&lt;list&gt;</code>:</p>
+
+<ul>
+  <li>Bind <code>&lt;name&gt;</code> to the element.</li>
+  <li>If <code>&lt;conditional&#x2d;expression&gt;</code> evaluates to a truth-y value, evaluate
+  <code>&lt;map&#x2d;expression&gt;</code> and add it to the result list.</li>
+</ul>
+
+<p>Here are some examples:</p>
+
+<pre><code class="scheme">scm&gt; (list&#x2d;of&#x2d;macro (* x x) for x in &#x27;(3 4 5) if (odd? x))
+(9 25)
+
+scm&gt; (list&#x2d;of&#x2d;macro &#x27;hi for x in &#x27;(1 2 3 4 5 6) if (= (modulo x 3) 0))
+(hi hi)
+
+scm&gt; (list&#x2d;of&#x2d;macro (car e) for e in &#x27;((10) 11 (12) 13 (14 15)) if (list? e))
+(10 12 14)</code></pre>
+
+
+
+<blockquote><p><em>Hint:</em> Again, you may use the built-in <code>map</code> and <code>filter</code> procedures. Check out the
+<a href="/articles/scheme-builtins/">Scheme Built-ins</a> reference for more
+information.</p></blockquote>
+
+<solution>
+
+<pre><code class="scheme">(define&#x2d;macro (list&#x2d;of&#x2d;macro map&#x2d;expr for var in lst if filter&#x2d;expr)
+<div class="sol-highlight">  `(map (lambda (,var) ,map&#x2d;expr) (filter (lambda (,var) ,filter&#x2d;expr) ,lst))</div>)</code></pre>
+
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q list-comp<button id="copy-code-python3ok-qlist-comp" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qlist-comp").onclick = () => copyCode('python3 ok -q list-comp', "copy-code-python3ok-qlist-comp");
+        </script>
+        <br/>
+
+<!-- replace this problem -->
+
+<!-- make sure to add .py file to <code>tests</code> in BUILD file -->
+
+
+<h2 id="submit">Submit</h2>
+
+
+<p>Make sure to submit this assignment by running:</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;submit</code></pre>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#topics">Topics</a></li>
+  <ul>
+    <li><a href="#quasiquotation">Quasiquotation</a></li>
+    <li><a href="#macros">Macros</a></li>
+  </ul>
+  <li><a href="#walkthrough-video">Walkthrough video</a></li>
+  <li><a href="#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="#quasiquotation-2">Quasiquotation</a></li>
+    <ul>
+      <li><a href="#q1-wwsd-quasiquote">Q1: WWSD: Quasiquote</a></li>
+    </ul>
+    <li><a href="#macros-2">Macros</a></li>
+    <ul>
+      <li><a href="#q2-if-macro-scheme">Q2: If Macro Scheme</a></li>
+      <li><a href="#q3-or-macro">Q3: Or Macro</a></li>
+      <li><a href="#q4-replicate">Q4: Replicate</a></li>
+      <li><a href="#q5-list-comprehensions">Q5: List Comprehensions</a></li>
+      <li><a href="#q6-list-comprehension-macro">Q6: List Comprehension Macro</a></li>
+    </ul>
+    <li><a href="#submit">Submit</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

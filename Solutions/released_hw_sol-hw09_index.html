@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/hw.css">
+
+
+    <title>
+Homework 9 Solutions | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Homework 9 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="hw09.zip" class="label label-outline">hw09.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+<p>You can find the solutions in <a href="hw09.scm">hw09.scm</a>.</p>
+
+    
+<p>Macros are a method of programming that allow programmers to treat expressions as data and create procedures of a language using the language itself. Macros open the door to many clever tricks of creating "shortcuts", and with Scheme, allow us to build our own special forms other than the ones that are built in.</p>
+
+
+<h1 id="required-questions">Required Questions</h1>
+
+
+<br />
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+<h2 id="getting-started-videos">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZdiDfC9wv_3HTYtluJuEB7J"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZdiDfC9wv_3HTYtluJuEB7J'> YouTube link </a></p>
+</div>
+
+
+<h2 id="interpreters">Interpreters</h2>
+
+
+<h3 id="q1-wwsd-eval-and-apply">Q1: WWSD: Eval and Apply</h3>
+
+
+<p>How many calls to <code>scheme_eval</code> and <code>scheme_apply</code> would it take to evaluate each of these
+Scheme expressions?</p>
+
+<blockquote><p>You may find the <a href="https://cs61a.org/study-guide/interpreters/#counting-calls">Interpreters Study Guide</a> helpful.</p>
+
+<p>Use Ok to test your knowledge by writing the number of calls needed
+to evaluate each expression:</p>
+
+<pre><code>python3 ok &#x2d;q wwsd&#x2d;eval_apply &#x2d;u</code></pre></blockquote>
+
+</question>
+
+<pre><code>scm&gt; (+ 2 4 6 8) ; number of calls to scheme_eval
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x36;</div>
+scm&gt; (+ 2 4 6 8) ; number of calls to scheme_apply
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x31;</div>
+scm&gt; (+ 2 (* 4 (&#x2d; 6 8))) ; number of calls to scheme_eval
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x31;&#x30;</div>
+scm&gt; (+ 2 (* 4 (&#x2d; 6 8))) ; number of calls to scheme_apply
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x33;</div>
+scm&gt; (if #f (+ 2 3) (+ 1 2)) ; number of calls to scheme_eval
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x35;</div>
+scm&gt; (if #f (+ 2 3) (+ 1 2)) ; number of calls to scheme_apply
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x31;</div>
+scm&gt; (define (cube a) (* a a a)) ; number of calls to scheme_eval
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x31;</div>
+scm&gt; (define (cube a) (* a a a)) ; number of calls to scheme_apply
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x30;</div>
+scm&gt; (cube 3) ; number of calls to scheme_eval
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x38;</div>
+scm&gt; (cube 3) ; number of calls to scheme_apply
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x32;</div></code></pre>
+        <button id='prompt-1' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+
+
+<h2 id="macros">Macros</h2>
+
+
+<h3 id="q2-when-macro">Q2: When Macro</h3>
+
+
+<p>Using macros, define a new special form, <code>when</code>, that has the
+following structure:</p>
+
+<pre><code class="scheme">(when &lt;condition&gt;
+      (&lt;expr1&gt; &lt;expr2&gt; &lt;expr3&gt; ...))</code></pre>
+
+
+
+<p>If the condition is not false (a truthy expression), all the subsequent
+operands are evaluated in order and the value of the last expression is
+returned. Otherwise, the entire <code>when</code> expression evaluates to
+<code>okay</code>.</p>
+
+<blockquote><p>Hint: you may find the <a href="https://cs61a.org/articles/scheme-spec/#begin">begin</a> form useful.</p></blockquote>
+
+<pre><code class="scheme">scm&gt; (when (= 1 0) ((/ 1 0) &#x27;error))
+okay
+
+scm&gt; (when (= 1 1) ((print 6) (print 1) &#x27;a))
+6
+1
+a</code></pre>
+
+
+
+<solution>
+
+<pre><code class="scheme">(define&#x2d;macro (when condition exprs)
+<div class="sol-highlight">  `(if ,condition ,(cons &#x27;begin exprs) &#x27;okay)</div>  )</code></pre>
+
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q when-macro<button id="copy-code-python3ok-qwhen-macro" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qwhen-macro").onclick = () => copyCode('python3 ok -q when-macro', "copy-code-python3ok-qwhen-macro");
+        </script>
+        <br/>
+
+
+<h3 id="q3-switch">Q3: Switch</h3>
+
+
+<p>Define the macro <code>switch</code>, which takes in an expression <code>expr</code> and a list of pairs, <code>cases</code>, where the first element of the pair
+is some <em>value</em> and the second element is a single expression. <code>switch</code> will evaluate the expression contained in the list
+of <code>cases</code> that corresponds to the value that <code>expr</code> evaluates to.</p>
+
+<pre><code class="scheme">scm&gt; (switch (+ 1 1) ((1 (print &#x27;a))
+                      (2 (print &#x27;b))
+                      (3 (print &#x27;c))))
+b</code></pre>
+
+
+
+<p>You may assume that the value <code>expr</code> evaluates to is always the first element of one of the pairs in <code>cases</code>. You can also assume that the first value of each pair in
+<code>cases</code> is a value.</p>
+
+<solution>
+
+<pre><code class="scheme">(define&#x2d;macro (switch expr cases)
+<div class="sol-highlight">	(cons &#x27;cond</div><div class="sol-highlight">		(map (lambda (case) (cons `(equal? ,expr (quote ,(car case))) (cdr case)))</div>    			cases))
+)</code></pre>
+
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q switch<button id="copy-code-python3ok-qswitch" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qswitch").onclick = () => copyCode('python3 ok -q switch', "copy-code-python3ok-qswitch");
+        </script>
+        <br/>
+
+
+<h1 id="exam-practice">Exam Practice</h1>
+
+
+<p>Homework assignments will also contain prior exam questions for you to try.
+These questions have no submission component; feel free to attempt them if you'd like some practice!</p>
+
+<p>Macros</p>
+
+<ol>
+  <li>Fall 2019 Final Q9: <a href="https://cs61a.org/exam/fa19/final/61a-fa19-final.pdf#page=10">Macro Lens</a></li>
+  <li>Summer 2019 Final Q10c: <a href="https://cs61a.org/exam/su19/final/61a-su19-final.pdf#page=10">Slice</a></li>
+  <li>Spring 2019 Final Q8: <a href="https://cs61a.org/exam/sp19/final/61a-sp19-final.pdf#page=8">Macros</a></li>
+</ol>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="#getting-started-videos">Getting Started Videos</a></li>
+    <li><a href="#interpreters">Interpreters</a></li>
+    <ul>
+      <li><a href="#q1-wwsd-eval-and-apply">Q1: WWSD: Eval and Apply</a></li>
+    </ul>
+    <li><a href="#macros">Macros</a></li>
+    <ul>
+      <li><a href="#q2-when-macro">Q2: When Macro</a></li>
+      <li><a href="#q3-switch">Q3: Switch</a></li>
+    </ul>
+  </ul>
+  <li><a href="#exam-practice">Exam Practice</a></li>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

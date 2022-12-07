@@ -1,0 +1,1251 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Justin Yokota" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/assets/js/hl.js"></script>
+    <script src="/assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="/assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mono-blue.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="/assets/css/disc.css">
+
+
+    <title>
+Discussion 13 | CS 61A Fall 2022
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Calendar
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/weekly">Weekly Schedule</a></li>
+                <li><a href="/office-hours">Office Hours</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/lecturezoom">Lecture Zoom Link</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+                <li><a href="https://oh.cs61a.org">Office Hours Queue</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="/instructor">Instructors</a></li>
+                <li><a href="/TAs">TAs</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/academic-interns">Academic Interns</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/accommodation-appts">Book an Accommodations Appointment</a></li>
+                <li><a href="/resources/">Topical Resources + Past Exams</a></li>
+                <li><a href="https://tutor.cs61a.org/">PythonTutor</a></li>
+                <li><a href="https://code.cs61a.org/">Code</a></li>
+                <li><a href="https://edstem.org/us/courses/25379/discussion/" target="_blank">Ed</a></li>
+                <li><a href="/articles/campus-res/">Department/Campus Resources</a></li>
+              </ul>
+            </li>
+            <li><a href="/articles/about">Syllabus</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" id="toggle-mode-cb">
+                <span class="slider round"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 13: Final Review
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc13.pdf" class="label label-outline">disc13.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<div class="alert storable-login-status"></div>
+
+This is an online worksheet that you can work on during discussions.
+Your work is not graded and you do not need to submit anything.
+
+
+    
+<h1 id="final-review">Final Review</h1>
+
+
+<p>The following worksheet is final review! It covers various topics that have been seen throughout the semester.</p>
+
+<p>Your TA will not be able to get to all of the problems on this worksheet
+ so feel free to work through the remaining problems on your own. Bring any questions you have to office hours
+ or post them on piazza.</p>
+
+<p>Good luck on the final and congratulations on making it to the last discussion of CS61A!</p>
+
+
+<h2 id="recursion">Recursion</h2>
+
+
+
+<h3 id="q1-paths-list">Q1: Paths List</h3>
+
+
+<p>(Adapted from Fall 2013) Fill in the blanks in the implementation of <code>paths</code>, which
+takes as input two positive integers <code>x</code> and <code>y</code>. It returns a list of paths, where
+each path is a list containing steps to reach <code>y</code> from <code>x</code> by repeated incrementing or
+doubling. For instance, we can reach 9 from 3 by incrementing to 4, doubling to 8,
+then incrementing again to 9, so one path is [3, 4, 8, 9].</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="path-arithmetic-input" style="height:450px;"></div>
+            <a href="javascript:void" id="modal-link-path-arithmetic-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-path-arithmetic-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-path-arithmetic-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def paths(x, y):\n    &quot;&quot;&quot;Return a list of ways to reach y from x by repeated\n    incrementing or doubling.\n    &gt;&gt;&gt; paths(3, 5)\n    [[3, 4, 5]]\n    &gt;&gt;&gt; sorted(paths(3, 6))\n    [[3, 4, 5, 6], [3, 6]]\n    &gt;&gt;&gt; sorted(paths(3, 9))\n    [[3, 4, 5, 6, 7, 8, 9], [3, 4, 8, 9], [3, 6, 7, 8, 9]]\n    &gt;&gt;&gt; paths(3, 3) # No calls is a valid path\n    [[3]]\n    &gt;&gt;&gt; paths(5, 3) # There is no valid path from x to y\n    []\n    &quot;&quot;&quot;\n    if ____________________________________\n        return ____________________________________\n    elif ____________________________________\n        return ____________________________________\n    else:\n        a = ____________________________________\n        b = ____________________________________\n        return ____________________________________\n\n', "python", "path-arithmetic-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def paths(x, y):
+    &quot;&quot;&quot;Return a list of ways to reach y from x by repeated
+    incrementing or doubling.
+    &gt;&gt;&gt; paths(3, 5)
+    [[3, 4, 5]]
+    &gt;&gt;&gt; sorted(paths(3, 6))
+    [[3, 4, 5, 6], [3, 6]]
+    &gt;&gt;&gt; sorted(paths(3, 9))
+    [[3, 4, 5, 6, 7, 8, 9], [3, 4, 8, 9], [3, 6, 7, 8, 9]]
+    &gt;&gt;&gt; paths(3, 3) # No calls is a valid path
+    [[3]]
+    &gt;&gt;&gt; paths(5, 3) # There is no valid path from x to y
+    []
+    &quot;&quot;&quot;
+    if x &gt; y:
+        return []
+    elif x == y:
+        return [[x]]
+    else:
+        a = paths(x + 1, y)
+        b = paths(x * 2, y)
+        return [[x] + subpath for subpath in a + b]
+</code></pre>
+
+            </div>
+        
+
+
+<h2 id="mutation">Mutation</h2>
+
+
+
+<h3 id="q2-reverse">Q2: Reverse</h3>
+
+
+<p>Write a function that reverses the given list. Be sure to mutate the original list.
+This is practice, so don't use the built-in <code>reverse</code> function!</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="reverse-input" style="height:360px;"></div>
+            <a href="javascript:void" id="modal-link-reverse-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-reverse-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-reverse-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def reverse(lst):\n    &quot;&quot;&quot;Reverses lst using mutation.\n\n    &gt;&gt;&gt; original_list = [5, &#x2d;1, 29, 0]\n    &gt;&gt;&gt; reverse(original_list)\n    &gt;&gt;&gt; original_list\n    [0, 29, &#x2d;1, 5]\n    &gt;&gt;&gt; odd_list = [42, 72, &#x2d;8]\n    &gt;&gt;&gt; reverse(odd_list)\n    &gt;&gt;&gt; odd_list\n    [&#x2d;8, 72, 42]\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "reverse-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def reverse(lst):
+    &quot;&quot;&quot;Reverses lst using mutation.
+
+    &gt;&gt;&gt; original_list = [5, &#x2d;1, 29, 0]
+    &gt;&gt;&gt; reverse(original_list)
+    &gt;&gt;&gt; original_list
+    [0, 29, &#x2d;1, 5]
+    &gt;&gt;&gt; odd_list = [42, 72, &#x2d;8]
+    &gt;&gt;&gt; reverse(odd_list)
+    &gt;&gt;&gt; odd_list
+    [&#x2d;8, 72, 42]
+    &quot;&quot;&quot;
+    # iterative solution
+    midpoint = len(lst) // 2
+    last = len(lst) &#x2d; 1
+    for i in range(midpoint):
+        lst[i], lst[last &#x2d; i] = lst[last &#x2d; i], lst[i]
+</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+
+<h2 id="trees">Trees</h2>
+
+
+
+<h3 id="q3-widest-level">Q3: Widest Level</h3>
+
+
+<p>Write a function that takes a <code>Tree</code> object and returns the
+elements at the depth with the most elements.</p>
+
+<p>In this problem, you may find it helpful to use the second optional argument to
+<code>sum</code>, which provides a starting value. All items in the sequence to be
+summed will be concatenated to the starting value. By default, start will
+default to 0, which allows you to sum a sequence of numbers. We provide an
+example of sum starting with a list, which allows you to concatenate items in a
+list.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="widest-level-input" style="height:324px;"></div>
+            <a href="javascript:void" id="modal-link-widest-level-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-widest-level-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-widest-level-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def widest_level(t):\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; sum([[1], [2]], [])\n    [1, 2]\n    &gt;&gt;&gt; t = Tree(3, [Tree(1, [Tree(1), Tree(5)]),\n    ...              Tree(4, [Tree(9, [Tree(2)])])])\n    &gt;&gt;&gt; widest_level(t)\n    [1, 5, 9]\n    &quot;&quot;&quot;\n    levels = []\n    x = [t]\n    while _____________:\n         _____________\n         __________ = sum(_______________________________, [])\n    return max(levels, key=_________________________________)\n\n', "python", "widest-level-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def widest_level(t):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; sum([[1], [2]], [])
+    [1, 2]
+    &gt;&gt;&gt; t = Tree(3, [Tree(1, [Tree(1), Tree(5)]),
+    ...              Tree(4, [Tree(9, [Tree(2)])])])
+    &gt;&gt;&gt; widest_level(t)
+    [1, 5, 9]
+    &quot;&quot;&quot;
+    levels = []
+    x = [t]
+    while x:
+        levels.append([t.label for t in x])
+        x = sum([t.branches for t in x], [])
+    return max(levels, key=len)
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+
+<pre><code>I would definitely let students know about summing lists with the `sum` function and a default value along with reminding them about the key argument in the `max` function. Before throwing students into the function since it is conceptually hard, you could give them some conceptual starting point to spend less time on it.
+
+**Main Idea** we&#x27;ll traverse each level of the tree and keep track of the
+elements of the levels. After we&#x27;re done, we return the level with the most
+items.
+
+Here, `x` keeps track of the trees in the current level. To get the next
+level of trees, we take all the branches from all the trees in the current
+level. The special `sum` call is needed to make sure we get a list of
+trees, instead of a list of branches (since branches are a list of trees
+themselves).
+
+Finally, we use `max` with a key to select the list with the longest
+length from our list of levels.</code></pre>
+
+</div>
+
+
+<h3 id="q4-in-order-traversal">Q4: In-order traversal</h3>
+
+
+<p>Write a function that returns a generator that generates an "in-order" traversal, in which we
+yield the value of every node in order from left to right, assuming that each node has either 0 or 2 branches.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="in_order_traversal-input" style="height:486px;"></div>
+            <a href="javascript:void" id="modal-link-in_order_traversal-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-in_order_traversal-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-in_order_traversal-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def in_order_traversal(t):\n    &quot;&quot;&quot;\n    Generator function that generates an &quot;in&#x2d;order&quot; traversal, in which we\n    yield the value of every node in order from left to right, assuming that each node has either 0 or 2 branches.\n\n    For example, take the following tree t:\n            1\n        2       3\n    4     5\n         6  7\n\n    We have the in&#x2d;order&#x2d;traversal 4, 2, 6, 5, 7, 1, 3\n\n    &gt;&gt;&gt; t = Tree(1, [Tree(2, [Tree(4), Tree(5, [Tree(6), Tree(7)])]), Tree(3)])\n    &gt;&gt;&gt; list(in_order_traversal(t))\n    [4, 2, 6, 5, 7, 1, 3]\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "in_order_traversal-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def in_order_traversal(t):
+    &quot;&quot;&quot;
+    Generator function that generates an &quot;in&#x2d;order&quot; traversal, in which we
+    yield the value of every node in order from left to right, assuming that each node has either 0 or 2 branches.
+
+    For example, take the following tree t:
+            1
+        2       3
+    4     5
+         6  7
+
+    We have the in&#x2d;order&#x2d;traversal 4, 2, 6, 5, 7, 1, 3
+
+    &gt;&gt;&gt; t = Tree(1, [Tree(2, [Tree(4), Tree(5, [Tree(6), Tree(7)])]), Tree(3)])
+    &gt;&gt;&gt; list(in_order_traversal(t))
+    [4, 2, 6, 5, 7, 1, 3]
+    &quot;&quot;&quot;
+    if t.is_leaf():
+        yield t.label
+    else:
+        left, right = t.branches
+        yield from in_order_traversal(left)
+        yield t.label
+        yield from in_order_traversal(right)
+</code></pre>
+
+            </div>
+        
+
+<!-- for lab
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q in_order_traversal<button id="copy-code-python3ok-qin_order_traversal" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qin_order_traversal").onclick = () => copyCode('python3 ok -q in_order_traversal', "copy-code-python3ok-qin_order_traversal");
+        </script>
+        <br/>
+
+<attach-py>
+
+<p>def in<em>order</em>traversal(t):</p>
+
+<pre><code>&quot;&quot;&quot;
+Generator function that generates an &quot;in&#x2d;order&quot; traversal, in which we
+yield the value of every node in order from left to right, assuming that each node has either 0 or 2 branches.
+
+For example, take the following tree t:
+        1
+    2       3
+4     5
+     6  7
+
+We have the in&#x2d;order&#x2d;traversal 4, 2, 6, 5, 7, 1, 3
+
+&gt;&gt;&gt; t = Tree(1, [Tree(2, [Tree(4), Tree(5, [Tree(6), Tree(7)])]), Tree(3)])
+&gt;&gt;&gt; list(in_order_traversal(t))
+[4, 2, 6, 5, 7, 1, 3]
+&quot;&quot;&quot;
+<div class="sol-highlight">if t.is_leaf():
+    yield t.label
+else:
+    left, right = t.branches
+    yield from in_order_traversal(left)
+    yield t.label
+    yield from in_order_traversal(right)</div></code></pre>
+
+</attach-py>
+
+<attach-py location=epilogue>
+class Tree:
+
+<pre><code>&quot;&quot;&quot;
+&gt;&gt;&gt; t = Tree(3, [Tree(2, [Tree(5)]), Tree(4)])
+&gt;&gt;&gt; t.label
+3
+&gt;&gt;&gt; t.branches[0].label
+2
+&gt;&gt;&gt; t.branches[1].is_leaf()
+True
+&quot;&quot;&quot;
+def __init__(self, label, branches=[]):
+    for b in branches:
+        assert isinstance(b, Tree)
+    self.label = label
+    self.branches = list(branches)
+
+def is_leaf(self):
+    return not self.branches
+
+def __repr__(self):
+    if self.branches:
+        branch_str = &#x27;, &#x27; + repr(self.branches)
+    else:
+        branch_str = &#x27;&#x27;
+    return &#x27;Tree({0}{1})&#x27;.format(self.label, branch_str)
+
+def __str__(self):
+    def print_tree(t, indent=0):
+        tree_str = &#x27;  &#x27; * indent + str(t.label) + &quot;\n&quot;
+        for b in t.branches:
+            tree_str += print_tree(b, indent + 1)
+        return tree_str
+    return print_tree(self).rstrip()</code></pre>
+
+</attach-py>
+
+<p>--></p>
+
+
+<h2 id="linked-lists">Linked Lists</h2>
+
+
+
+<h3 id="q5-deep-map">Q5: Deep Map</h3>
+
+
+<p>Implement <code>deep_map</code>, which takes a function <code>f</code> and a <code>link</code>. It returns a
+<em>new</em> linked list with the same structure as <code>link</code>, but with <code>f</code> applied to any
+element within <code>link</code> or any <code>Link</code> instance contained in <code>link</code>.</p>
+
+<p>The <code>deep_map</code> function should recursively apply <code>fn</code> to each of that
+<code>Link</code>'s elements rather than to that <code>Link</code> itself.</p>
+
+<blockquote><p><em>Hint</em>: You may find the built-in <code>isinstance</code> function for checking if 
+something is an instance of an object. For example:</p>
+
+<pre><code>&gt;&gt;&gt; isinstance([1, 2, 3], list)
+True
+&gt;&gt;&gt; isinstance(Link(1), Link)
+True
+&gt;&gt;&gt; isinstance(Link(1, Link(2)), list)
+False</code></pre></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="deep-map-input" style="height:414px;"></div>
+            <a href="javascript:void" id="modal-link-deep-map-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-deep-map-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-deep-map-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def deep_map(f, link):\n    &quot;&quot;&quot;Return a Link with the same structure as link but with fn mapped over\n    its elements. If an element is an instance of a linked list, recursively\n    apply f inside that linked list as well.\n\n    &gt;&gt;&gt; s = Link(1, Link(Link(2, Link(3)), Link(4)))\n    &gt;&gt;&gt; print(deep_map(lambda x: x * x, s))\n    &lt;1 &lt;4 9&gt; 16&gt;\n    &gt;&gt;&gt; print(s) # unchanged\n    &lt;1 &lt;2 3&gt; 4&gt;\n    &gt;&gt;&gt; print(deep_map(lambda x: 2 * x, Link(s, Link(Link(Link(5))))))\n    &lt;&lt;2 &lt;4 6&gt; 8&gt; &lt;&lt;10&gt;&gt;&gt;\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "deep-map-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def deep_map(f, link):
+    &quot;&quot;&quot;Return a Link with the same structure as link but with fn mapped over
+    its elements. If an element is an instance of a linked list, recursively
+    apply f inside that linked list as well.
+
+    &gt;&gt;&gt; s = Link(1, Link(Link(2, Link(3)), Link(4)))
+    &gt;&gt;&gt; print(deep_map(lambda x: x * x, s))
+    &lt;1 &lt;4 9&gt; 16&gt;
+    &gt;&gt;&gt; print(s) # unchanged
+    &lt;1 &lt;2 3&gt; 4&gt;
+    &gt;&gt;&gt; print(deep_map(lambda x: 2 * x, Link(s, Link(Link(Link(5))))))
+    &lt;&lt;2 &lt;4 6&gt; 8&gt; &lt;&lt;10&gt;&gt;&gt;
+    &quot;&quot;&quot;
+    if link is Link.empty:
+        return link
+    if isinstance(link.first, Link):
+        first = deep_map(f, link.first)
+    else:
+        first = f(link.first)
+    return Link(first, deep_map(f, link.rest))
+</code></pre>
+
+            </div>
+        
+
+<!-- for lab
+<div class="sol-highlight">
+
+<pre><code>def deep_map(f, link):
+    &quot;&quot;&quot;Return a Link with the same structure as link but with fn mapped over
+    its elements. If an element is an instance of a linked list, recursively
+    apply f inside that linked list as well.
+
+    &gt;&gt;&gt; s = Link(1, Link(Link(2, Link(3)), Link(4)))
+    &gt;&gt;&gt; print(deep_map(lambda x: x * x, s))
+    &lt;1 &lt;4 9&gt; 16&gt;
+    &gt;&gt;&gt; print(s) # unchanged
+    &lt;1 &lt;2 3&gt; 4&gt;
+    &gt;&gt;&gt; print(deep_map(lambda x: 2 * x, Link(s, Link(Link(Link(5))))))
+    &lt;&lt;2 &lt;4 6&gt; 8&gt; &lt;&lt;10&gt;&gt;&gt;
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if link is Link.empty:
+        return link
+    if isinstance(link.first, Link):
+        first = deep_map(f, link.first)
+    else:
+        first = f(link.first)
+    return Link(first, deep_map(f, link.rest))</div></code></pre>
+
+</div>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q deep_map<button id="copy-code-python3ok-qdeep_map" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdeep_map").onclick = () => copyCode('python3 ok -q deep_map', "copy-code-python3ok-qdeep_map");
+        </script>
+        <br/>
+
+<attach-py>
+def deep<em>map(f, link):
+
+<pre><code>&quot;&quot;&quot;Return a Link with the same structure as link but with fn mapped over
+its elements. If an element is an instance of a linked list, recursively
+apply f inside that linked list as well.
+
+&gt;&gt;&gt; s = Link(1, Link(Link(2, Link(3)), Link(4)))
+&gt;&gt;&gt; print(deep_map(lambda x: x * x, s))
+&lt;1 &lt;4 9&gt; 16&gt;
+&gt;&gt;&gt; print(s) # unchanged
+&lt;1 &lt;2 3&gt; 4&gt;
+&gt;&gt;&gt; print(deep_map(lambda x: 2 * x, Link(s, Link(Link(Link(5))))))
+&lt;&lt;2 &lt;4 6&gt; 8&gt; &lt;&lt;10&gt;&gt;&gt;
+&quot;&quot;&quot;
+<div class="sol-highlight">if link is Link.empty:
+    return link
+if isinstance(link.first, Link):
+    first = deep_map(f, link.first)
+else:
+    first = f(link.first)
+return Link(first, deep_map(f, link.rest))</div></code></pre>
+
+</attach-py>
+
+<attach-py location=epilogue>
+class Link:
+
+<pre><code>&quot;&quot;&quot;A linked list.
+
+&gt;&gt;&gt; s = Link(1)
+&gt;&gt;&gt; s.first
+1
+&gt;&gt;&gt; s.rest is Link.empty
+True
+&gt;&gt;&gt; s = Link(2, Link(3, Link(4)))
+&gt;&gt;&gt; s.first = 5
+&gt;&gt;&gt; s.rest.first = 6
+&gt;&gt;&gt; s.rest.rest = Link.empty
+&gt;&gt;&gt; s                                    # Displays the contents of repr(s)
+Link(5, Link(6))
+&gt;&gt;&gt; s.rest = Link(7, Link(Link(8, Link(9))))
+&gt;&gt;&gt; s
+Link(5, Link(7, Link(Link(8, Link(9)))))
+&gt;&gt;&gt; print(s)                             # Prints str(s)
+&lt;5 7 &lt;8 9&gt;&gt;
+&quot;&quot;&quot;
+empty = ()
+
+def __init__(self, first, rest=empty):
+    assert rest is Link.empty or isinstance(rest, Link)
+    self.first = first
+    self.rest = rest
+
+def __repr__(self):
+    if self.rest is not Link.empty:
+        rest_repr = &#x27;, &#x27; + repr(self.rest)
+    else:
+        rest_repr = &#x27;&#x27;
+    return &#x27;Link(&#x27; + repr(self.first) + rest_repr + &#x27;)&#x27;
+
+def __str__(self):
+    string = &#x27;&lt;&#x27;
+    while self.rest is not Link.empty:
+        string += str(self.first) + &#x27; &#x27;
+        self = self.rest
+    return string + str(self.first) + &#x27;&gt;&#x27;</code></pre>
+
+</attach-py>
+
+<p>--></p>
+
+
+<h2 id="generators">Generators</h2>
+
+
+
+<h3 id="q6-repeated">Q6: Repeated</h3>
+
+
+<p>Write a generator function that yields functions that are repeated applications of
+a one-argument function <code>f</code>. The first function yielded should apply <code>f</code> 0 times (the
+identity function), the second function yielded should apply <code>f</code> once, etc.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="repeated-input" style="height:432px;"></div>
+            <a href="javascript:void" id="modal-link-repeated-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-repeated-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-repeated-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def repeated(f):\n    &quot;&quot;&quot;\n    &gt;&gt;&gt; double = lambda x: 2 * x\n    &gt;&gt;&gt; funcs = repeated(double)\n    &gt;&gt;&gt; identity = next(funcs)\n    &gt;&gt;&gt; double = next(funcs)\n    &gt;&gt;&gt; quad = next(funcs)\n    &gt;&gt;&gt; oct = next(funcs)\n    &gt;&gt;&gt; quad(1)\n    4\n    &gt;&gt;&gt; oct(1)\n    8\n    &gt;&gt;&gt; [g(1) for _, g in\n    ...  zip(range(5), repeated(lambda x: 2 * x))]\n    [1, 2, 4, 8, 16]\n    &quot;&quot;&quot;\n\n    g = ____________________________________________\n    while True:\n        ____________________________________________ \n        ____________________________________________\n\n', "python", "repeated-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def repeated(f):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; double = lambda x: 2 * x
+    &gt;&gt;&gt; funcs = repeated(double)
+    &gt;&gt;&gt; identity = next(funcs)
+    &gt;&gt;&gt; double = next(funcs)
+    &gt;&gt;&gt; quad = next(funcs)
+    &gt;&gt;&gt; oct = next(funcs)
+    &gt;&gt;&gt; quad(1)
+    4
+    &gt;&gt;&gt; oct(1)
+    8
+    &gt;&gt;&gt; [g(1) for _, g in
+    ...  zip(range(5), repeated(lambda x: 2 * x))]
+    [1, 2, 4, 8, 16]
+    &quot;&quot;&quot;
+
+    g = lambda x : x
+    while True:
+        yield g
+        g = (lambda g: lambda x: f(g(x)))(g)
+</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+
+<h2 id="scheme">Scheme</h2>
+
+
+
+<h3 id="q7-group-by-non-decreasing">Q7: Group by Non-Decreasing</h3>
+
+
+<p>Define a function <code>nondecreaselist</code>, which takes in a scheme list of numbers and outputs a list of lists, which overall has the same numbers in the same order, but grouped into lists that are non-decreasing.</p>
+
+<p>For example, if the input is a stream containing elements</p>
+
+<pre><code>(1 2 3 4 1 2 3 4 1 1 1 2 1 1 0 4 3 2 1)</code></pre>
+
+<p>the output should contain elements</p>
+
+<pre><code>((1 2 3 4) (1 2 3 4) (1 1 1 2) (1 1) (0 4) (3) (2) (1))</code></pre>
+
+<p></em><em>Note:</em>_ The skeleton code is just a suggestion; feel free to use your own structure if you prefer.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="nondecreaselist-input" style="height:342px;"></div>
+            <a href="javascript:void" id="modal-link-nondecreaselist-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-nondecreaselist-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-nondecreaselist-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('(define (nondecreaselist s)\n\n    (if _____________________________\n        _____________________________\n        (let ((rest _____________________________ ))\n            (if _____________________________\n                (cons _____________________________ rest)\n                (cons _____________________________ (cdr rest))\n            )\n        )\n    )\n)\n\n(expect (nondecreaselist &#x27;(1 2 3 1 2 3)) ((1 2 3) (1 2 3)))\n\n(expect (nondecreaselist &#x27;(1 2 3 4 1 2 3 4 1 1 1 2 1 1 0 4 3 2 1))\n        ((1 2 3 4) (1 2 3 4) (1 1 1 2) (1 1) (0 4) (3) (2) (1)))\n', "scheme", "nondecreaselist-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define (nondecreaselist s)
+
+    (if (null? s)
+        nil
+        (let ((rest (nondecreaselist (cdr s)) ))
+            (if (or (null? (cdr s)) (&gt; (car s) (car (cdr s))))
+                (cons (list (car s)) rest)
+                (cons (cons (car s) (car rest)) (cdr rest))
+            )
+        )
+    )
+)
+
+(expect (nondecreaselist &#x27;(1 2 3 1 2 3)) ((1 2 3) (1 2 3)))
+
+(expect (nondecreaselist &#x27;(1 2 3 4 1 2 3 4 1 1 1 2 1 1 0 4 3 2 1))
+        ((1 2 3 4) (1 2 3 4) (1 1 1 2) (1 1) (0 4) (3) (2) (1)))</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+
+<h2 id="programs-as-data">Programs as Data</h2>
+
+
+
+<h3 id="q8-or-with-multiple-args">Q8: Or with Multiple Args</h3>
+
+
+<p>Recall <code>make&#x2d;or</code> from Discussion 11. Implement <code>make&#x2d;long&#x2d;or</code>,  which returns, as a list, a program that takes in any number of expressions and <code>or</code>'s them together (applying short-circuiting rules). This procedure should do this without using the <code>or</code> special form. Unlike the <code>make&#x2d;or</code> procedure from Discussion 11, the arguments will be passed in as a list named <code>args</code>.</p>
+
+<p>The behavior of the <code>or</code>  procedure is specified by the following doctests:</p>
+
+<pre><code class="scheme">scm&gt; (define or&#x2d;program (make&#x2d;long&#x2d;or &#x27;((print &#x27;hello) (/ 1 0) 3 #f)))
+or&#x2d;program
+scm&gt; (eval or&#x2d;program)
+hello
+scm&gt; (eval (make&#x2d;long&#x2d;or &#x27;((= 1 0) #f (+ 1 2) (print &#x27;goodbye))))
+3
+scm&gt; (eval (make&#x2d;long&#x2d;or &#x27;((&gt; 3 1))))
+#t
+scm&gt; (eval (make&#x2d;long&#x2d;or &#x27;()))
+#f</code></pre>
+
+
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="make-long-or-input" style="height:198px;"></div>
+            <a href="javascript:void" id="modal-link-make-long-or-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-make-long-or-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-make-long-or-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor("(define (make&#x2d;long&#x2d;or args)\n    'YOUR-CODE-HERE\n)\n", "scheme", "make-long-or-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>(define (make&#x2d;long&#x2d;or args)
+    (cond 
+        ((null? args) #f)
+        (else 
+            `(let ((v1 ,(car args)))
+                (if v1 v1 ,(make&#x2d;long&#x2d;or (cdr args))))
+        )
+    )
+)</code></pre>
+
+            </div>
+        
+
+
+<h2 id="sql">SQL</h2>
+
+
+<p>The following questions will refer to two tables:</p>
+
+<ul>
+  <li><strong>records</strong>: a table that stores information about the employees at a small company</li>
+  <li><strong>meetings</strong>: a table which records the divisional meetings at the company</li>
+</ul>
+
+<p style="text-align: center;">records</p>
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th><strong>Name</strong></th>
+    <th><strong>Division</strong></th>
+    <th><strong>Title</strong></th>
+    <th><strong>Salary</strong></th>
+    <th><strong>Supervisor</strong></th>
+  </tr>
+  <tr>
+    <td>Ben Bitdiddle</td>
+    <td>Computer</td>
+    <td>Wizard</td>
+    <td>60000</td>
+    <td>Oliver Warbucks</td>
+  </tr>
+  <tr>
+    <td>Alyssa P Hacker</td>
+    <td>Computer</td>
+    <td>Programmer</td>
+    <td>40000</td>
+    <td>Ben Bitdiddle</td>
+  </tr>
+  <tr>
+    <td>Cy D Fect</td>
+    <td>Computer</td>
+    <td>Programmer</td>
+    <td>35000</td>
+    <td>Ben Bitdiddle</td>
+  </tr>
+  <tr>
+    <td>Lem E Tweakit</td>
+    <td>Computer</td>
+    <td>Technician</td>
+    <td>25000</td>
+    <td>Ben Bitdiddle</td>
+  </tr>
+  <tr>
+    <td>Louis Reasoner</td>
+    <td>Computer</td>
+    <td>Programmer Trainee</td>
+    <td>30000</td>
+    <td>Alyssa P Hacker</td>
+  </tr>
+  <tr>
+    <td>Oliver Warbucks</td>
+    <td>Administration</td>
+    <td>Big Wheel</td>
+    <td>150000</td>
+    <td>Oliver Warbucks</td>
+  </tr>
+  <tr>
+    <td>Eben Scrooge</td>
+    <td>Accounting</td>
+    <td>Chief Accountant</td>
+    <td>75000</td>
+    <td>Oliver Warbucks</td>
+  </tr>
+  <tr>
+    <td>Robert Cratchet</td>
+    <td>Accounting</td>
+    <td>Scrivener</td>
+    <td>18000</td>
+    <td>Eben Scrooge</td>
+  </tr>
+  <tr>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+<p style="text-align: center;">meetings</p>
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th><strong>Division</strong></th>
+    <th><strong>Day</strong></th>
+    <th><strong>Time</strong></th>
+  </tr>
+  <tr>
+    <td>Accounting</td>
+    <td>Monday</td>
+    <td>9am</td>
+  </tr>
+  <tr>
+    <td>Computer</td>
+    <td>Wednesday</td>
+    <td>4pm</td>
+  </tr>
+  <tr>
+    <td>Administration</td>
+    <td>Monday</td>
+    <td>11am</td>
+  </tr>
+  <tr>
+    <td>Administration</td>
+    <td>Wednesday</td>
+    <td>4pm</td>
+  </tr>
+  <tr>
+    <td>...</td>
+    <td>...</td>
+    <td>...</td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+<h3 id="q9-oliver-employee-meetings">Q9: Oliver Employee Meetings</h3>
+
+
+<p>Write a query that outputs the meeting days and times of all employees directly
+supervised by Oliver Warbucks.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="question-4 lang=sql-input" style="height:108px;"></div>
+            <a href="javascript:void" id="modal-link-question-4 lang=sql-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-question-4 lang=sql-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-question-4 lang=sql-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('SELECT &quot;YOUR CODE HERE&quot;\n\n\n', "scheme", "question-4 lang=sql-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>SELECT m.day, m.time FROM records AS r, meetings AS m WHERE r.division = m.division 
+AND r.supervisor = &quot;Oliver Warbucks&quot;;
+</code></pre>
+
+
+            </div>
+        
+<!-- 
+<div class="sol-highlight">
+<strong>Solution</strong>: SELECT m.day, m.time FROM records AS r, meetings AS m
+WHERE r.division = m.division AND r.supervisor = "Oliver Warbucks";
+</div> -->
+
+<h3 id="q10-different-division">Q10: Different Division</h3>
+
+
+<p>Write a query that outputs the names of employees whose supervisor is in a different
+division.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="question-8 lang=sql-input" style="height:90px;"></div>
+            <a href="javascript:void" id="modal-link-question-8 lang=sql-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-question-8 lang=sql-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-question-8 lang=sql-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('SELECT &quot;YOUR CODE HERE&quot;\n\n\n', "scheme", "question-8 lang=sql-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>SELECT e.name FROM records AS e, records AS s WHERE e.supervisor = s.name AND e.division != s.division;
+</code></pre>
+
+
+            </div>
+        
+
+<!-- <div class="sol-highlight">
+<strong>Solution</strong>: SELECT e.name FROM records AS e, records AS s
+WHERE e.supervisor = s.name AND e.division != s.division;
+</div> -->
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="#final-review">Final Review</a></li>
+  <ul>
+    <li><a href="#recursion">Recursion</a></li>
+    <ul>
+      <li><a href="#q1-paths-list">Q1: Paths List</a></li>
+    </ul>
+    <li><a href="#mutation">Mutation</a></li>
+    <ul>
+      <li><a href="#q2-reverse">Q2: Reverse</a></li>
+    </ul>
+    <li><a href="#trees">Trees</a></li>
+    <ul>
+      <li><a href="#q3-widest-level">Q3: Widest Level</a></li>
+      <li><a href="#q4-in-order-traversal">Q4: In-order traversal</a></li>
+    </ul>
+    <li><a href="#linked-lists">Linked Lists</a></li>
+    <ul>
+      <li><a href="#q5-deep-map">Q5: Deep Map</a></li>
+    </ul>
+    <li><a href="#generators">Generators</a></li>
+    <ul>
+      <li><a href="#q6-repeated">Q6: Repeated</a></li>
+    </ul>
+    <li><a href="#scheme">Scheme</a></li>
+    <ul>
+      <li><a href="#q7-group-by-non-decreasing">Q7: Group by Non-Decreasing</a></li>
+    </ul>
+    <li><a href="#programs-as-data">Programs as Data</a></li>
+    <ul>
+      <li><a href="#q8-or-with-multiple-args">Q8: Or with Multiple Args</a></li>
+    </ul>
+    <li><a href="#sql">SQL</a></li>
+    <ul>
+      <li><a href="#q9-oliver-employee-meetings">Q9: Oliver Employee Meetings</a></li>
+      <li><a href="#q10-different-division">Q10: Different Division</a></li>
+    </ul>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="/assets/js/network_storage.js"></script>
+    <script src="/assets/js/storable.js"></script>
+    <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/copy-button.js"></script>
+    <script src="/assets/js/env-diagram.js"></script>
+    
+<script src="/assets/js/sketchy.js"></script>
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>
