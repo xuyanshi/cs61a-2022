@@ -76,5 +76,8 @@ ORDER BY item
 
 
 CREATE TABLE total_bandwidth AS
-SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+SELECT SUM(Mbs)
+FROM shopping_list AS s, stores AS st
+WHERE s.store=st.store
+;
 
