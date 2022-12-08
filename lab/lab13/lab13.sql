@@ -31,7 +31,10 @@ CREATE TABLE matchmaker AS
 
 
 CREATE TABLE sevens AS
-  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+  SELECT seven
+  FROM students AS s, numbers AS n
+  WHERE s.time=n.time AND s.number=7 AND n."7"="True"
+;
 
 
 CREATE TABLE average_prices AS
