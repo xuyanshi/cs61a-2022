@@ -25,4 +25,4 @@ I paused this course due to my busy work. ~~And I will complete all of it in in 
 
 ### Continue Date:   Wed Dec 7 2022
 I have to skip the Scheme project and some other things related to the Scheme because it's too difficult for me now.
-### Finish Date:   
+### Finish Date:   Thu Dec 8 2022
