@@ -59,20 +59,20 @@ GROUP BY item
 HAVING price = MIN(price)
 ;
 
-CREATE TABLE shopping_list AS
-SELECT category, store, item, price/rating AS pr
-FROM products AS p, lowest_prices AS l
-WHERE name=item
+CREATE TABLE shopping AS
+SELECT category, store, item, MSRP / rating AS pr
+FROM products AS p,
+     lowest_prices AS l
+WHERE name = item
+GROUP BY category
+HAVING MIN(pr) = pr
 ;
 
--- CREATE TABLE shopping_list AS
--- SELECT item,store
--- FROM lowest_prices AS l, products AS p
--- WHERE l.item=p.name
--- GROUP BY category
--- HAVING MIN(price/rating)=price/rating
--- ORDER BY item
--- ;
+CREATE TABLE shopping_list AS
+SELECT item,store
+FROM shopping
+ORDER BY item
+;
 
 
 CREATE TABLE total_bandwidth AS
