@@ -56,12 +56,23 @@ CREATE TABLE lowest_prices AS
 SELECT store, item, price
 FROM inventory
 GROUP BY item
-HAVING price=MIN(price)
+HAVING price = MIN(price)
 ;
 
-
 CREATE TABLE shopping_list AS
-SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+SELECT category, store, item, price/rating AS pr
+FROM products AS p, lowest_prices AS l
+WHERE name=item
+;
+
+-- CREATE TABLE shopping_list AS
+-- SELECT item,store
+-- FROM lowest_prices AS l, products AS p
+-- WHERE l.item=p.name
+-- GROUP BY category
+-- HAVING MIN(price/rating)=price/rating
+-- ORDER BY item
+-- ;
 
 
 CREATE TABLE total_bandwidth AS
