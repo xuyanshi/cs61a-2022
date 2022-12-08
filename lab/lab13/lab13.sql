@@ -53,7 +53,10 @@ GROUP BY category
 
 
 CREATE TABLE lowest_prices AS
-SELECT
+SELECT store, item, price
+FROM inventory
+GROUP BY item
+HAVING price=MIN(price)
 ;
 
 
