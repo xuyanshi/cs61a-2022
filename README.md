@@ -1,4 +1,4 @@
-# [CS 61A Fall 2022](https://cs61a.org)
+# [CS 61A Fall 2022](https://inst.eecs.berkeley.edu/~cs61a/fa22/)
 
 ![GitHub watchers](https://img.shields.io/github/watchers/xuyanshi/cs61a?style=social) 
 ![GitHub stars](https://img.shields.io/github/stars/xuyanshi/cs61a?style=social) 
