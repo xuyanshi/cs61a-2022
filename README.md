@@ -5,7 +5,7 @@
 ![GitHub forks](https://img.shields.io/github/forks/xuyanshi/cs61a?style=social) 
 ![GitHub followers](https://img.shields.io/github/followers/xuyanshi?style=social)
 
-## self-study
+## UCB CS 61A: Structure and Interpretation of Computer Programs
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/xuyanshi/cs61a?style=flat-square) 
 ![GitHub repo size](https://img.shields.io/github/repo-size/xuyanshi/cs61a?style=flat-square) 
