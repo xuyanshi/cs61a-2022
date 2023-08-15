@@ -5,6 +5,8 @@
 ![GitHub forks](https://img.shields.io/github/forks/xuyanshi/cs61a?style=social) 
 ![GitHub followers](https://img.shields.io/github/followers/xuyanshi?style=social)
 
+
+
 ## UCB CS 61A: Structure and Interpretation of Computer Programs
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/xuyanshi/cs61a?style=flat-square) 
@@ -28,3 +30,7 @@ I have to skip the Scheme project and some other things related to the Scheme. B
 -->
 ### Finish Date:   Thu Dec 8 2022
 Bravo!!
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=xuyanshi/cs61a-2022&type=Date)](https://star-history.com/#xuyanshi/cs61a-2022)
